@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "msn-graph-scheduler"
+version = "0.1.0"
+description = "Graph-aware mobile edge LLM inference scheduling simulator"
+requires-python = ">=3.10"
+dependencies = [
+  "numpy>=1.24",
+  "pandas>=2.0",
+  "PyYAML>=6.0",
+  "networkx>=3.0",
+  "matplotlib>=3.7",
+  "torch>=2.1",
+]
+
+[project.optional-dependencies]
+profile = ["transformers>=4.45", "accelerate>=0.33"]
+dev = ["pytest>=8.0"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
