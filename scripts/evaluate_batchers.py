@@ -177,6 +177,7 @@ def run_full_queue(
     mapping_steps = 0
 
     batch_sizes: list[int] = []
+    pending_sizes: list[int] = []
     request_e2e_ms: list[float] = []
     failure_reason = ""
 
@@ -205,6 +206,12 @@ def run_full_queue(
                 ),
             )
             continue
+
+        # Record how many requests were available
+        # when the batching decision was made.
+        pending_sizes.append(
+            len(pending)
+        )
 
         env = SchedulingEnv(
             cfg,
@@ -411,6 +418,28 @@ def run_full_queue(
             / max(total_requests, 1)
         ),
         "batches": len(batch_sizes),
+        "mean_pending_size": (
+            float(np.mean(pending_sizes))
+            if pending_sizes
+            else 0.0
+        ),
+        "max_pending_size": (
+            int(max(pending_sizes))
+            if pending_sizes
+            else 0
+        ),
+        "batch_opportunity_rate": (
+            float(
+                np.mean(
+                    [
+                        size >= 2
+                        for size in pending_sizes
+                    ]
+                )
+            )
+            if pending_sizes
+            else 0.0
+        ),
         "mean_batch_size": (
             float(np.mean(batch_sizes))
             if batch_sizes
