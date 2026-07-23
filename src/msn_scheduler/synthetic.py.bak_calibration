@@ -1,0 +1,122 @@
+from __future__ import annotations
+
+import math
+
+import numpy as np
+
+from .datatypes import ComputeNode, Infrastructure, Link, Request
+from .deployment import generate_block_layout
+
+
+def make_synthetic_infrastructure(cfg: dict, rng: np.random.Generator) -> Infrastructure:
+    n_edge = int(cfg["system"]["num_edge_nodes"])
+    cloud = "cloud_0"
+    node_ids = [f"edge_{i}" for i in range(n_edge)] + [cloud]
+    model_cfg = cfg["model"]
+    layout = generate_block_layout(
+        node_ids=node_ids,
+        num_blocks=int(model_cfg["num_blocks"]),
+        cloud_node=cloud,
+        coverage=float(cfg["system"]["block_replica_coverage"]),
+        mode=str(cfg["system"]["block_layout"]),
+        rng=rng,
+    )
+    nodes: dict[str, ComputeNode] = {}
+    for i, node_id in enumerate(node_ids):
+        if node_id == cloud:
+            node_type = "cloud"
+            memory = 80.0
+            scale = 1.45
+            queue = float(rng.uniform(3, 18))
+        else:
+            fast = i % 2 == 1
+            node_type = "edge_fast" if fast else "edge_slow"
+            memory = 24.0 if fast else 16.0
+            scale = 1.0 if fast else 0.78
+            queue = float(rng.uniform(0, 35))
+        load = float(rng.uniform(0.05, 0.72))
+        free = memory * (1.0 - 0.28 * load)
+        nodes[node_id] = ComputeNode(
+            node_id=node_id,
+            node_type=node_type,
+            total_memory_gb=memory,
+            free_memory_gb=free,
+            compute_scale=scale,
+            queue_delay_ms=queue,
+            background_load=load,
+            kv_cache_gb=memory - free,
+            deployed_blocks=layout[node_id],
+        )
+
+    links: dict[tuple[str, str], Link] = {}
+    p = float(cfg["system"]["topology_edge_prob"])
+    # Ensure a connected edge backbone by a ring, then add random shortcuts.
+    edge_ids = [f"edge_{i}" for i in range(n_edge)]
+    for i in range(n_edge):
+        pairs = [(edge_ids[i], edge_ids[(i + 1) % n_edge])]
+        for a, b in pairs:
+            for src, dst in [(a, b), (b, a)]:
+                bw = float(rng.uniform(500, 1600))
+                lat = float(rng.uniform(0.6, 3.5))
+                links[(src, dst)] = Link(src, dst, bw, lat, float(rng.uniform(0.97, 1.0)))
+    for i in range(n_edge):
+        for j in range(i + 1, n_edge):
+            if rng.random() < p:
+                for src, dst in [(edge_ids[i], edge_ids[j]), (edge_ids[j], edge_ids[i])]:
+                    if (src, dst) not in links:
+                        links[(src, dst)] = Link(
+                            src,
+                            dst,
+                            float(rng.uniform(350, 1400)),
+                            float(rng.uniform(1.0, 6.0)),
+                            float(rng.uniform(0.95, 1.0)),
+                        )
+    for edge in edge_ids:
+        for src, dst in [(edge, cloud), (cloud, edge)]:
+            links[(src, dst)] = Link(
+                src,
+                dst,
+                float(rng.uniform(180, 600)),
+                float(rng.uniform(12, 35)),
+                float(rng.uniform(0.985, 1.0)),
+            )
+    return Infrastructure(
+        nodes=nodes,
+        links=links,
+        cloud_node=cloud,
+        anchor_node=str(cfg["system"]["anchor_node"]),
+    )
+
+
+def make_request_queue(cfg: dict, rng: np.random.Generator, now_ms: float = 0.0) -> list[Request]:
+    q_cfg = cfg["requests"]
+    size = int(q_cfg["queue_size"])
+    anchor = str(cfg["system"]["anchor_node"])
+    n_edge = int(cfg["system"]["num_edge_nodes"])
+    requests: list[Request] = []
+    for i in range(size):
+        input_tokens = int(rng.integers(q_cfg["input_token_min"], q_cfg["input_token_max"] + 1))
+        # Generate a weak positive relation between input and output lengths.
+        out_base = 0.16 * input_tokens + rng.normal(80, 35)
+        out = int(np.clip(out_base, q_cfg["output_token_min"], q_cfg["output_token_max"]))
+        deadline = float(rng.uniform(q_cfg["deadline_ms_min"], q_cfg["deadline_ms_max"]))
+        arrival = now_ms - float(rng.uniform(0, 480))
+        handover_p = float(rng.uniform(0, q_cfg["handover_prob_max"]))
+        next_anchor = f"edge_{int(rng.integers(0, n_edge))}"
+        if next_anchor == anchor and n_edge > 1:
+            next_anchor = f"edge_{(int(anchor.split('_')[-1]) + 1) % n_edge}"
+        requests.append(
+            Request(
+                request_id=f"r{i:04d}",
+                arrival_ms=arrival,
+                input_tokens=input_tokens,
+                expected_output_tokens=out,
+                deadline_ms=deadline,
+                anchor_node=anchor,
+                next_anchor_node=next_anchor,
+                handover_probability=handover_p,
+                residual_dwell_ms=float(rng.uniform(150, 2500)),
+            )
+        )
+    requests.sort(key=lambda r: r.arrival_ms)
+    return requests

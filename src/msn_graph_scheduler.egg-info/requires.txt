@@ -1,0 +1,13 @@
+numpy>=1.24
+pandas>=2.0
+PyYAML>=6.0
+networkx>=3.0
+matplotlib>=3.7
+torch>=2.1
+
+[dev]
+pytest>=8.0
+
+[profile]
+transformers>=4.45
+accelerate>=0.33

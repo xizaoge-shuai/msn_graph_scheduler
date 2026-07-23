@@ -1,0 +1,16 @@
+Metadata-Version: 2.4
+Name: msn-graph-scheduler
+Version: 0.1.0
+Summary: Graph-aware mobile edge LLM inference scheduling simulator
+Requires-Python: >=3.10
+Requires-Dist: numpy>=1.24
+Requires-Dist: pandas>=2.0
+Requires-Dist: PyYAML>=6.0
+Requires-Dist: networkx>=3.0
+Requires-Dist: matplotlib>=3.7
+Requires-Dist: torch>=2.1
+Provides-Extra: profile
+Requires-Dist: transformers>=4.45; extra == "profile"
+Requires-Dist: accelerate>=0.33; extra == "profile"
+Provides-Extra: dev
+Requires-Dist: pytest>=8.0; extra == "dev"

@@ -38,14 +38,6 @@ def parse_args() -> argparse.Namespace:
         help="Measured profile CSV; use analytic profile when omitted.",
     )
     parser.add_argument(
-        "--request-trace",
-        default=None,
-        help=(
-            "CSV request-shape pool containing "
-            "input_tokens and output_tokens."
-        ),
-    )
-    parser.add_argument(
         "--episodes",
         type=int,
         default=None,
@@ -85,31 +77,6 @@ def parse_args() -> argparse.Namespace:
 def main() -> None:
     args = parse_args()
     cfg = load_config(args.config)
-    request_pool = None
-
-    if args.request_trace:
-        request_pool = pd.read_csv(
-            args.request_trace,
-            usecols=[
-                "input_tokens",
-                "output_tokens",
-                "request_type",
-                "source",
-            ],
-        )
-
-        if request_pool.empty:
-            raise RuntimeError(
-                "Request trace is empty: "
-                f"{args.request_trace}"
-            )
-
-        print(
-            f"Using request trace: "
-            f"{args.request_trace} "
-            f"rows={len(request_pool):,}",
-            flush=True,
-        )
 
     seed = int(cfg["seed"])
     random.seed(seed)
@@ -141,7 +108,7 @@ def main() -> None:
 
     # Probe one environment instance to obtain feature dimensions.
     probe_infra = make_synthetic_infrastructure(cfg, rng)
-    probe_queue = make_request_queue(cfg, rng, request_pool=request_pool)
+    probe_queue = make_request_queue(cfg, rng)
     probe_obs = env.reset(probe_infra, probe_queue)
 
     agent = DDQNAgent(
@@ -187,7 +154,7 @@ def main() -> None:
 
     for episode in range(1, episodes + 1):
         infra = make_synthetic_infrastructure(cfg, rng)
-        queue = make_request_queue(cfg, rng, request_pool=request_pool)
+        queue = make_request_queue(cfg, rng)
 
         try:
             obs = env.reset(infra, queue)

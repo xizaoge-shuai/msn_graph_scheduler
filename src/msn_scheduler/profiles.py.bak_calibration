@@ -60,176 +60,43 @@ class ProfileTable:
         # is available. Scale by g/L as an explicit first-stage approximation.
         return float(row["latency_ms"]) * float(group_size) / measured_group
 
-    def prefill_ms(
-        self,
-        node: ComputeNode,
-        batch_size: int,
-        max_input_tokens: int,
-        group_size: int,
-    ) -> float:
+    def prefill_ms(self, node: ComputeNode, batch_size: int, max_input_tokens: int, group_size: int) -> float:
         measured = self._nearest_measured(
-            node.node_type,
-            "prefill",
-            batch_size,
-            max_input_tokens,
-            group_size,
+            node.node_type, "prefill", batch_size, max_input_tokens, group_size
         )
-
-        if measured is None:
-            measured = self._nearest_measured(
-                "edge_fast",
-                "prefill",
-                batch_size,
-                max_input_tokens,
-                group_size,
-            )
-
-            if measured is not None:
-                measured = (
-                    measured
-                    / max(node.compute_scale, 0.1)
-                )
-
         if measured is not None:
-            return (
-                measured
-                * (
-                    1.0
-                    + 0.85
-                    * node.background_load
-                )
-                + node.queue_delay_ms
-            )
-
-        token_factor = (
-            max_input_tokens / 128.0
-        )
-
-        batch_factor = (
-            0.55
-            + 0.45
-            * (batch_size ** 0.72)
-        )
-
-        layer_factor = (
-            group_size
-            / max(
-                self.model.num_blocks,
-                1,
-            )
-        )
-
-        base_full_model_ms = (
-            32.0
-            / max(
-                node.compute_scale,
-                0.1,
-            )
-        )
-
+            return measured * (1.0 + 0.85 * node.background_load) + node.queue_delay_ms
+        # Sublinear batch scaling models GPU parallelism, quadratic token term
+        # approximates attention cost, and group_size scales the layer segment.
+        token_factor = max_input_tokens / 128.0
+        batch_factor = 0.55 + 0.45 * (batch_size ** 0.72)
+        layer_factor = group_size / max(self.model.num_blocks, 1)
+        base_full_model_ms = 32.0 / max(node.compute_scale, 0.1)
         return (
             base_full_model_ms
             * layer_factor
             * batch_factor
-            * (
-                0.60 * token_factor
-                + 0.40
-                * token_factor**1.55
-            )
-            * (
-                1.0
-                + 1.1
-                * node.background_load
-            )
+            * (0.60 * token_factor + 0.40 * token_factor**1.55)
+            * (1.0 + 1.1 * node.background_load)
             + node.queue_delay_ms
         )
 
-    def decode_per_token_ms(
-        self,
-        node: ComputeNode,
-        batch_size: int,
-        context_tokens: int,
-        group_size: int,
-    ) -> float:
+    def decode_per_token_ms(self, node: ComputeNode, batch_size: int, context_tokens: int, group_size: int) -> float:
         measured = self._nearest_measured(
-            node.node_type,
-            "decode",
-            batch_size,
-            context_tokens,
-            group_size,
+            node.node_type, "decode", batch_size, context_tokens, group_size
         )
-
-        if measured is None:
-            measured = self._nearest_measured(
-                "edge_fast",
-                "decode",
-                batch_size,
-                context_tokens,
-                group_size,
-            )
-
-            if measured is not None:
-                measured = (
-                    measured
-                    / max(
-                        node.compute_scale,
-                        0.1,
-                    )
-                )
-
         if measured is not None:
-            return (
-                measured
-                * (
-                    1.0
-                    + 0.70
-                    * node.background_load
-                )
-                + 0.02
-                * node.queue_delay_ms
-            )
-
-        layer_factor = (
-            group_size
-            / max(
-                self.model.num_blocks,
-                1,
-            )
-        )
-
-        context_factor = (
-            1.0
-            + 0.18
-            * np.log2(
-                max(
-                    context_tokens,
-                    1,
-                )
-                / 128.0
-                + 1.0
-            )
-        )
-
-        batch_factor = (
-            0.72
-            + 0.28
-            * (batch_size ** 0.55)
-        )
-
+            return measured * (1.0 + 0.70 * node.background_load) + 0.02 * node.queue_delay_ms
+        layer_factor = group_size / max(self.model.num_blocks, 1)
+        context_factor = 1.0 + 0.18 * np.log2(max(context_tokens, 1) / 128.0 + 1.0)
+        batch_factor = 0.72 + 0.28 * (batch_size ** 0.55)
         return (
             3.4
             * layer_factor
             * context_factor
             * batch_factor
-            / max(
-                node.compute_scale,
-                0.1,
-            )
-            * (
-                1.0
-                + 0.8
-                * node.background_load
-            )
+            / max(node.compute_scale, 0.1)
+            * (1.0 + 0.8 * node.background_load)
         )
 
     def activation_gb(self, batch_size: int, max_input_tokens: int) -> float:

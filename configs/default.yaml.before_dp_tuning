@@ -45,22 +45,10 @@ batching:
   alpha_padding: 0.0005
   alpha_mobility: 0.003
   deadline_slack_ms: 250.0
-  alpha_decode: 0.00015
-  alpha_deadline_risk: 1.0
-  alpha_output_spread: 0.002
+  alpha_decode: 0.0004
+  alpha_deadline_risk: 3.0
+  alpha_output_spread: 0.012
   deadline_risk_start: 0.8
-  baseline_alpha_urgency: 1.0
-  baseline_alpha_batch_gain: 0.025
-  baseline_alpha_padding: 0.0005
-  baseline_alpha_mobility: 0.003
-  dp_alpha_urgency: 1.0
-  dp_alpha_batch_gain: 4.0
-  dp_alpha_padding: 0.0005
-  dp_alpha_mobility: 0.003
-  dp_alpha_decode: 0.0001
-  dp_alpha_deadline_risk: 1.0
-  dp_alpha_output_spread: 0.002
-  hard_deadline_filter: false
 scheduler:
   group_sizes:
   - 1

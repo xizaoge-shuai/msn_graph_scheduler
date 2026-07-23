@@ -35,89 +35,30 @@ class NodeConditionedDPBatcher:
         self.token_quantum = int(bcfg["token_quantum"])
         self.length_buckets = [int(x) for x in bcfg["length_buckets"]]
         self.slack_ms = float(bcfg["deadline_slack_ms"])
-        self.hard_deadline_filter = bool(
-            bcfg.get(
-                "hard_deadline_filter",
-                False,
-            )
-        )
-        # Frozen weights used only by heuristic baselines.
         self.weights = BatchingWeights(
-            urgency=float(
-                bcfg.get(
-                    "baseline_alpha_urgency",
-                    1.0,
-                )
-            ),
-            batch_gain=float(
-                bcfg.get(
-                    "baseline_alpha_batch_gain",
-                    0.025,
-                )
-            ),
-            padding=float(
-                bcfg.get(
-                    "baseline_alpha_padding",
-                    0.0005,
-                )
-            ),
-            mobility=float(
-                bcfg.get(
-                    "baseline_alpha_mobility",
-                    0.003,
-                )
-            ),
-            decode=0.0,
-            deadline_risk=0.0,
-            output_spread=0.0,
-        )
-
-        # Tunable weights used only by NodeConditionedDPBatcher.
-        self.dp_weights = BatchingWeights(
-            urgency=float(
-                bcfg.get(
-                    "dp_alpha_urgency",
-                    1.0,
-                )
-            ),
-            batch_gain=float(
-                bcfg.get(
-                    "dp_alpha_batch_gain",
-                    4.0,
-                )
-            ),
-            padding=float(
-                bcfg.get(
-                    "dp_alpha_padding",
-                    0.0005,
-                )
-            ),
-            mobility=float(
-                bcfg.get(
-                    "dp_alpha_mobility",
-                    0.003,
-                )
-            ),
+            urgency=float(bcfg["alpha_urgency"]),
+            batch_gain=float(bcfg["alpha_batch_gain"]),
+            padding=float(bcfg["alpha_padding"]),
+            mobility=float(bcfg["alpha_mobility"]),
             decode=float(
                 bcfg.get(
-                    "dp_alpha_decode",
-                    0.00010,
+                    "alpha_decode",
+                    0.0004,
                 )
             ),
             deadline_risk=float(
                 bcfg.get(
-                    "dp_alpha_deadline_risk",
-                    1.0,
+                    "alpha_deadline_risk",
+                    3.0,
                 )
             ),
             output_spread=float(
                 bcfg.get(
-                    "dp_alpha_output_spread",
-                    0.0020,
+                    "alpha_output_spread",
+                    0.012,
                 )
             ),
         )
-
         self.deadline_risk_start = float(
             bcfg.get(
                 "deadline_risk_start",
@@ -478,23 +419,23 @@ class NodeConditionedDPBatcher:
                     ) ** 2
 
                     value = (
-                        self.dp_weights.urgency
+                        self.weights.urgency
                         * max(
                             0.0,
                             now_ms - req.arrival_ms,
                         )
                         / remaining
-                        - self.dp_weights.padding
+                        - self.weights.padding
                         * (
                             max_len
                             - req.input_tokens
                         )
-                        - self.dp_weights.mobility
+                        - self.weights.mobility
                         * p_ho
                         * handover
-                        - self.dp_weights.decode
+                        - self.weights.decode
                         * estimated_decode_ms
-                        - self.dp_weights.deadline_risk
+                        - self.weights.deadline_risk
                         * deadline_risk
                     )
                     updates: dict[tuple[int, int], tuple[float, int]] = {}
@@ -525,11 +466,7 @@ class NodeConditionedDPBatcher:
                     if token_sum > self.token_capacity:
                         continue
                     min_deadline = min(r.remaining_deadline_ms(now_ms) for r in chosen)
-                    if (
-                        self.hard_deadline_filter
-                        and completion_reference
-                        > min_deadline + self.slack_ms
-                    ):
+                    if completion_reference > min_deadline + self.slack_ms:
                         continue
                     mean_handover = float(
                         np.mean(
@@ -579,9 +516,9 @@ class NodeConditionedDPBatcher:
 
                     utility = float(
                         base
-                        + self.dp_weights.batch_gain
+                        + self.weights.batch_gain
                         * relative_batch_gain
-                        - self.dp_weights.output_spread
+                        - self.weights.output_spread
                         * output_spread
                     )
                     candidate = BatchCandidate(
@@ -646,11 +583,7 @@ class HeuristicBatcherBase(NodeConditionedDPBatcher):
             expected_out=expected_out,
         )
         min_deadline = min(r.remaining_deadline_ms(now_ms) for r in requests)
-        if (
-                        self.hard_deadline_filter
-                        and completion_reference
-                        > min_deadline + self.slack_ms
-                    ):
+        if completion_reference > min_deadline + self.slack_ms:
             return None
         padding = batch_size * max_len - token_sum
         gain = (

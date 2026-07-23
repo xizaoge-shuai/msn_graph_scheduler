@@ -14,9 +14,6 @@ class BatchingWeights:
     batch_gain: float
     padding: float
     mobility: float
-    decode: float
-    deadline_risk: float
-    output_spread: float
 
 
 class NodeConditionedDPBatcher:
@@ -35,94 +32,11 @@ class NodeConditionedDPBatcher:
         self.token_quantum = int(bcfg["token_quantum"])
         self.length_buckets = [int(x) for x in bcfg["length_buckets"]]
         self.slack_ms = float(bcfg["deadline_slack_ms"])
-        self.hard_deadline_filter = bool(
-            bcfg.get(
-                "hard_deadline_filter",
-                False,
-            )
-        )
-        # Frozen weights used only by heuristic baselines.
         self.weights = BatchingWeights(
-            urgency=float(
-                bcfg.get(
-                    "baseline_alpha_urgency",
-                    1.0,
-                )
-            ),
-            batch_gain=float(
-                bcfg.get(
-                    "baseline_alpha_batch_gain",
-                    0.025,
-                )
-            ),
-            padding=float(
-                bcfg.get(
-                    "baseline_alpha_padding",
-                    0.0005,
-                )
-            ),
-            mobility=float(
-                bcfg.get(
-                    "baseline_alpha_mobility",
-                    0.003,
-                )
-            ),
-            decode=0.0,
-            deadline_risk=0.0,
-            output_spread=0.0,
-        )
-
-        # Tunable weights used only by NodeConditionedDPBatcher.
-        self.dp_weights = BatchingWeights(
-            urgency=float(
-                bcfg.get(
-                    "dp_alpha_urgency",
-                    1.0,
-                )
-            ),
-            batch_gain=float(
-                bcfg.get(
-                    "dp_alpha_batch_gain",
-                    4.0,
-                )
-            ),
-            padding=float(
-                bcfg.get(
-                    "dp_alpha_padding",
-                    0.0005,
-                )
-            ),
-            mobility=float(
-                bcfg.get(
-                    "dp_alpha_mobility",
-                    0.003,
-                )
-            ),
-            decode=float(
-                bcfg.get(
-                    "dp_alpha_decode",
-                    0.00010,
-                )
-            ),
-            deadline_risk=float(
-                bcfg.get(
-                    "dp_alpha_deadline_risk",
-                    1.0,
-                )
-            ),
-            output_spread=float(
-                bcfg.get(
-                    "dp_alpha_output_spread",
-                    0.0020,
-                )
-            ),
-        )
-
-        self.deadline_risk_start = float(
-            bcfg.get(
-                "deadline_risk_start",
-                0.80,
-            )
+            urgency=float(bcfg["alpha_urgency"]),
+            batch_gain=float(bcfg["alpha_batch_gain"]),
+            padding=float(bcfg["alpha_padding"]),
+            mobility=float(bcfg["alpha_mobility"]),
         )
         self.profile = profile
         self.cloud_reserve_gb = float(cfg["system"]["cloud_reserved_memory_gb"])
@@ -263,87 +177,6 @@ class NodeConditionedDPBatcher:
             + cloud_decode
         )
 
-    def _estimate_request_decode_ms(
-        self,
-        infra: Infrastructure,
-        node_id: str,
-        batch_size: int,
-        max_len: int,
-        group_size: int,
-        req: Request,
-    ) -> float:
-        """Estimate request-specific decode cost.
-
-        The selected node executes the current block group.
-        Remaining blocks use the cloud reference path.
-        """
-        node = infra.nodes[node_id]
-        cloud = infra.nodes[
-            infra.cloud_node
-        ]
-
-        output_tokens = max(
-            int(req.expected_output_tokens),
-            1,
-        )
-
-        context_tokens = int(
-            max_len
-            + output_tokens / 2
-        )
-
-        local_decode = (
-            self.profile.decode_per_token_ms(
-                node,
-                batch_size,
-                context_tokens,
-                group_size,
-            )
-            * output_tokens
-        )
-
-        remaining_blocks = (
-            self.profile.model.num_blocks
-            - group_size
-        )
-
-        if remaining_blocks <= 0:
-            return float(local_decode)
-
-        cloud_decode = (
-            self.profile.decode_per_token_ms(
-                cloud,
-                batch_size,
-                context_tokens,
-                remaining_blocks,
-            )
-            * output_tokens
-        )
-
-        token_mb = (
-            self.profile.intermediate_mb(
-                batch_size,
-                1,
-                decode=True,
-            )
-        )
-
-        decode_transfer = (
-            transfer_time_ms(
-                infra,
-                node_id,
-                infra.cloud_node,
-                token_mb,
-            )
-            * output_tokens
-        )
-
-        return float(
-            local_decode
-            + cloud_decode
-            + decode_transfer
-        )
-
     def _cache_key(
         self, queue: list[Request], now_ms: float, infra: Infrastructure, node_id: str, group_size: int
     ) -> tuple:
@@ -450,52 +283,10 @@ class NodeConditionedDPBatcher:
                         * batch_prefill
                         / max(req.residual_dwell_ms, 1.0),
                     )
-                    estimated_decode_ms = (
-                        self._estimate_request_decode_ms(
-                            infra=infra,
-                            node_id=node_id,
-                            batch_size=target_b,
-                            max_len=max_len,
-                            group_size=group_size,
-                            req=req,
-                        )
-                    )
-
-                    predicted_total_ms = (
-                        batch_prefill
-                        + estimated_decode_ms
-                    )
-
-                    deadline_ratio = (
-                        predicted_total_ms
-                        / remaining
-                    )
-
-                    deadline_risk = max(
-                        0.0,
-                        deadline_ratio
-                        - self.deadline_risk_start,
-                    ) ** 2
-
                     value = (
-                        self.dp_weights.urgency
-                        * max(
-                            0.0,
-                            now_ms - req.arrival_ms,
-                        )
-                        / remaining
-                        - self.dp_weights.padding
-                        * (
-                            max_len
-                            - req.input_tokens
-                        )
-                        - self.dp_weights.mobility
-                        * p_ho
-                        * handover
-                        - self.dp_weights.decode
-                        * estimated_decode_ms
-                        - self.dp_weights.deadline_risk
-                        * deadline_risk
+                        self.weights.urgency * max(0.0, now_ms - req.arrival_ms) / remaining
+                        - self.weights.padding * (max_len - req.input_tokens)
+                        - self.weights.mobility * p_ho * handover
                     )
                     updates: dict[tuple[int, int], tuple[float, int]] = {}
                     for (k, s), (old_value, mask) in states.items():
@@ -525,11 +316,7 @@ class NodeConditionedDPBatcher:
                     if token_sum > self.token_capacity:
                         continue
                     min_deadline = min(r.remaining_deadline_ms(now_ms) for r in chosen)
-                    if (
-                        self.hard_deadline_filter
-                        and completion_reference
-                        > min_deadline + self.slack_ms
-                    ):
+                    if completion_reference > min_deadline + self.slack_ms:
                         continue
                     mean_handover = float(
                         np.mean(
@@ -540,50 +327,7 @@ class NodeConditionedDPBatcher:
                             ]
                         )
                     )
-                    output_lengths = [
-                        int(
-                            r.expected_output_tokens
-                        )
-                        for r in chosen
-                    ]
-
-                    output_spread = (
-                        max(output_lengths)
-                        - min(output_lengths)
-                    )
-
-                    # Normalize prefill saving into a dimensionless
-                    # relative batching gain. Using raw milliseconds
-                    # makes the utility depend excessively on hardware
-                    # speed, sequence length, and batch size.
-                    independent_prefill_ms = (
-                        target_b
-                        * self.profile.prefill_ms(
-                            node,
-                            1,
-                            max_len,
-                            group_size,
-                        )
-                    )
-
-                    relative_batch_gain = (
-                        max(
-                            0.0,
-                            batch_gain,
-                        )
-                        / max(
-                            independent_prefill_ms,
-                            1e-6,
-                        )
-                    )
-
-                    utility = float(
-                        base
-                        + self.dp_weights.batch_gain
-                        * relative_batch_gain
-                        - self.dp_weights.output_spread
-                        * output_spread
-                    )
+                    utility = float(base + self.weights.batch_gain * batch_gain)
                     candidate = BatchCandidate(
                         requests=chosen,
                         node_id=node_id,
@@ -646,11 +390,7 @@ class HeuristicBatcherBase(NodeConditionedDPBatcher):
             expected_out=expected_out,
         )
         min_deadline = min(r.remaining_deadline_ms(now_ms) for r in requests)
-        if (
-                        self.hard_deadline_filter
-                        and completion_reference
-                        > min_deadline + self.slack_ms
-                    ):
+        if completion_reference > min_deadline + self.slack_ms:
             return None
         padding = batch_size * max_len - token_sum
         gain = (

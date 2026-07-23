@@ -90,11 +90,7 @@ class DDQNAgent:
         )
 
     def load(self, path: str) -> None:
-        ckpt = torch.load(
-            path,
-            map_location=self.device,
-            weights_only=False,
-        )
+        ckpt = torch.load(path, map_location=self.device)
         self.online.load_state_dict(ckpt["online"])
         self.target.load_state_dict(ckpt.get("target", ckpt["online"]))
         if "optimizer" in ckpt:

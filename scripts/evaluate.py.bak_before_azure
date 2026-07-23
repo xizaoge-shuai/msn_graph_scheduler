@@ -53,14 +53,6 @@ def parse_args() -> argparse.Namespace:
         ),
     )
     parser.add_argument(
-        "--request-trace",
-        default=None,
-        help=(
-            "CSV request-shape pool containing "
-            "input_tokens and output_tokens."
-        ),
-    )
-    parser.add_argument(
         "--checkpoint",
         default=None,
         help="Trained DDQN checkpoint.",
@@ -190,31 +182,6 @@ def main() -> None:
     )
 
     cfg = load_config(args.config)
-    request_pool = None
-
-    if args.request_trace:
-        request_pool = pd.read_csv(
-            args.request_trace,
-            usecols=[
-                "input_tokens",
-                "output_tokens",
-                "request_type",
-                "source",
-            ],
-        )
-
-        if request_pool.empty:
-            raise RuntimeError(
-                "Request trace is empty: "
-                f"{args.request_trace}"
-            )
-
-        print(
-            f"Using request trace: "
-            f"{args.request_trace} "
-            f"rows={len(request_pool):,}",
-            flush=True,
-        )
 
     model = ModelProfile(
         num_blocks=int(cfg["model"]["num_blocks"]),
