@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+from dataclasses import replace
 from pathlib import Path
 import sys
 import time
@@ -99,6 +100,44 @@ def get_per_request_decode(
     ]
 
 
+def assign_poisson_arrivals(
+    queue,
+    rng: np.random.Generator,
+    arrival_rate_rps: float,
+):
+    """Assign online Poisson arrivals to one request trace."""
+
+    if arrival_rate_rps <= 0:
+        raise ValueError(
+            "arrival_rate_rps must be positive"
+        )
+
+    updated = []
+    current_ms = 0.0
+
+    for index, request in enumerate(queue):
+        if index > 0:
+            current_ms += float(
+                rng.exponential(
+                    1000.0 / arrival_rate_rps
+                )
+            )
+
+        try:
+            new_request = replace(
+                request,
+                arrival_ms=current_ms,
+            )
+        except TypeError:
+            # Fallback for a non-dataclass request object.
+            new_request = request
+            new_request.arrival_ms = current_ms
+
+        updated.append(new_request)
+
+    return updated
+
+
 def run_full_queue(
     cfg: dict,
     profile: ProfileTable,
@@ -108,10 +147,24 @@ def run_full_queue(
     max_steps: int,
     max_batches: int,
 ) -> dict:
-    remaining = list(queue)
-    total_requests = len(remaining)
+    # Requests that have not arrived yet.
+    future = sorted(
+        list(queue),
+        key=lambda req: req.arrival_ms,
+    )
 
-    now_ms = 0.0
+    total_requests = len(future)
+
+    if total_requests == 0:
+        raise ValueError(
+            "The request queue is empty"
+        )
+
+    # Requests visible to the scheduler.
+    pending = []
+    cursor = 0
+    now_ms = float(future[0].arrival_ms)
+
     total_reward = 0.0
     total_prefill_ms = 0.0
     total_decode_service_ms = 0.0
@@ -127,9 +180,31 @@ def run_full_queue(
     request_e2e_ms: list[float] = []
     failure_reason = ""
 
-    for batch_index in range(max_batches):
-        if not remaining:
-            break
+    while len(batch_sizes) < max_batches:
+        # Release requests that have arrived by now.
+        while (
+            cursor < len(future)
+            and float(
+                future[cursor].arrival_ms
+            )
+            <= now_ms + 1e-9
+        ):
+            pending.append(future[cursor])
+            cursor += 1
+
+        # No available request: jump directly to the
+        # next arrival event instead of busy waiting.
+        if not pending:
+            if cursor >= len(future):
+                break
+
+            now_ms = max(
+                now_ms,
+                float(
+                    future[cursor].arrival_ms
+                ),
+            )
+            continue
 
         env = SchedulingEnv(
             cfg,
@@ -143,24 +218,23 @@ def run_full_queue(
             result = run_one_mapping(
                 env=env,
                 infra=infra,
-                queue=remaining,
+                queue=pending,
                 now_ms=now_ms,
                 max_steps=max_steps,
             )
         except RuntimeError as exc:
-            # A single physically infeasible request must not
-            # terminate the entire queue. Drop only the most
-            # urgent remaining request and continue.
+            # Drop only one physically infeasible request;
+            # never terminate the entire episode.
             drop_index = min(
-                range(len(remaining)),
+                range(len(pending)),
                 key=lambda idx: (
-                    remaining[idx]
+                    pending[idx]
                     .remaining_deadline_ms(now_ms),
-                    remaining[idx].arrival_ms,
+                    pending[idx].arrival_ms,
                 ),
             )
 
-            dropped = remaining.pop(
+            dropped = pending.pop(
                 drop_index
             )
 
@@ -168,9 +242,7 @@ def run_full_queue(
             total_slo_violations += 1
 
             total_reward -= float(
-                cfg["scheduler"][
-                    "reward_slo"
-                ]
+                cfg["scheduler"]["reward_slo"]
             )
 
             message = (
@@ -184,7 +256,6 @@ def run_full_queue(
                 + " | "
                 + message
             )
-
             continue
 
         if env.batch is None:
@@ -193,7 +264,9 @@ def run_full_queue(
                 "selecting a batch"
             )
 
-        selected = list(env.batch.requests)
+        selected = list(
+            env.batch.requests
+        )
 
         if not selected:
             raise RuntimeError(
@@ -205,19 +278,22 @@ def run_full_queue(
             for req in selected
         }
 
-        old_size = len(remaining)
+        previous_pending_size = len(pending)
 
-        remaining = [
+        pending = [
             req
-            for req in remaining
+            for req in pending
             if req.request_id
             not in selected_ids
         ]
 
-        if len(remaining) >= old_size:
+        if (
+            len(pending)
+            >= previous_pending_size
+        ):
             raise RuntimeError(
-                "Full-queue evaluation made "
-                "no request-level progress"
+                "The evaluator made no "
+                "request-level progress"
             )
 
         per_request_decode = (
@@ -230,8 +306,8 @@ def run_full_queue(
             )
         )
 
-        # The next batch starts when the slowest request
-        # in the current batch finishes.
+        # A batch occupies the serving pipeline until
+        # the slowest request finishes.
         service_decode_ms = max(
             per_request_decode,
             default=float(
@@ -249,7 +325,7 @@ def run_full_queue(
             + service_decode_ms
         )
 
-        for req, decode_ms in zip(
+        for request, decode_ms in zip(
             selected,
             per_request_decode,
         ):
@@ -263,7 +339,9 @@ def run_full_queue(
                 max(
                     0.0,
                     completion_ms
-                    - req.arrival_ms,
+                    - float(
+                        request.arrival_ms
+                    ),
                 )
             )
 
@@ -286,24 +364,41 @@ def run_full_queue(
         total_handover_ms += (
             result.handover_ms
         )
-        mapping_steps += len(result.mapping)
-        batch_sizes.append(result.batch_size)
+        mapping_steps += len(
+            result.mapping
+        )
+        batch_sizes.append(
+            result.batch_size
+        )
 
-    if remaining:
-        dropped_requests += len(remaining)
-        total_slo_violations += len(remaining)
-        remaining = []
+    unfinished_requests = (
+        len(pending)
+        + len(future)
+        - cursor
+    )
 
+    if unfinished_requests > 0:
+        dropped_requests += (
+            unfinished_requests
+        )
+        total_slo_violations += (
+            unfinished_requests
+        )
+
+    makespan_ms = now_ms
     makespan_seconds = (
-        now_ms / 1000.0
+        makespan_ms / 1000.0
+    )
+
+    served_violations = max(
+        total_slo_violations
+        - dropped_requests,
+        0,
     )
 
     successful_requests = max(
         served_requests
-        - (
-            total_slo_violations
-            - dropped_requests
-        ),
+        - served_violations,
         0,
     )
 
@@ -321,7 +416,7 @@ def run_full_queue(
             if batch_sizes
             else 0.0
         ),
-        "makespan_ms": now_ms,
+        "makespan_ms": makespan_ms,
         "avg_e2e_ms": (
             float(np.mean(request_e2e_ms))
             if request_e2e_ms
@@ -410,6 +505,24 @@ def main() -> None:
             "sequential_greedy",
             "node_conditioned_dp",
         ],
+    )
+    parser.add_argument(
+        "--arrival-rate-rps",
+        type=float,
+        default=0.20,
+        help=(
+            "Poisson request arrival rate "
+            "in requests per second."
+        ),
+    )
+    parser.add_argument(
+        "--max-requests",
+        type=int,
+        default=None,
+        help=(
+            "Limit requests per episode for "
+            "fast simulator validation."
+        ),
     )
     parser.add_argument(
         "--full-queue",
@@ -574,6 +687,25 @@ def main() -> None:
                 request_pool=request_pool,
             )
 
+            if args.max_requests is not None:
+                if args.max_requests <= 0:
+                    raise ValueError(
+                        "--max-requests must "
+                        "be positive"
+                    )
+
+                queue = queue[
+                    :args.max_requests
+                ]
+
+            queue = assign_poisson_arrivals(
+                queue=queue,
+                rng=rng,
+                arrival_rate_rps=(
+                    args.arrival_rate_rps
+                ),
+            )
+
             batcher = factories[name]()
 
             if not args.full_queue:
@@ -596,6 +728,12 @@ def main() -> None:
                 {
                     "episode": episode,
                     "batcher": name,
+                    "arrival_rate_rps": (
+                        args.arrival_rate_rps
+                    ),
+                    "max_requests": (
+                        len(queue)
+                    ),
                     **metrics,
                 }
             )
