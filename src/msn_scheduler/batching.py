@@ -442,7 +442,29 @@ class NodeConditionedDPBatcher:
                 states: dict[tuple[int, int], tuple[float, int]] = {(0, 0): (0.0, 0)}
                 for idx, req in enumerate(eligible):
                     units = int(np.ceil(req.input_tokens / self.token_quantum))
-                    remaining = max(req.remaining_deadline_ms(now_ms), 1.0)
+                    remaining_raw = float(
+                        req.remaining_deadline_ms(
+                            now_ms
+                        )
+                    )
+
+                    deadline_scale_ms = max(
+                        float(req.deadline_ms),
+                        1.0,
+                    )
+
+                    waiting_ratio = min(
+                        max(
+                            (
+                                now_ms
+                                - req.arrival_ms
+                            )
+                            / deadline_scale_ms,
+                            0.0,
+                        ),
+                        2.0,
+                    )
+
                     handover = self._handover_cost_ms(req, infra, node_id)
                     p_ho = min(
                         1.0,
@@ -466,24 +488,31 @@ class NodeConditionedDPBatcher:
                         + estimated_decode_ms
                     )
 
-                    deadline_ratio = (
+                    # Soft and bounded SLO risk.
+                    #
+                    # Using predicted_total / max(remaining, 1)
+                    # with a squared penalty makes the value explode
+                    # after a request becomes overdue. Normalize the
+                    # predicted miss by the request's original SLO
+                    # budget and cap the result instead.
+                    predicted_miss_ms = max(
+                        0.0,
                         predicted_total_ms
-                        / remaining
+                        - max(
+                            remaining_raw,
+                            0.0,
+                        ),
                     )
 
-                    deadline_risk = max(
-                        0.0,
-                        deadline_ratio
-                        - self.deadline_risk_start,
-                    ) ** 2
+                    deadline_risk = min(
+                        predicted_miss_ms
+                        / deadline_scale_ms,
+                        2.0,
+                    )
 
                     value = (
                         self.dp_weights.urgency
-                        * max(
-                            0.0,
-                            now_ms - req.arrival_ms,
-                        )
-                        / remaining
+                        * waiting_ratio
                         - self.dp_weights.padding
                         * (
                             max_len
@@ -591,16 +620,19 @@ class NodeConditionedDPBatcher:
                         )
                     )
 
-                    # Reward serving more than one request when
-                    # the target batch has sufficient candidates.
-                    # The value is in [0, 1].
+                    # Reward progressively larger batches.
+                    #
+                    # Because len(chosen) == target_b here, dividing
+                    # by target_b - 1 would make every multi-request
+                    # candidate receive exactly the same value 1.0.
+                    # Normalize by the largest feasible target instead.
                     coverage_gain = (
                         max(
-                            len(chosen) - 1,
-                            0,
+                            float(target_b - 1),
+                            0.0,
                         )
                         / max(
-                            float(target_b - 1),
+                            float(max_target - 1),
                             1.0,
                         )
                     )
