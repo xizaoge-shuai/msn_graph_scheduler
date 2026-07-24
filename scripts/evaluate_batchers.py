@@ -8,10 +8,12 @@ import time
 
 import numpy as np
 import pandas as pd
+import torch
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
+from msn_scheduler.agent import DDQNAgent
 from msn_scheduler.baselines import (
     choose_min_lower_bound,
 )
@@ -39,6 +41,7 @@ def run_one_mapping(
     queue,
     now_ms: float,
     max_steps: int,
+    agent: DDQNAgent | None = None,
 ):
     obs = env.reset(
         infra,
@@ -49,7 +52,22 @@ def run_one_mapping(
     result = None
 
     for _ in range(max_steps):
-        action = choose_min_lower_bound(obs)
+        if agent is None:
+            action = choose_min_lower_bound(
+                obs
+            )
+        else:
+            with torch.no_grad():
+                q_values = agent.online(
+                    obs,
+                    agent.device,
+                )
+
+            action = int(
+                torch.argmax(
+                    q_values
+                ).item()
+            )
 
         next_obs, _, done, result = env.step(
             action
@@ -146,6 +164,7 @@ def run_full_queue(
     queue,
     max_steps: int,
     max_batches: int,
+    agent: DDQNAgent | None = None,
 ) -> dict:
     # Requests that have not arrived yet.
     future = sorted(
@@ -228,6 +247,7 @@ def run_full_queue(
                 queue=pending,
                 now_ms=now_ms,
                 max_steps=max_steps,
+                agent=agent,
             )
         except RuntimeError as exc:
             # Drop only one physically infeasible request;
@@ -515,6 +535,18 @@ def main() -> None:
         default=None,
     )
     parser.add_argument(
+        "--agent-checkpoint",
+        default=None,
+        help=(
+            "Evaluate a DDQN checkpoint with "
+            "deterministic action selection."
+        ),
+    )
+    parser.add_argument(
+        "--device",
+        default="cpu",
+    )
+    parser.add_argument(
         "--episodes",
         type=int,
         default=20,
@@ -636,6 +668,148 @@ def main() -> None:
         else ProfileTable(model)
     )
 
+    agent = None
+
+    if args.agent_checkpoint:
+        probe_rng = np.random.default_rng(
+            int(cfg["seed"]) + 987654
+        )
+
+        probe_infra = (
+            make_synthetic_infrastructure(
+                cfg,
+                probe_rng,
+            )
+        )
+
+        probe_queue = make_request_queue(
+            cfg,
+            probe_rng,
+            request_pool=request_pool,
+        )
+
+        if args.max_requests is not None:
+            probe_queue = probe_queue[
+                :args.max_requests
+            ]
+
+        probe_queue = assign_poisson_arrivals(
+            queue=probe_queue,
+            rng=probe_rng,
+            arrival_rate_rps=(
+                args.arrival_rate_rps
+            ),
+        )
+
+        probe_batcher = (
+            NodeConditionedDPBatcher(
+                cfg,
+                profile,
+            )
+        )
+
+        probe_env = SchedulingEnv(
+            cfg,
+            profile,
+            probe_batcher,
+        )
+
+        probe_obs = probe_env.reset(
+            probe_infra,
+            [probe_queue[0]],
+            now_ms=float(
+                probe_queue[0].arrival_ms
+            ),
+        )
+
+        agent = DDQNAgent(
+            cfg,
+            node_dim=int(
+                probe_obs.node_features.shape[1]
+            ),
+            edge_dim=int(
+                probe_obs.edge_features.shape[1]
+            ),
+            batch_dim=int(
+                probe_obs.batch_features.shape[0]
+            ),
+            device=args.device,
+        )
+
+        checkpoint = torch.load(
+            args.agent_checkpoint,
+            map_location=agent.device,
+            weights_only=False,
+        )
+
+        if not isinstance(
+            checkpoint,
+            dict,
+        ):
+            raise TypeError(
+                "Checkpoint must be a dict, "
+                f"got {type(checkpoint)}"
+            )
+
+        online_state = None
+
+        for key in [
+            "online",
+            "online_state_dict",
+            "model_state_dict",
+            "model",
+        ]:
+            if key in checkpoint:
+                online_state = checkpoint[key]
+                break
+
+        if online_state is None:
+            # 兼容直接保存 state_dict 的情况。
+            if checkpoint and all(
+                isinstance(key, str)
+                for key in checkpoint
+            ):
+                online_state = checkpoint
+            else:
+                raise KeyError(
+                    "Cannot find online network "
+                    f"state in checkpoint. Keys: "
+                    f"{sorted(checkpoint.keys())}"
+                )
+
+        agent.online.load_state_dict(
+            online_state
+        )
+
+        target_state = None
+
+        for key in [
+            "target",
+            "target_state_dict",
+        ]:
+            if key in checkpoint:
+                target_state = checkpoint[key]
+                break
+
+        if target_state is not None:
+            agent.target.load_state_dict(
+                target_state
+            )
+        else:
+            agent.target.load_state_dict(
+                agent.online.state_dict()
+            )
+
+        agent.online.eval()
+        agent.target.eval()
+
+        print(
+            "Using deterministic DDQN: "
+            f"{args.agent_checkpoint} "
+            f"device={agent.device}",
+            flush=True,
+        )
+
     factories = {
         "no_batch": lambda: (
             SingleRequestBatcher(
@@ -669,6 +843,16 @@ def main() -> None:
         if args.batchers
         else list(factories)
     )
+
+    if args.agent_checkpoint:
+        if selected_names != [
+            "node_conditioned_dp"
+        ]:
+            raise ValueError(
+                "--agent-checkpoint must be "
+                "evaluated with only "
+                "--batchers node_conditioned_dp"
+            )
 
     rows: list[dict] = []
     output = Path(args.output)
@@ -751,6 +935,7 @@ def main() -> None:
                 queue=queue,
                 max_steps=args.max_steps,
                 max_batches=args.max_batches,
+                agent=agent,
             )
 
             rows.append(
@@ -762,6 +947,10 @@ def main() -> None:
                     ),
                     "max_requests": (
                         len(queue)
+                    ),
+                    "agent_checkpoint": (
+                        args.agent_checkpoint
+                        or ""
                     ),
                     **metrics,
                 }
