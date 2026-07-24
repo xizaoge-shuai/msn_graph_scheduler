@@ -53,28 +53,130 @@ class DDQNAgent:
     def update(self) -> float | None:
         if len(self.replay) < self.batch_size:
             return None
-        samples = self.replay.sample(self.batch_size)
-        losses = []
-        for tr in samples:
-            q_values = self.online(tr.observation, self.device)
-            q_sa = q_values[tr.action_index]
-            with torch.no_grad():
-                if tr.done or tr.next_observation is None:
-                    target = torch.tensor(tr.reward, dtype=torch.float32, device=self.device)
-                else:
-                    next_online = self.online(tr.next_observation, self.device)
-                    best_idx = int(torch.argmax(next_online).item())
-                    next_target = self.target(tr.next_observation, self.device)[best_idx]
-                    target = torch.tensor(tr.reward, dtype=torch.float32, device=self.device) + self.gamma * next_target
-            losses.append(nn.functional.smooth_l1_loss(q_sa, target))
-        loss = torch.stack(losses).mean()
-        self.optimizer.zero_grad(set_to_none=True)
+
+        samples = self.replay.sample(
+            self.batch_size
+        )
+
+        observations = [
+            transition.observation
+            for transition in samples
+        ]
+
+        # One disjoint-graph GAT pass replaces one
+        # separate GAT pass per replay sample.
+        q_batches = self.online.forward_batch(
+            observations,
+            self.device,
+        )
+
+        q_selected = torch.stack(
+            [
+                q_values[
+                    transition.action_index
+                ]
+                for q_values, transition
+                in zip(
+                    q_batches,
+                    samples,
+                )
+            ]
+        )
+
+        targets = torch.as_tensor(
+            [
+                transition.reward
+                for transition in samples
+            ],
+            dtype=torch.float32,
+            device=self.device,
+        ).clone()
+
+        nonterminal_positions = [
+            index
+            for index, transition
+            in enumerate(samples)
+            if (
+                not transition.done
+                and transition.next_observation
+                is not None
+            )
+        ]
+
+        with torch.no_grad():
+            if nonterminal_positions:
+                next_observations = [
+                    samples[index]
+                    .next_observation
+                    for index
+                    in nonterminal_positions
+                ]
+
+                next_online_batches = (
+                    self.online.forward_batch(
+                        next_observations,
+                        self.device,
+                    )
+                )
+
+                next_target_batches = (
+                    self.target.forward_batch(
+                        next_observations,
+                        self.device,
+                    )
+                )
+
+                for local_index, sample_index in enumerate(
+                    nonterminal_positions
+                ):
+                    best_action = int(
+                        torch.argmax(
+                            next_online_batches[
+                                local_index
+                            ]
+                        ).item()
+                    )
+
+                    next_value = (
+                        next_target_batches[
+                            local_index
+                        ][best_action]
+                    )
+
+                    targets[sample_index] += (
+                        self.gamma
+                        * next_value
+                    )
+
+        loss = nn.functional.smooth_l1_loss(
+            q_selected,
+            targets,
+        )
+
+        self.optimizer.zero_grad(
+            set_to_none=True
+        )
+
         loss.backward()
-        nn.utils.clip_grad_norm_(self.online.parameters(), 5.0)
+
+        nn.utils.clip_grad_norm_(
+            self.online.parameters(),
+            5.0,
+        )
+
         self.optimizer.step()
+
         self.updates += 1
-        if self.updates % self.target_interval == 0:
-            self.target.load_state_dict(self.online.state_dict())
+
+        if (
+            self.updates
+            % self.target_interval
+            == 0
+        ):
+            self.target.load_state_dict(
+                self.online.state_dict()
+            )
+
         return float(loss.item())
 
     def save(self, path: str) -> None:
