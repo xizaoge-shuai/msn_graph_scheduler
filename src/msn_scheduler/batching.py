@@ -577,10 +577,41 @@ class NodeConditionedDPBatcher:
                         )
                     )
 
-                    utility = float(
+                    # `base` is the sum of request-level
+                    # values. Comparing this raw sum across
+                    # different batch sizes structurally favors
+                    # small batches because every added request
+                    # contributes another decode/deadline cost.
+                    # Normalize it before comparing candidates.
+                    mean_request_value = (
                         base
+                        / max(
+                            float(len(chosen)),
+                            1.0,
+                        )
+                    )
+
+                    # Reward serving more than one request when
+                    # the target batch has sufficient candidates.
+                    # The value is in [0, 1].
+                    coverage_gain = (
+                        max(
+                            len(chosen) - 1,
+                            0,
+                        )
+                        / max(
+                            float(target_b - 1),
+                            1.0,
+                        )
+                    )
+
+                    utility = float(
+                        mean_request_value
                         + self.dp_weights.batch_gain
-                        * relative_batch_gain
+                        * (
+                            relative_batch_gain
+                            + coverage_gain
+                        )
                         - self.dp_weights.output_spread
                         * output_spread
                     )
