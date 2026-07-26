@@ -103,3 +103,20 @@ profiling:
       base_decode_ms: 0.11
       memory_gb: 80
       compute_scale: 1.45
+external_baselines:
+  rba:
+    compute_feature_index: -1
+    memory_feature_index: -1
+    compute_weight: 0.5
+    memory_weight: 0.5
+    lower_bound_tiebreak_weight: 0.05
+  dybap_core:
+    compute_feature_index: -1
+    memory_feature_index: -1
+    edge_cost_feature_index: 0
+    edge_feature_is_bandwidth: false
+    lower_bound_weight: 1.0
+    resource_weight: 0.25
+    mobility_weight: 0.2
+    group_weight: 0.1
+    prefer_larger_groups: true
