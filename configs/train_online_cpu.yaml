@@ -120,3 +120,18 @@ external_baselines:
     mobility_weight: 0.2
     group_weight: 0.1
     prefer_larger_groups: true
+dybap:
+  v_wait: 1.0
+  v_load: 1.0
+  v_com: 1.0
+  hidden_dim: 128
+  attention_heads: 4
+  learning_rate: 0.0003
+  gamma: 0.99
+  gae_lambda: 0.95
+  clip_ratio: 0.2
+  entropy_coef: 0.01
+  value_coef: 0.5
+  update_epochs: 4
+  minibatch_size: 32
+  slo_penalty: 2.0

@@ -99,6 +99,20 @@ class Observation:
     candidate_node_indices: np.ndarray
     candidate_group_sizes: np.ndarray
     candidate_payloads: list[object] = field(default_factory=list)
+    mobility_features: np.ndarray = field(
+        default_factory=lambda: np.zeros(
+            (1, 4),
+            dtype=np.float32,
+        )
+    )
+    agent_id: int = 0
+    mobility_features: np.ndarray = field(
+        default_factory=lambda: np.zeros(
+            (1, 4),
+            dtype=np.float32,
+        )
+    )
+    agent_id: int = 0
 
 
 @dataclass

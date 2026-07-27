@@ -102,16 +102,85 @@ class SchedulingEnv:
         assert self.infra is not None
         node_features, edge_index, edge_features, node_ids = infrastructure_to_tensors(self.infra)
         self.node_ids = node_ids
-        node_to_idx = {n: i for i, n in enumerate(node_ids)}
+        node_to_idx = {
+            node_id: index
+            for index, node_id
+            in enumerate(node_ids)
+        }
+
+        active_requests = (
+            self.batch.requests
+            if self.batch is not None
+            else self.queue[
+                :self.batcher.window_size
+            ]
+        )
+
+        node_scale = max(
+            len(node_ids) - 1,
+            1,
+        )
+
+        mobility_features = np.asarray(
+            [
+                [
+                    node_to_idx.get(
+                        request.anchor_node,
+                        0,
+                    )
+                    / node_scale,
+                    node_to_idx.get(
+                        request.next_anchor_node,
+                        0,
+                    )
+                    / node_scale,
+                    float(
+                        request.handover_probability
+                    ),
+                    float(
+                        request.residual_dwell_ms
+                    )
+                    / 3000.0,
+                ]
+                for request in active_requests
+            ],
+            dtype=np.float32,
+        )
+
+        if mobility_features.size == 0:
+            mobility_features = np.zeros(
+                (1, 4),
+                dtype=np.float32,
+            )
+
         return Observation(
             node_features=node_features,
             edge_index=edge_index,
             edge_features=edge_features,
             batch_features=self._batch_feature_vector(self.batch),
             current_block=self.current_block,
-            candidate_node_indices=np.array([node_to_idx[a.node_id] for a in self.actions], dtype=np.int64),
-            candidate_group_sizes=np.array([a.group_size for a in self.actions], dtype=np.int64),
+            candidate_node_indices=np.array(
+                [
+                    node_to_idx[action.node_id]
+                    for action in self.actions
+                ],
+                dtype=np.int64,
+            ),
+            candidate_group_sizes=np.array(
+                [
+                    action.group_size
+                    for action in self.actions
+                ],
+                dtype=np.int64,
+            ),
             candidate_payloads=list(self.actions),
+            mobility_features=mobility_features,
+            agent_id=int(
+                node_to_idx.get(
+                    self.infra.anchor_node,
+                    0,
+                )
+            ),
         )
 
     def _step_costs(self, action: ActionCandidate) -> tuple[float, float, float]:
