@@ -531,167 +531,15 @@ def choose_dybap_core_action(
     obs: Any,
     cfg: dict,
 ) -> int:
-    """Compressed DyBAP block-partition mapper.
+    """Compatibility wrapper for DyBAP-Adapted."""
+    from .dybap import (
+        choose_dybap_action,
+    )
 
-    This is an adapted core implementation rather than the
-    original MARL/PPO implementation. It combines analytical
-    latency, residual resources, graph/mobility cost, and block
-    group size in every block-allocation decision.
-    """
-    section = _section(
+    return choose_dybap_action(
+        obs,
         cfg,
-        "dybap_core",
     )
-
-    candidates = _candidate_nodes(
-        obs
-    )
-
-    groups = _candidate_groups(
-        obs,
-        len(candidates),
-    )
-
-    lower_bounds = _normalize(
-        _candidate_lower_bounds(
-            obs,
-            len(candidates),
-        )
-    )
-
-    node_features = _array(
-        obs.node_features,
-        float,
-    )
-
-    compute_index = _feature_index(
-        obs,
-        int(
-            section.get(
-                "compute_feature_index",
-                -1,
-            )
-        ),
-        [
-            "compute_free",
-            "compute_remaining",
-            "cpu_free",
-            "available_compute",
-        ],
-        0,
-    )
-
-    memory_index = _feature_index(
-        obs,
-        int(
-            section.get(
-                "memory_feature_index",
-                -1,
-            )
-        ),
-        [
-            "memory_free",
-            "memory_remaining",
-            "mem_free",
-            "available_memory",
-        ],
-        1,
-    )
-
-    compute = _normalize(
-        node_features[
-            candidates,
-            compute_index,
-        ]
-    )
-
-    memory = _normalize(
-        node_features[
-            candidates,
-            memory_index,
-        ]
-    )
-
-    resource_penalty = (
-        1.0
-        - 0.5 * (
-            compute + memory
-        )
-    )
-
-    mobility_cost = _normalize(
-        _edge_costs_from_anchor(
-            obs,
-            candidates,
-            feature_index=int(
-                section.get(
-                    "edge_cost_feature_index",
-                    0,
-                )
-            ),
-            inverse=bool(
-                section.get(
-                    "edge_feature_is_bandwidth",
-                    False,
-                )
-            ),
-        )
-    )
-
-    normalized_groups = _normalize(
-        groups
-    )
-
-    if bool(
-        section.get(
-            "prefer_larger_groups",
-            True,
-        )
-    ):
-        group_penalty = (
-            1.0
-            - normalized_groups
-        )
-    else:
-        group_penalty = (
-            normalized_groups
-        )
-
-    score = (
-        float(
-            section.get(
-                "lower_bound_weight",
-                1.0,
-            )
-        )
-        * lower_bounds
-        + float(
-            section.get(
-                "resource_weight",
-                0.25,
-            )
-        )
-        * resource_penalty
-        + float(
-            section.get(
-                "mobility_weight",
-                0.20,
-            )
-        )
-        * mobility_cost
-        + float(
-            section.get(
-                "group_weight",
-                0.10,
-            )
-        )
-        * group_penalty
-    )
-
-    return int(
-        np.argmin(score)
-    )
-
 
 def choose_external_action(
     obs: Any,
@@ -704,7 +552,10 @@ def choose_external_action(
             cfg,
         )
 
-    if mapper == "dybap_core":
+    if mapper in {
+        "dybap_core",
+        "dybap_adapted",
+    }:
         return choose_dybap_core_action(
             obs,
             cfg,

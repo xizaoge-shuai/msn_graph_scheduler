@@ -23,6 +23,7 @@ from msn_scheduler.batching import (
     SequentialGreedyBatcher,
     SingleRequestBatcher,
 )
+from msn_scheduler.dybap import DyBAPFusionBatcher
 from msn_scheduler.config import load_config
 from msn_scheduler.env import SchedulingEnv
 from msn_scheduler.profiles import (
@@ -564,6 +565,7 @@ def main() -> None:
             "no_batch",
             "fixed_4",
             "sequential_greedy",
+            "dybap_fusion",
             "node_conditioned_dp",
         ],
     )
@@ -826,6 +828,12 @@ def main() -> None:
         ),
         "sequential_greedy": lambda: (
             SequentialGreedyBatcher(
+                cfg,
+                profile,
+            )
+        ),
+        "dybap_fusion": lambda: (
+            DyBAPFusionBatcher(
                 cfg,
                 profile,
             )

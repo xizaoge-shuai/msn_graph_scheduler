@@ -135,3 +135,10 @@ dybap:
   update_epochs: 4
   minibatch_size: 32
   slo_penalty: 2.0
+dybap_adapted:
+  fusion_min_gain_ms: 0.0
+  lower_bound_weight: 1.0
+  resource_weight: 0.25
+  mobility_weight: 0.2
+  group_risk_weight: 0.1
+  fragmentation_weight: 0.05

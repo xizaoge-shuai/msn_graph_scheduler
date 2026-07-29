@@ -57,6 +57,7 @@ def main() -> None:
         choices=[
             "rba",
             "dybap_core",
+            "dybap_adapted",
         ],
     )
 
@@ -109,30 +110,12 @@ def main() -> None:
         evaluator
     )
 
-    original_mapper = (
-        evaluator.choose_min_lower_bound
-    )
-
     def adapted_mapper(obs):
-        try:
-            return choose_external_action(
-                obs,
-                known.external_mapper,
-                cfg,
-            )
-        except Exception as error:
-            print(
-                "External mapper fallback to "
-                "lower-bound greedy: "
-                f"{type(error).__name__}: "
-                f"{error}",
-                file=sys.stderr,
-                flush=True,
-            )
-
-            return original_mapper(
-                obs
-            )
+        return choose_external_action(
+            obs,
+            known.external_mapper,
+            cfg,
+        )
 
     evaluator.choose_min_lower_bound = (
         adapted_mapper
