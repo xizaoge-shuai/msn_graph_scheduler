@@ -1,0 +1,2 @@
+comparison,avg_e2e_reduction_pct,p95_e2e_reduction_pct,slo_gain_pp,throughput_gain_pct,goodput_gain_pct
+Full vs Ours w/o mobility,0.0,0.0,0.0,0.0,0.0

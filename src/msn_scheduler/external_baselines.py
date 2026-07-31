@@ -122,6 +122,46 @@ def _candidate_lower_bounds(
     obs: Any,
     count: int,
 ) -> np.ndarray:
+    """Read the analytical lower bound of each action."""
+    payloads = getattr(
+        obs,
+        "candidate_payloads",
+        None,
+    )
+
+    if (
+        payloads is not None
+        and len(payloads) == count
+    ):
+        result = np.asarray(
+            [
+                float(
+                    getattr(
+                        payload,
+                        "latency_lower_bound_ms",
+                        float("inf"),
+                    )
+                )
+                for payload in payloads
+            ],
+            dtype=float,
+        )
+
+        finite = np.isfinite(result)
+
+        if finite.any():
+            maximum = float(
+                np.max(result[finite])
+            )
+
+            fallback = max(
+                maximum * 2.0,
+                1.0,
+            )
+
+            result[~finite] = fallback
+            return result
+
     names = [
         "candidate_lower_bounds",
         "action_lower_bounds",
@@ -141,22 +181,18 @@ def _candidate_lower_bounds(
         if values is None:
             continue
 
-        result = _array(
+        result = np.asarray(
             values,
-            float,
+            dtype=float,
         ).reshape(-1)
 
         if len(result) == count:
             return result
 
-    # The current evaluator already enforces
-    # action feasibility. Missing analytical
-    # lower bounds therefore fall back to zero.
     return np.zeros(
         count,
         dtype=float,
     )
-
 
 def _feature_index(
     obs: Any,
@@ -413,11 +449,12 @@ def choose_rba_action(
     obs: Any,
     cfg: dict,
 ) -> int:
-    """Adapted LECU-RBA resource-balanced mapper.
+    """Idea-adapted LECU resource-balanced allocation.
 
-    Candidate actions are ranked by residual compute and
-    memory resources. Analytical lower bound is only used
-    as a small tie breaker.
+    Select the edge node with the highest residual-resource
+    score, then select the minimum-lower-bound action on that
+    node. Cloud actions are considered only when no edge action
+    is feasible.
     """
     section = _section(
         cfg,
@@ -428,10 +465,25 @@ def choose_rba_action(
         obs
     )
 
-    node_features = _array(
-        obs.node_features,
-        float,
+    if len(candidates) == 0:
+        raise RuntimeError(
+            "RBA received no feasible action"
+        )
+
+    groups = _candidate_groups(
+        obs,
+        len(candidates),
     )
+
+    node_features = np.asarray(
+        obs.node_features,
+        dtype=float,
+    )
+
+    if node_features.ndim != 2:
+        raise ValueError(
+            "node_features must be a matrix"
+        )
 
     compute_index = _feature_index(
         obs,
@@ -442,11 +494,8 @@ def choose_rba_action(
             )
         ),
         [
-            "compute_free",
-            "compute_remaining",
-            "cpu_free",
-            "cpu_remaining",
-            "available_compute",
+            "compute_scale",
+            "compute",
         ],
         0,
     )
@@ -462,32 +511,65 @@ def choose_rba_action(
         [
             "memory_free",
             "memory_remaining",
-            "mem_free",
-            "mem_remaining",
             "available_memory",
         ],
         1,
     )
 
-    compute = _normalize(
+    background_index = _feature_index(
+        obs,
+        int(
+            section.get(
+                "background_load_feature_index",
+                -1,
+            )
+        ),
+        [
+            "background_load",
+            "load",
+        ],
+        3,
+    )
+
+    compute_scale = np.maximum(
         node_features[
             candidates,
             compute_index,
-        ]
+        ],
+        0.0,
     )
 
-    memory = _normalize(
+    background_load = np.clip(
+        node_features[
+            candidates,
+            background_index,
+        ],
+        0.0,
+        1.0,
+    )
+
+    residual_compute_raw = (
+        compute_scale
+        * (
+            1.0
+            - background_load
+        )
+    )
+
+    memory_raw = np.maximum(
         node_features[
             candidates,
             memory_index,
-        ]
+        ],
+        0.0,
     )
 
-    lower_bounds = _normalize(
-        _candidate_lower_bounds(
-            obs,
-            len(candidates),
-        )
+    residual_compute = _normalize(
+        residual_compute_raw
+    )
+
+    memory = _normalize(
+        memory_raw
     )
 
     compute_weight = float(
@@ -504,28 +586,124 @@ def choose_rba_action(
         )
     )
 
-    lower_bound_weight = float(
+    resource_score = (
+        compute_weight
+        * residual_compute
+        + memory_weight
+        * memory
+    )
+
+    edge_first = bool(
         section.get(
-            "lower_bound_tiebreak_weight",
-            0.05,
+            "edge_first",
+            True,
         )
     )
 
-    resource_score = (
-        compute_weight * compute
-        + memory_weight * memory
+    if (
+        edge_first
+        and node_features.shape[1] >= 2
+    ):
+        # The final two features are edge/cloud one-hot flags.
+        edge_mask = (
+            node_features[
+                candidates,
+                -2,
+            ]
+            > node_features[
+                candidates,
+                -1,
+            ]
+        )
+    else:
+        edge_mask = np.zeros(
+            len(candidates),
+            dtype=bool,
+        )
+
+    eligible_indices = np.flatnonzero(
+        edge_mask
     )
 
-    score = (
-        resource_score
-        - lower_bound_weight
-        * lower_bounds
+    if len(eligible_indices) == 0:
+        eligible_indices = np.arange(
+            len(candidates),
+            dtype=int,
+        )
+
+    unique_nodes = sorted(
+        {
+            int(candidates[index])
+            for index in eligible_indices
+        }
     )
 
-    return int(
-        np.argmax(score)
+    def node_key(
+        node_index: int,
+    ) -> tuple:
+        action_indices = [
+            int(index)
+            for index in eligible_indices
+            if int(candidates[index])
+            == node_index
+        ]
+
+        representative = (
+            action_indices[0]
+        )
+
+        return (
+            float(
+                resource_score[
+                    representative
+                ]
+            ),
+            float(
+                residual_compute_raw[
+                    representative
+                ]
+            ),
+            float(
+                memory_raw[
+                    representative
+                ]
+            ),
+            -int(node_index),
+        )
+
+    selected_node = max(
+        unique_nodes,
+        key=node_key,
     )
 
+    node_actions = [
+        int(index)
+        for index in range(
+            len(candidates)
+        )
+        if int(candidates[index])
+        == selected_node
+    ]
+
+    lower_bounds = (
+        _candidate_lower_bounds(
+            obs,
+            len(candidates),
+        )
+    )
+
+    selected_action = min(
+        node_actions,
+        key=lambda index: (
+            float(
+                lower_bounds[index]
+            ),
+            -float(groups[index]),
+            int(index),
+        ),
+    )
+
+    return int(selected_action)
 
 def choose_dybap_core_action(
     obs: Any,

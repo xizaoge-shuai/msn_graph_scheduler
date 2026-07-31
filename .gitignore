@@ -1,0 +1,10 @@
+
+# Large Azure datasets: keep locally, do not commit
+data/raw/azure_2024/conversation.csv
+data/raw/azure_2024/code.csv
+data/processed/azure_2024_code.csv
+data/processed/azure_2024_conversation.csv
+data/processed/azure_all_requests.csv
+
+git reset --soft origin/reproduce/lecu-dybap
+git reset

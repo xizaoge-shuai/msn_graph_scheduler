@@ -1,0 +1,715 @@
+src/msn_scheduler/dybap.py-911-        )
+src/msn_scheduler/dybap.py-912-    )
+src/msn_scheduler/dybap.py-913-
+src/msn_scheduler/dybap.py:914:    mobility_weight = float(
+src/msn_scheduler/dybap.py-915-        dcfg.get(
+src/msn_scheduler/dybap.py:916:            "mobility_weight",
+src/msn_scheduler/dybap.py-917-            0.20,
+src/msn_scheduler/dybap.py-918-        )
+src/msn_scheduler/dybap.py-919-    )
+--
+src/msn_scheduler/dybap.py-942-        )
+src/msn_scheduler/dybap.py-943-        + resource_weight
+src/msn_scheduler/dybap.py-944-        * resource_penalty
+src/msn_scheduler/dybap.py:945:        + mobility_weight
+src/msn_scheduler/dybap.py-946-        * _normalize_cost(
+src/msn_scheduler/dybap.py-947-            mobility_raw
+src/msn_scheduler/dybap.py-948-        )
+--
+src/msn_scheduler/candidates.py-33-        memory = profile.memory_gb(batch_size, max_input_tokens, expected_output_tokens, group_size)
+src/msn_scheduler/candidates.py-34-        if memory > node.free_memory_gb:
+src/msn_scheduler/candidates.py-35-            continue
+src/msn_scheduler/candidates.py:36:        if not np.isfinite(shortest_path_latency_ms(infra, infra.anchor_node, node_id)):
+src/msn_scheduler/candidates.py-37-            continue
+src/msn_scheduler/candidates.py-38-        feasible.append(node_id)
+src/msn_scheduler/candidates.py-39-    return feasible
+--
+src/msn_scheduler/candidates.py-60-                continue
+src/msn_scheduler/candidates.py-61-            lower = (
+src/msn_scheduler/candidates.py-62-                node.queue_delay_ms
+src/msn_scheduler/candidates.py:63:                + shortest_path_latency_ms(infra, infra.anchor_node, node_id)
+src/msn_scheduler/candidates.py-64-                + profile.prefill_ms(node, batch.batch_size, batch.max_input_tokens, g)
+src/msn_scheduler/candidates.py-65-            )
+src/msn_scheduler/candidates.py-66-            scored.append(ActionCandidate(node_id, g, batch, float(lower)))
+--
+src/msn_scheduler/candidates.py-69-        for item in scored[:top_n]:
+src/msn_scheduler/candidates.py-70-            keep[(item.node_id, item.group_size)] = item
+src/msn_scheduler/candidates.py-71-        for item in scored:
+src/msn_scheduler/candidates.py:72:            if item.node_id in {infra.anchor_node, infra.cloud_node}:
+src/msn_scheduler/candidates.py-73-                keep[(item.node_id, item.group_size)] = item
+src/msn_scheduler/candidates.py-74-        actions.extend(keep.values())
+src/msn_scheduler/candidates.py-75-    return actions
+--
+src/msn_scheduler/candidates.py-113-        for item in scored[:top_n]:
+src/msn_scheduler/candidates.py-114-            keep[(item.node_id, item.group_size)] = item
+src/msn_scheduler/candidates.py-115-        for item in scored:
+src/msn_scheduler/candidates.py:116:            if item.node_id in {infra.anchor_node, infra.cloud_node}:
+src/msn_scheduler/candidates.py-117-                keep[(item.node_id, item.group_size)] = item
+src/msn_scheduler/candidates.py-118-        actions.extend(keep.values())
+src/msn_scheduler/candidates.py-119-    return actions
+--
+src/msn_scheduler/synthetic.py-85-        nodes=nodes,
+src/msn_scheduler/synthetic.py-86-        links=links,
+src/msn_scheduler/synthetic.py-87-        cloud_node=cloud,
+src/msn_scheduler/synthetic.py:88:        anchor_node=str(cfg["system"]["anchor_node"]),
+src/msn_scheduler/synthetic.py-89-    )
+src/msn_scheduler/synthetic.py-90-
+src/msn_scheduler/synthetic.py-91-
+--
+src/msn_scheduler/synthetic.py-103-    """
+src/msn_scheduler/synthetic.py-104-    q_cfg = cfg["requests"]
+src/msn_scheduler/synthetic.py-105-    size = int(q_cfg["queue_size"])
+src/msn_scheduler/synthetic.py:106:    anchor = str(cfg["system"]["anchor_node"])
+src/msn_scheduler/synthetic.py-107-    n_edge = int(cfg["system"]["num_edge_nodes"])
+src/msn_scheduler/synthetic.py-108-
+src/msn_scheduler/synthetic.py-109-    sampled = None
+--
+src/msn_scheduler/synthetic.py-272-                input_tokens=input_tokens,
+src/msn_scheduler/synthetic.py-273-                expected_output_tokens=out,
+src/msn_scheduler/synthetic.py-274-                deadline_ms=deadline,
+src/msn_scheduler/synthetic.py:275:                anchor_node=anchor,
+src/msn_scheduler/synthetic.py:276:                next_anchor_node=next_anchor,
+src/msn_scheduler/synthetic.py:277:                handover_probability=handover_p,
+src/msn_scheduler/synthetic.py:278:                residual_dwell_ms=float(
+src/msn_scheduler/synthetic.py-279-                    rng.uniform(150, 2500)
+src/msn_scheduler/synthetic.py-280-                ),
+src/msn_scheduler/synthetic.py-281-                model_name=str(
+Binary file src/msn_scheduler/__pycache__/dybap.cpython-310.pyc matches
+Binary file src/msn_scheduler/__pycache__/candidates.cpython-310.pyc matches
+Binary file src/msn_scheduler/__pycache__/datatypes.cpython-310.pyc matches
+Binary file src/msn_scheduler/__pycache__/synthetic.cpython-310.pyc matches
+Binary file src/msn_scheduler/__pycache__/external_baselines.cpython-310.pyc matches
+Binary file src/msn_scheduler/__pycache__/batching.cpython-310.pyc matches
+Binary file src/msn_scheduler/__pycache__/baselines.cpython-310.pyc matches
+Binary file src/msn_scheduler/__pycache__/env.cpython-310.pyc matches
+--
+src/msn_scheduler/datatypes.py-13-    input_tokens: int
+src/msn_scheduler/datatypes.py-14-    expected_output_tokens: int
+src/msn_scheduler/datatypes.py-15-    deadline_ms: float
+src/msn_scheduler/datatypes.py:16:    anchor_node: str
+src/msn_scheduler/datatypes.py:17:    next_anchor_node: str
+src/msn_scheduler/datatypes.py:18:    handover_probability: float
+src/msn_scheduler/datatypes.py:19:    residual_dwell_ms: float
+src/msn_scheduler/datatypes.py-20-    model_name: str = "qwen-1.5b-sim"
+src/msn_scheduler/datatypes.py-21-    service_class: str = "default"
+src/msn_scheduler/datatypes.py-22-
+--
+src/msn_scheduler/datatypes.py-57-    nodes: dict[str, ComputeNode]
+src/msn_scheduler/datatypes.py-58-    links: dict[tuple[str, str], Link]
+src/msn_scheduler/datatypes.py-59-    cloud_node: str
+src/msn_scheduler/datatypes.py:60:    anchor_node: str
+src/msn_scheduler/datatypes.py-61-
+src/msn_scheduler/datatypes.py-62-
+src/msn_scheduler/datatypes.py-63-@dataclass
+--
+src/msn_scheduler/synthetic.py.bak_before_azure-84-        nodes=nodes,
+src/msn_scheduler/synthetic.py.bak_before_azure-85-        links=links,
+src/msn_scheduler/synthetic.py.bak_before_azure-86-        cloud_node=cloud,
+src/msn_scheduler/synthetic.py.bak_before_azure:87:        anchor_node=str(cfg["system"]["anchor_node"]),
+src/msn_scheduler/synthetic.py.bak_before_azure-88-    )
+src/msn_scheduler/synthetic.py.bak_before_azure-89-
+src/msn_scheduler/synthetic.py.bak_before_azure-90-
+src/msn_scheduler/synthetic.py.bak_before_azure-91-def make_request_queue(cfg: dict, rng: np.random.Generator, now_ms: float = 0.0) -> list[Request]:
+src/msn_scheduler/synthetic.py.bak_before_azure-92-    q_cfg = cfg["requests"]
+src/msn_scheduler/synthetic.py.bak_before_azure-93-    size = int(q_cfg["queue_size"])
+src/msn_scheduler/synthetic.py.bak_before_azure:94:    anchor = str(cfg["system"]["anchor_node"])
+src/msn_scheduler/synthetic.py.bak_before_azure-95-    n_edge = int(cfg["system"]["num_edge_nodes"])
+src/msn_scheduler/synthetic.py.bak_before_azure-96-    requests: list[Request] = []
+src/msn_scheduler/synthetic.py.bak_before_azure-97-    for i in range(size):
+--
+src/msn_scheduler/synthetic.py.bak_before_azure-163-                input_tokens=input_tokens,
+src/msn_scheduler/synthetic.py.bak_before_azure-164-                expected_output_tokens=out,
+src/msn_scheduler/synthetic.py.bak_before_azure-165-                deadline_ms=deadline,
+src/msn_scheduler/synthetic.py.bak_before_azure:166:                anchor_node=anchor,
+src/msn_scheduler/synthetic.py.bak_before_azure:167:                next_anchor_node=next_anchor,
+src/msn_scheduler/synthetic.py.bak_before_azure:168:                handover_probability=handover_p,
+src/msn_scheduler/synthetic.py.bak_before_azure:169:                residual_dwell_ms=float(rng.uniform(150, 2500)),
+src/msn_scheduler/synthetic.py.bak_before_azure-170-            )
+src/msn_scheduler/synthetic.py.bak_before_azure-171-        )
+src/msn_scheduler/synthetic.py.bak_before_azure-172-    requests.sort(key=lambda r: r.arrival_ms)
+--
+src/msn_scheduler/env.py-56-        self.now_ms = now_ms
+src/msn_scheduler/env.py-57-        self.batch = None
+src/msn_scheduler/env.py-58-        self.current_block = 0
+src/msn_scheduler/env.py:59:        self.current_node = infra.anchor_node
+src/msn_scheduler/env.py-60-        self.mapping = []
+src/msn_scheduler/env.py-61-        self.total_reward = 0.0
+src/msn_scheduler/env.py-62-        self.total_prefill_ms = 0.0
+--
+src/msn_scheduler/env.py-94-                else float(
+src/msn_scheduler/env.py-95-                    np.mean(
+src/msn_scheduler/env.py-96-                        [
+src/msn_scheduler/env.py:97:                            r.handover_probability
+src/msn_scheduler/env.py-98-                            for r in reqs
+src/msn_scheduler/env.py-99-                        ]
+src/msn_scheduler/env.py-100-                    )
+--
+src/msn_scheduler/env.py-107-                else float(
+src/msn_scheduler/env.py-108-                    np.mean(
+src/msn_scheduler/env.py-109-                        [
+src/msn_scheduler/env.py:110:                            r.residual_dwell_ms
+src/msn_scheduler/env.py-111-                            for r in reqs
+src/msn_scheduler/env.py-112-                        ]
+src/msn_scheduler/env.py-113-                    )
+--
+src/msn_scheduler/env.py-156-            else float(
+src/msn_scheduler/env.py-157-                np.mean(
+src/msn_scheduler/env.py-158-                    [
+src/msn_scheduler/env.py:159:                        r.handover_probability
+src/msn_scheduler/env.py-160-                        for r in batch.requests
+src/msn_scheduler/env.py-161-                    ]
+src/msn_scheduler/env.py-162-                )
+--
+src/msn_scheduler/env.py-169-            else float(
+src/msn_scheduler/env.py-170-                np.mean(
+src/msn_scheduler/env.py-171-                    [
+src/msn_scheduler/env.py:172:                        r.residual_dwell_ms
+src/msn_scheduler/env.py-173-                        for r in batch.requests
+src/msn_scheduler/env.py-174-                    ]
+src/msn_scheduler/env.py-175-                )
+--
+src/msn_scheduler/env.py-225-            [
+src/msn_scheduler/env.py-226-                [
+src/msn_scheduler/env.py-227-                    node_to_idx.get(
+src/msn_scheduler/env.py:228:                        request.anchor_node,
+src/msn_scheduler/env.py-229-                        0,
+src/msn_scheduler/env.py-230-                    )
+src/msn_scheduler/env.py-231-                    / node_scale,
+src/msn_scheduler/env.py-232-                    node_to_idx.get(
+src/msn_scheduler/env.py:233:                        request.next_anchor_node,
+src/msn_scheduler/env.py-234-                        0,
+src/msn_scheduler/env.py-235-                    )
+src/msn_scheduler/env.py-236-                    / node_scale,
+src/msn_scheduler/env.py-237-                    float(
+src/msn_scheduler/env.py:238:                        request.handover_probability
+src/msn_scheduler/env.py-239-                    ),
+src/msn_scheduler/env.py-240-                    float(
+src/msn_scheduler/env.py:241:                        request.residual_dwell_ms
+src/msn_scheduler/env.py-242-                    )
+src/msn_scheduler/env.py-243-                    / 3000.0,
+src/msn_scheduler/env.py-244-                ]
+--
+src/msn_scheduler/env.py-277-            mobility_features=mobility_features,
+src/msn_scheduler/env.py-278-            agent_id=int(
+src/msn_scheduler/env.py-279-                node_to_idx.get(
+src/msn_scheduler/env.py:280:                    self.infra.anchor_node,
+src/msn_scheduler/env.py-281-                    0,
+src/msn_scheduler/env.py-282-                )
+src/msn_scheduler/env.py-283-            ),
+--
+src/msn_scheduler/env.py-301-        handover = float(
+src/msn_scheduler/env.py-302-            np.mean(
+src/msn_scheduler/env.py-303-                [
+src/msn_scheduler/env.py:304:                    req.handover_probability
+src/msn_scheduler/env.py-305-                    * (
+src/msn_scheduler/env.py-306-                        12.0
+src/msn_scheduler/env.py-307-                        + max(
+src/msn_scheduler/env.py-308-                            0.0,
+src/msn_scheduler/env.py:309:                            shortest_path_latency_ms(self.infra, req.next_anchor_node, action.node_id)
+src/msn_scheduler/env.py:310:                            - shortest_path_latency_ms(self.infra, req.anchor_node, action.node_id),
+src/msn_scheduler/env.py-311-                        )
+src/msn_scheduler/env.py-312-                    )
+src/msn_scheduler/env.py-313-                    for req in self.batch.requests
+--
+src/msn_scheduler/env.py-343-
+src/msn_scheduler/env.py-344-        for req in self.batch.requests:
+src/msn_scheduler/env.py-345-            total_per_token = 0.0
+src/msn_scheduler/env.py:346:            previous = req.anchor_node
+src/msn_scheduler/env.py-347-
+src/msn_scheduler/env.py-348-            context = int(
+src/msn_scheduler/env.py-349-                req.input_tokens
+--
+src/msn_scheduler/baselines.py-14-    return int(np.argmin(obs.candidate_group_sizes))
+src/msn_scheduler/baselines.py-15-
+src/msn_scheduler/baselines.py-16-
+src/msn_scheduler/baselines.py:17:def choose_anchor(obs: Observation, payload_node_ids: list[str], anchor_node: str) -> int:
+src/msn_scheduler/baselines.py:18:    anchor_actions = [i for i, n in enumerate(payload_node_ids) if n == anchor_node]
+src/msn_scheduler/baselines.py-19-    if anchor_actions:
+src/msn_scheduler/baselines.py-20-        return max(anchor_actions, key=lambda i: int(obs.candidate_group_sizes[i]))
+src/msn_scheduler/baselines.py-21-    return 0
+--
+src/msn_scheduler/batching.py.bak_calibration-36-            urgency=float(bcfg["alpha_urgency"]),
+src/msn_scheduler/batching.py.bak_calibration-37-            batch_gain=float(bcfg["alpha_batch_gain"]),
+src/msn_scheduler/batching.py.bak_calibration-38-            padding=float(bcfg["alpha_padding"]),
+src/msn_scheduler/batching.py.bak_calibration:39:            mobility=float(bcfg["alpha_mobility"]),
+src/msn_scheduler/batching.py.bak_calibration-40-        )
+src/msn_scheduler/batching.py.bak_calibration-41-        self.profile = profile
+src/msn_scheduler/batching.py.bak_calibration-42-        self.cloud_reserve_gb = float(cfg["system"]["cloud_reserved_memory_gb"])
+src/msn_scheduler/batching.py.bak_calibration-43-
+src/msn_scheduler/batching.py.bak_calibration-44-    def _handover_cost_ms(self, req: Request, infra: Infrastructure, node_id: str) -> float:
+src/msn_scheduler/batching.py.bak_calibration-45-        reroute_ms = 12.0
+src/msn_scheduler/batching.py.bak_calibration:46:        old_path = shortest_path_latency_ms(infra, req.anchor_node, node_id)
+src/msn_scheduler/batching.py.bak_calibration:47:        new_path = shortest_path_latency_ms(infra, req.next_anchor_node, node_id)
+src/msn_scheduler/batching.py.bak_calibration-48-        if not np.isfinite(new_path):
+src/msn_scheduler/batching.py.bak_calibration-49-            return 1e6
+src/msn_scheduler/batching.py.bak_calibration-50-        stretch_ms = max(0.0, new_path - old_path)
+--
+src/msn_scheduler/batching.py.bak_calibration-75-                r.expected_output_tokens,
+src/msn_scheduler/batching.py.bak_calibration-76-                round(r.deadline_ms, 3),
+src/msn_scheduler/batching.py.bak_calibration-77-                round(r.arrival_ms, 3),
+src/msn_scheduler/batching.py.bak_calibration:78:                round(r.handover_probability, 4),
+src/msn_scheduler/batching.py.bak_calibration:79:                r.next_anchor_node,
+src/msn_scheduler/batching.py.bak_calibration-80-            )
+src/msn_scheduler/batching.py.bak_calibration-81-            for r in queue[: self.window_size]
+src/msn_scheduler/batching.py.bak_calibration-82-        )
+--
+src/msn_scheduler/batching.py.bak_calibration-161-                    handover = self._handover_cost_ms(req, infra, node_id)
+src/msn_scheduler/batching.py.bak_calibration-162-                    p_ho = min(
+src/msn_scheduler/batching.py.bak_calibration-163-                        1.0,
+src/msn_scheduler/batching.py.bak_calibration:164:                        req.handover_probability
+src/msn_scheduler/batching.py.bak_calibration-165-                        * batch_prefill
+src/msn_scheduler/batching.py.bak_calibration:166:                        / max(req.residual_dwell_ms, 1.0),
+src/msn_scheduler/batching.py.bak_calibration-167-                    )
+src/msn_scheduler/batching.py.bak_calibration-168-                    value = (
+src/msn_scheduler/batching.py.bak_calibration-169-                        self.weights.urgency * max(0.0, now_ms - req.arrival_ms) / remaining
+--
+src/msn_scheduler/batching.py.bak_calibration-204-                        np.mean(
+src/msn_scheduler/batching.py.bak_calibration-205-                            [
+src/msn_scheduler/batching.py.bak_calibration-206-                                self._handover_cost_ms(r, infra, node_id)
+src/msn_scheduler/batching.py.bak_calibration:207:                                * r.handover_probability
+src/msn_scheduler/batching.py.bak_calibration-208-                                for r in chosen
+src/msn_scheduler/batching.py.bak_calibration-209-                            ]
+src/msn_scheduler/batching.py.bak_calibration-210-                        )
+--
+src/msn_scheduler/batching.py.bak_calibration-275-            - prefill
+src/msn_scheduler/batching.py.bak_calibration-276-        )
+src/msn_scheduler/batching.py.bak_calibration-277-        mobility = sum(
+src/msn_scheduler/batching.py.bak_calibration:278:            r.handover_probability * self._handover_cost_ms(r, infra, node_id)
+src/msn_scheduler/batching.py.bak_calibration-279-            for r in requests
+src/msn_scheduler/batching.py.bak_calibration-280-        )
+src/msn_scheduler/batching.py.bak_calibration-281-        urgency = sum(
+--
+src/msn_scheduler/synthetic.py.bak_calibration-84-        nodes=nodes,
+src/msn_scheduler/synthetic.py.bak_calibration-85-        links=links,
+src/msn_scheduler/synthetic.py.bak_calibration-86-        cloud_node=cloud,
+src/msn_scheduler/synthetic.py.bak_calibration:87:        anchor_node=str(cfg["system"]["anchor_node"]),
+src/msn_scheduler/synthetic.py.bak_calibration-88-    )
+src/msn_scheduler/synthetic.py.bak_calibration-89-
+src/msn_scheduler/synthetic.py.bak_calibration-90-
+src/msn_scheduler/synthetic.py.bak_calibration-91-def make_request_queue(cfg: dict, rng: np.random.Generator, now_ms: float = 0.0) -> list[Request]:
+src/msn_scheduler/synthetic.py.bak_calibration-92-    q_cfg = cfg["requests"]
+src/msn_scheduler/synthetic.py.bak_calibration-93-    size = int(q_cfg["queue_size"])
+src/msn_scheduler/synthetic.py.bak_calibration:94:    anchor = str(cfg["system"]["anchor_node"])
+src/msn_scheduler/synthetic.py.bak_calibration-95-    n_edge = int(cfg["system"]["num_edge_nodes"])
+src/msn_scheduler/synthetic.py.bak_calibration-96-    requests: list[Request] = []
+src/msn_scheduler/synthetic.py.bak_calibration-97-    for i in range(size):
+--
+src/msn_scheduler/synthetic.py.bak_calibration-112-                input_tokens=input_tokens,
+src/msn_scheduler/synthetic.py.bak_calibration-113-                expected_output_tokens=out,
+src/msn_scheduler/synthetic.py.bak_calibration-114-                deadline_ms=deadline,
+src/msn_scheduler/synthetic.py.bak_calibration:115:                anchor_node=anchor,
+src/msn_scheduler/synthetic.py.bak_calibration:116:                next_anchor_node=next_anchor,
+src/msn_scheduler/synthetic.py.bak_calibration:117:                handover_probability=handover_p,
+src/msn_scheduler/synthetic.py.bak_calibration:118:                residual_dwell_ms=float(rng.uniform(150, 2500)),
+src/msn_scheduler/synthetic.py.bak_calibration-119-            )
+src/msn_scheduler/synthetic.py.bak_calibration-120-        )
+src/msn_scheduler/synthetic.py.bak_calibration-121-    requests.sort(key=lambda r: r.arrival_ms)
+--
+src/msn_scheduler/batching.py.bak_split_weights-39-            urgency=float(bcfg["alpha_urgency"]),
+src/msn_scheduler/batching.py.bak_split_weights-40-            batch_gain=float(bcfg["alpha_batch_gain"]),
+src/msn_scheduler/batching.py.bak_split_weights-41-            padding=float(bcfg["alpha_padding"]),
+src/msn_scheduler/batching.py.bak_split_weights:42:            mobility=float(bcfg["alpha_mobility"]),
+src/msn_scheduler/batching.py.bak_split_weights-43-            decode=float(
+src/msn_scheduler/batching.py.bak_split_weights-44-                bcfg.get(
+src/msn_scheduler/batching.py.bak_split_weights-45-                    "alpha_decode",
+--
+src/msn_scheduler/batching.py.bak_split_weights-70-
+src/msn_scheduler/batching.py.bak_split_weights-71-    def _handover_cost_ms(self, req: Request, infra: Infrastructure, node_id: str) -> float:
+src/msn_scheduler/batching.py.bak_split_weights-72-        reroute_ms = 12.0
+src/msn_scheduler/batching.py.bak_split_weights:73:        old_path = shortest_path_latency_ms(infra, req.anchor_node, node_id)
+src/msn_scheduler/batching.py.bak_split_weights:74:        new_path = shortest_path_latency_ms(infra, req.next_anchor_node, node_id)
+src/msn_scheduler/batching.py.bak_split_weights-75-        if not np.isfinite(new_path):
+src/msn_scheduler/batching.py.bak_split_weights-76-            return 1e6
+src/msn_scheduler/batching.py.bak_split_weights-77-        stretch_ms = max(0.0, new_path - old_path)
+--
+src/msn_scheduler/batching.py.bak_split_weights-113-        anchor_transfer = (
+src/msn_scheduler/batching.py.bak_split_weights-114-            transfer_time_ms(
+src/msn_scheduler/batching.py.bak_split_weights-115-                infra,
+src/msn_scheduler/batching.py.bak_split_weights:116:                infra.anchor_node,
+src/msn_scheduler/batching.py.bak_split_weights-117-                node_id,
+src/msn_scheduler/batching.py.bak_split_weights-118-                activation_mb,
+src/msn_scheduler/batching.py.bak_split_weights-119-            )
+--
+src/msn_scheduler/batching.py.bak_split_weights-296-                r.expected_output_tokens,
+src/msn_scheduler/batching.py.bak_split_weights-297-                round(r.deadline_ms, 3),
+src/msn_scheduler/batching.py.bak_split_weights-298-                round(r.arrival_ms, 3),
+src/msn_scheduler/batching.py.bak_split_weights:299:                round(r.handover_probability, 4),
+src/msn_scheduler/batching.py.bak_split_weights:300:                r.next_anchor_node,
+src/msn_scheduler/batching.py.bak_split_weights-301-            )
+src/msn_scheduler/batching.py.bak_split_weights-302-            for r in queue[: self.window_size]
+src/msn_scheduler/batching.py.bak_split_weights-303-        )
+--
+src/msn_scheduler/batching.py.bak_split_weights-387-                    handover = self._handover_cost_ms(req, infra, node_id)
+src/msn_scheduler/batching.py.bak_split_weights-388-                    p_ho = min(
+src/msn_scheduler/batching.py.bak_split_weights-389-                        1.0,
+src/msn_scheduler/batching.py.bak_split_weights:390:                        req.handover_probability
+src/msn_scheduler/batching.py.bak_split_weights-391-                        * batch_prefill
+src/msn_scheduler/batching.py.bak_split_weights:392:                        / max(req.residual_dwell_ms, 1.0),
+src/msn_scheduler/batching.py.bak_split_weights-393-                    )
+src/msn_scheduler/batching.py.bak_split_weights-394-                    estimated_decode_ms = (
+src/msn_scheduler/batching.py.bak_split_weights-395-                        self._estimate_request_decode_ms(
+--
+src/msn_scheduler/batching.py.bak_split_weights-472-                        np.mean(
+src/msn_scheduler/batching.py.bak_split_weights-473-                            [
+src/msn_scheduler/batching.py.bak_split_weights-474-                                self._handover_cost_ms(r, infra, node_id)
+src/msn_scheduler/batching.py.bak_split_weights:475:                                * r.handover_probability
+src/msn_scheduler/batching.py.bak_split_weights-476-                                for r in chosen
+src/msn_scheduler/batching.py.bak_split_weights-477-                            ]
+src/msn_scheduler/batching.py.bak_split_weights-478-                        )
+--
+src/msn_scheduler/batching.py.bak_split_weights-591-            - prefill
+src/msn_scheduler/batching.py.bak_split_weights-592-        )
+src/msn_scheduler/batching.py.bak_split_weights-593-        mobility = sum(
+src/msn_scheduler/batching.py.bak_split_weights:594:            r.handover_probability * self._handover_cost_ms(r, infra, node_id)
+src/msn_scheduler/batching.py.bak_split_weights-595-            for r in requests
+src/msn_scheduler/batching.py.bak_split_weights-596-        )
+src/msn_scheduler/batching.py.bak_split_weights-597-        urgency = sum(
+--
+src/msn_scheduler/batching.py.bak_relative_gain-39-            urgency=float(bcfg["alpha_urgency"]),
+src/msn_scheduler/batching.py.bak_relative_gain-40-            batch_gain=float(bcfg["alpha_batch_gain"]),
+src/msn_scheduler/batching.py.bak_relative_gain-41-            padding=float(bcfg["alpha_padding"]),
+src/msn_scheduler/batching.py.bak_relative_gain:42:            mobility=float(bcfg["alpha_mobility"]),
+src/msn_scheduler/batching.py.bak_relative_gain-43-            decode=float(
+src/msn_scheduler/batching.py.bak_relative_gain-44-                bcfg.get(
+src/msn_scheduler/batching.py.bak_relative_gain-45-                    "alpha_decode",
+--
+src/msn_scheduler/batching.py.bak_relative_gain-70-
+src/msn_scheduler/batching.py.bak_relative_gain-71-    def _handover_cost_ms(self, req: Request, infra: Infrastructure, node_id: str) -> float:
+src/msn_scheduler/batching.py.bak_relative_gain-72-        reroute_ms = 12.0
+src/msn_scheduler/batching.py.bak_relative_gain:73:        old_path = shortest_path_latency_ms(infra, req.anchor_node, node_id)
+src/msn_scheduler/batching.py.bak_relative_gain:74:        new_path = shortest_path_latency_ms(infra, req.next_anchor_node, node_id)
+src/msn_scheduler/batching.py.bak_relative_gain-75-        if not np.isfinite(new_path):
+src/msn_scheduler/batching.py.bak_relative_gain-76-            return 1e6
+src/msn_scheduler/batching.py.bak_relative_gain-77-        stretch_ms = max(0.0, new_path - old_path)
+--
+src/msn_scheduler/batching.py.bak_relative_gain-113-        anchor_transfer = (
+src/msn_scheduler/batching.py.bak_relative_gain-114-            transfer_time_ms(
+src/msn_scheduler/batching.py.bak_relative_gain-115-                infra,
+src/msn_scheduler/batching.py.bak_relative_gain:116:                infra.anchor_node,
+src/msn_scheduler/batching.py.bak_relative_gain-117-                node_id,
+src/msn_scheduler/batching.py.bak_relative_gain-118-                activation_mb,
+src/msn_scheduler/batching.py.bak_relative_gain-119-            )
+--
+src/msn_scheduler/batching.py.bak_relative_gain-296-                r.expected_output_tokens,
+src/msn_scheduler/batching.py.bak_relative_gain-297-                round(r.deadline_ms, 3),
+src/msn_scheduler/batching.py.bak_relative_gain-298-                round(r.arrival_ms, 3),
+src/msn_scheduler/batching.py.bak_relative_gain:299:                round(r.handover_probability, 4),
+src/msn_scheduler/batching.py.bak_relative_gain:300:                r.next_anchor_node,
+src/msn_scheduler/batching.py.bak_relative_gain-301-            )
+src/msn_scheduler/batching.py.bak_relative_gain-302-            for r in queue[: self.window_size]
+src/msn_scheduler/batching.py.bak_relative_gain-303-        )
+--
+src/msn_scheduler/batching.py.bak_relative_gain-387-                    handover = self._handover_cost_ms(req, infra, node_id)
+src/msn_scheduler/batching.py.bak_relative_gain-388-                    p_ho = min(
+src/msn_scheduler/batching.py.bak_relative_gain-389-                        1.0,
+src/msn_scheduler/batching.py.bak_relative_gain:390:                        req.handover_probability
+src/msn_scheduler/batching.py.bak_relative_gain-391-                        * batch_prefill
+src/msn_scheduler/batching.py.bak_relative_gain:392:                        / max(req.residual_dwell_ms, 1.0),
+src/msn_scheduler/batching.py.bak_relative_gain-393-                    )
+src/msn_scheduler/batching.py.bak_relative_gain-394-                    estimated_decode_ms = (
+src/msn_scheduler/batching.py.bak_relative_gain-395-                        self._estimate_request_decode_ms(
+--
+src/msn_scheduler/batching.py.bak_relative_gain-472-                        np.mean(
+src/msn_scheduler/batching.py.bak_relative_gain-473-                            [
+src/msn_scheduler/batching.py.bak_relative_gain-474-                                self._handover_cost_ms(r, infra, node_id)
+src/msn_scheduler/batching.py.bak_relative_gain:475:                                * r.handover_probability
+src/msn_scheduler/batching.py.bak_relative_gain-476-                                for r in chosen
+src/msn_scheduler/batching.py.bak_relative_gain-477-                            ]
+src/msn_scheduler/batching.py.bak_relative_gain-478-                        )
+--
+src/msn_scheduler/batching.py.bak_relative_gain-566-            - prefill
+src/msn_scheduler/batching.py.bak_relative_gain-567-        )
+src/msn_scheduler/batching.py.bak_relative_gain-568-        mobility = sum(
+src/msn_scheduler/batching.py.bak_relative_gain:569:            r.handover_probability * self._handover_cost_ms(r, infra, node_id)
+src/msn_scheduler/batching.py.bak_relative_gain-570-            for r in requests
+src/msn_scheduler/batching.py.bak_relative_gain-571-        )
+src/msn_scheduler/batching.py.bak_relative_gain-572-        urgency = sum(
+--
+src/msn_scheduler/external_baselines.py-243-    obs: Any,
+src/msn_scheduler/external_baselines.py-244-) -> int | None:
+src/msn_scheduler/external_baselines.py-245-    names = [
+src/msn_scheduler/external_baselines.py:246:        "predicted_anchor_node_index",
+src/msn_scheduler/external_baselines.py:247:        "next_anchor_node_index",
+src/msn_scheduler/external_baselines.py:248:        "anchor_node_index",
+src/msn_scheduler/external_baselines.py-249-        "source_node_index",
+src/msn_scheduler/external_baselines.py-250-        "current_node_index",
+src/msn_scheduler/external_baselines.py-251-        "request_node_index",
+--
+src/msn_scheduler/batching.py.bak_decode_aware-36-            urgency=float(bcfg["alpha_urgency"]),
+src/msn_scheduler/batching.py.bak_decode_aware-37-            batch_gain=float(bcfg["alpha_batch_gain"]),
+src/msn_scheduler/batching.py.bak_decode_aware-38-            padding=float(bcfg["alpha_padding"]),
+src/msn_scheduler/batching.py.bak_decode_aware:39:            mobility=float(bcfg["alpha_mobility"]),
+src/msn_scheduler/batching.py.bak_decode_aware-40-        )
+src/msn_scheduler/batching.py.bak_decode_aware-41-        self.profile = profile
+src/msn_scheduler/batching.py.bak_decode_aware-42-        self.cloud_reserve_gb = float(cfg["system"]["cloud_reserved_memory_gb"])
+src/msn_scheduler/batching.py.bak_decode_aware-43-
+src/msn_scheduler/batching.py.bak_decode_aware-44-    def _handover_cost_ms(self, req: Request, infra: Infrastructure, node_id: str) -> float:
+src/msn_scheduler/batching.py.bak_decode_aware-45-        reroute_ms = 12.0
+src/msn_scheduler/batching.py.bak_decode_aware:46:        old_path = shortest_path_latency_ms(infra, req.anchor_node, node_id)
+src/msn_scheduler/batching.py.bak_decode_aware:47:        new_path = shortest_path_latency_ms(infra, req.next_anchor_node, node_id)
+src/msn_scheduler/batching.py.bak_decode_aware-48-        if not np.isfinite(new_path):
+src/msn_scheduler/batching.py.bak_decode_aware-49-            return 1e6
+src/msn_scheduler/batching.py.bak_decode_aware-50-        stretch_ms = max(0.0, new_path - old_path)
+--
+src/msn_scheduler/batching.py.bak_decode_aware-86-        anchor_transfer = (
+src/msn_scheduler/batching.py.bak_decode_aware-87-            transfer_time_ms(
+src/msn_scheduler/batching.py.bak_decode_aware-88-                infra,
+src/msn_scheduler/batching.py.bak_decode_aware:89:                infra.anchor_node,
+src/msn_scheduler/batching.py.bak_decode_aware-90-                node_id,
+src/msn_scheduler/batching.py.bak_decode_aware-91-                activation_mb,
+src/msn_scheduler/batching.py.bak_decode_aware-92-            )
+--
+src/msn_scheduler/batching.py.bak_decode_aware-188-                r.expected_output_tokens,
+src/msn_scheduler/batching.py.bak_decode_aware-189-                round(r.deadline_ms, 3),
+src/msn_scheduler/batching.py.bak_decode_aware-190-                round(r.arrival_ms, 3),
+src/msn_scheduler/batching.py.bak_decode_aware:191:                round(r.handover_probability, 4),
+src/msn_scheduler/batching.py.bak_decode_aware:192:                r.next_anchor_node,
+src/msn_scheduler/batching.py.bak_decode_aware-193-            )
+src/msn_scheduler/batching.py.bak_decode_aware-194-            for r in queue[: self.window_size]
+src/msn_scheduler/batching.py.bak_decode_aware-195-        )
+--
+src/msn_scheduler/batching.py.bak_decode_aware-279-                    handover = self._handover_cost_ms(req, infra, node_id)
+src/msn_scheduler/batching.py.bak_decode_aware-280-                    p_ho = min(
+src/msn_scheduler/batching.py.bak_decode_aware-281-                        1.0,
+src/msn_scheduler/batching.py.bak_decode_aware:282:                        req.handover_probability
+src/msn_scheduler/batching.py.bak_decode_aware-283-                        * batch_prefill
+src/msn_scheduler/batching.py.bak_decode_aware:284:                        / max(req.residual_dwell_ms, 1.0),
+src/msn_scheduler/batching.py.bak_decode_aware-285-                    )
+src/msn_scheduler/batching.py.bak_decode_aware-286-                    value = (
+src/msn_scheduler/batching.py.bak_decode_aware-287-                        self.weights.urgency * max(0.0, now_ms - req.arrival_ms) / remaining
+--
+src/msn_scheduler/batching.py.bak_decode_aware-322-                        np.mean(
+src/msn_scheduler/batching.py.bak_decode_aware-323-                            [
+src/msn_scheduler/batching.py.bak_decode_aware-324-                                self._handover_cost_ms(r, infra, node_id)
+src/msn_scheduler/batching.py.bak_decode_aware:325:                                * r.handover_probability
+src/msn_scheduler/batching.py.bak_decode_aware-326-                                for r in chosen
+src/msn_scheduler/batching.py.bak_decode_aware-327-                            ]
+src/msn_scheduler/batching.py.bak_decode_aware-328-                        )
+--
+src/msn_scheduler/batching.py.bak_decode_aware-398-            - prefill
+src/msn_scheduler/batching.py.bak_decode_aware-399-        )
+src/msn_scheduler/batching.py.bak_decode_aware-400-        mobility = sum(
+src/msn_scheduler/batching.py.bak_decode_aware:401:            r.handover_probability * self._handover_cost_ms(r, infra, node_id)
+src/msn_scheduler/batching.py.bak_decode_aware-402-            for r in requests
+src/msn_scheduler/batching.py.bak_decode_aware-403-        )
+src/msn_scheduler/batching.py.bak_decode_aware-404-        urgency = sum(
+--
+src/msn_scheduler/batching.py-63-            ),
+src/msn_scheduler/batching.py-64-            mobility=float(
+src/msn_scheduler/batching.py-65-                bcfg.get(
+src/msn_scheduler/batching.py:66:                    "baseline_alpha_mobility",
+src/msn_scheduler/batching.py-67-                    0.003,
+src/msn_scheduler/batching.py-68-                )
+src/msn_scheduler/batching.py-69-            ),
+--
+src/msn_scheduler/batching.py-94-            ),
+src/msn_scheduler/batching.py-95-            mobility=float(
+src/msn_scheduler/batching.py-96-                bcfg.get(
+src/msn_scheduler/batching.py:97:                    "dp_alpha_mobility",
+src/msn_scheduler/batching.py-98-                    0.003,
+src/msn_scheduler/batching.py-99-                )
+src/msn_scheduler/batching.py-100-            ),
+--
+src/msn_scheduler/batching.py-129-
+src/msn_scheduler/batching.py-130-    def _handover_cost_ms(self, req: Request, infra: Infrastructure, node_id: str) -> float:
+src/msn_scheduler/batching.py-131-        reroute_ms = 12.0
+src/msn_scheduler/batching.py:132:        old_path = shortest_path_latency_ms(infra, req.anchor_node, node_id)
+src/msn_scheduler/batching.py:133:        new_path = shortest_path_latency_ms(infra, req.next_anchor_node, node_id)
+src/msn_scheduler/batching.py-134-        if not np.isfinite(new_path):
+src/msn_scheduler/batching.py-135-            return 1e6
+src/msn_scheduler/batching.py-136-        stretch_ms = max(0.0, new_path - old_path)
+--
+src/msn_scheduler/batching.py-172-        anchor_transfer = (
+src/msn_scheduler/batching.py-173-            transfer_time_ms(
+src/msn_scheduler/batching.py-174-                infra,
+src/msn_scheduler/batching.py:175:                infra.anchor_node,
+src/msn_scheduler/batching.py-176-                node_id,
+src/msn_scheduler/batching.py-177-                activation_mb,
+src/msn_scheduler/batching.py-178-            )
+--
+src/msn_scheduler/batching.py-355-                r.expected_output_tokens,
+src/msn_scheduler/batching.py-356-                round(r.deadline_ms, 3),
+src/msn_scheduler/batching.py-357-                round(r.arrival_ms, 3),
+src/msn_scheduler/batching.py:358:                round(r.handover_probability, 4),
+src/msn_scheduler/batching.py:359:                r.next_anchor_node,
+src/msn_scheduler/batching.py-360-            )
+src/msn_scheduler/batching.py-361-            for r in queue[: self.window_size]
+src/msn_scheduler/batching.py-362-        )
+--
+src/msn_scheduler/batching.py-468-                    handover = self._handover_cost_ms(req, infra, node_id)
+src/msn_scheduler/batching.py-469-                    p_ho = min(
+src/msn_scheduler/batching.py-470-                        1.0,
+src/msn_scheduler/batching.py:471:                        req.handover_probability
+src/msn_scheduler/batching.py-472-                        * batch_prefill
+src/msn_scheduler/batching.py:473:                        / max(req.residual_dwell_ms, 1.0),
+src/msn_scheduler/batching.py-474-                    )
+src/msn_scheduler/batching.py-475-                    estimated_decode_ms = (
+src/msn_scheduler/batching.py-476-                        self._estimate_request_decode_ms(
+--
+src/msn_scheduler/batching.py-564-                        np.mean(
+src/msn_scheduler/batching.py-565-                            [
+src/msn_scheduler/batching.py-566-                                self._handover_cost_ms(r, infra, node_id)
+src/msn_scheduler/batching.py:567:                                * r.handover_probability
+src/msn_scheduler/batching.py-568-                                for r in chosen
+src/msn_scheduler/batching.py-569-                            ]
+src/msn_scheduler/batching.py-570-                        )
+--
+src/msn_scheduler/batching.py-721-            - prefill
+src/msn_scheduler/batching.py-722-        )
+src/msn_scheduler/batching.py-723-        mobility = sum(
+src/msn_scheduler/batching.py:724:            r.handover_probability * self._handover_cost_ms(r, infra, node_id)
+src/msn_scheduler/batching.py-725-            for r in requests
+src/msn_scheduler/batching.py-726-        )
+src/msn_scheduler/batching.py-727-        urgency = sum(
+--
+src/msn_scheduler/env.py.bak_before_azure-56-        self.now_ms = now_ms
+src/msn_scheduler/env.py.bak_before_azure-57-        self.batch = None
+src/msn_scheduler/env.py.bak_before_azure-58-        self.current_block = 0
+src/msn_scheduler/env.py.bak_before_azure:59:        self.current_node = infra.anchor_node
+src/msn_scheduler/env.py.bak_before_azure-60-        self.mapping = []
+src/msn_scheduler/env.py.bak_before_azure-61-        self.total_reward = 0.0
+src/msn_scheduler/env.py.bak_before_azure-62-        self.total_prefill_ms = 0.0
+--
+src/msn_scheduler/env.py.bak_before_azure-80-                    sum(r.input_tokens for r in reqs) / 8192.0,
+src/msn_scheduler/env.py.bak_before_azure-81-                    np.mean([r.expected_output_tokens for r in reqs]) / 512.0,
+src/msn_scheduler/env.py.bak_before_azure-82-                    min(r.remaining_deadline_ms(self.now_ms) for r in reqs) / 5000.0,
+src/msn_scheduler/env.py.bak_before_azure:83:                    np.mean([r.handover_probability for r in reqs]),
+src/msn_scheduler/env.py.bak_before_azure:84:                    np.mean([r.residual_dwell_ms for r in reqs]) / 3000.0,
+src/msn_scheduler/env.py.bak_before_azure-85-                ],
+src/msn_scheduler/env.py.bak_before_azure-86-                dtype=np.float32,
+src/msn_scheduler/env.py.bak_before_azure-87-            )
+--
+src/msn_scheduler/env.py.bak_before_azure-92-                batch.token_sum / 8192.0,
+src/msn_scheduler/env.py.bak_before_azure-93-                batch.expected_output_mean / 512.0,
+src/msn_scheduler/env.py.bak_before_azure-94-                batch.min_remaining_deadline_ms / 5000.0,
+src/msn_scheduler/env.py.bak_before_azure:95:                np.mean([r.handover_probability for r in batch.requests]),
+src/msn_scheduler/env.py.bak_before_azure:96:                np.mean([r.residual_dwell_ms for r in batch.requests]) / 3000.0,
+src/msn_scheduler/env.py.bak_before_azure-97-            ],
+src/msn_scheduler/env.py.bak_before_azure-98-            dtype=np.float32,
+src/msn_scheduler/env.py.bak_before_azure-99-        )
+--
+src/msn_scheduler/env.py.bak_before_azure-132-        handover = float(
+src/msn_scheduler/env.py.bak_before_azure-133-            np.mean(
+src/msn_scheduler/env.py.bak_before_azure-134-                [
+src/msn_scheduler/env.py.bak_before_azure:135:                    req.handover_probability
+src/msn_scheduler/env.py.bak_before_azure-136-                    * (
+src/msn_scheduler/env.py.bak_before_azure-137-                        12.0
+src/msn_scheduler/env.py.bak_before_azure-138-                        + max(
+src/msn_scheduler/env.py.bak_before_azure-139-                            0.0,
+src/msn_scheduler/env.py.bak_before_azure:140:                            shortest_path_latency_ms(self.infra, req.next_anchor_node, action.node_id)
+src/msn_scheduler/env.py.bak_before_azure:141:                            - shortest_path_latency_ms(self.infra, req.anchor_node, action.node_id),
+src/msn_scheduler/env.py.bak_before_azure-142-                        )
+src/msn_scheduler/env.py.bak_before_azure-143-                    )
+src/msn_scheduler/env.py.bak_before_azure-144-                    for req in self.batch.requests
+--
+src/msn_scheduler/env.py.bak_before_azure-152-        if not self.mapping:
+src/msn_scheduler/env.py.bak_before_azure-153-            return 0.0
+src/msn_scheduler/env.py.bak_before_azure-154-        total_per_token = 0.0
+src/msn_scheduler/env.py.bak_before_azure:155:        previous = self.batch.requests[0].anchor_node
+src/msn_scheduler/env.py.bak_before_azure-156-        context = int(self.batch.max_input_tokens + self.batch.expected_output_mean / 2)
+src/msn_scheduler/env.py.bak_before_azure-157-        for step in self.mapping:
+src/msn_scheduler/env.py.bak_before_azure-158-            node = self.infra.nodes[step.node_id]
+--
+scripts/evaluate_dynamic_mobility.py-49-    "stationary": {
+scripts/evaluate_dynamic_mobility.py-50-        "dwell_min_ms": float("inf"),
+scripts/evaluate_dynamic_mobility.py-51-        "dwell_max_ms": float("inf"),
+scripts/evaluate_dynamic_mobility.py:52:        "handover_probability": 0.0,
+scripts/evaluate_dynamic_mobility.py-53-    },
+scripts/evaluate_dynamic_mobility.py-54-    "walking": {
+scripts/evaluate_dynamic_mobility.py-55-        "dwell_min_ms": 20000.0,
+scripts/evaluate_dynamic_mobility.py-56-        "dwell_max_ms": 60000.0,
+scripts/evaluate_dynamic_mobility.py:57:        "handover_probability": 0.15,
+scripts/evaluate_dynamic_mobility.py-58-    },
+scripts/evaluate_dynamic_mobility.py-59-    "driving": {
+scripts/evaluate_dynamic_mobility.py-60-        "dwell_min_ms": 8000.0,
+scripts/evaluate_dynamic_mobility.py-61-        "dwell_max_ms": 25000.0,
+scripts/evaluate_dynamic_mobility.py:62:        "handover_probability": 0.45,
+scripts/evaluate_dynamic_mobility.py-63-    },
+scripts/evaluate_dynamic_mobility.py-64-    "high_speed": {
+scripts/evaluate_dynamic_mobility.py-65-        "dwell_min_ms": 3000.0,
+scripts/evaluate_dynamic_mobility.py-66-        "dwell_max_ms": 10000.0,
+scripts/evaluate_dynamic_mobility.py:67:        "handover_probability": 0.75,
+scripts/evaluate_dynamic_mobility.py-68-    },
+scripts/evaluate_dynamic_mobility.py-69-}
+scripts/evaluate_dynamic_mobility.py-70-
+--
+scripts/evaluate_dynamic_mobility.py-76-    actual_next_anchor: str
+scripts/evaluate_dynamic_mobility.py-77-    next_handover_ms: float
+scripts/evaluate_dynamic_mobility.py-78-    transition_index: int
+scripts/evaluate_dynamic_mobility.py:79:    handover_probability: float
+scripts/evaluate_dynamic_mobility.py-80-
+scripts/evaluate_dynamic_mobility.py-81-
+scripts/evaluate_dynamic_mobility.py-82-def build_model_profile(
+--
+scripts/evaluate_dynamic_mobility.py-222-            transition_index=(
+scripts/evaluate_dynamic_mobility.py-223-                transition_index
+scripts/evaluate_dynamic_mobility.py-224-            ),
+scripts/evaluate_dynamic_mobility.py:225:            handover_probability=0.0,
+scripts/evaluate_dynamic_mobility.py-226-        )
+scripts/evaluate_dynamic_mobility.py-227-
+scripts/evaluate_dynamic_mobility.py-228-    actual_rng = deterministic_rng(
+--
+scripts/evaluate_dynamic_mobility.py-319-        transition_index=(
+scripts/evaluate_dynamic_mobility.py-320-            transition_index
+scripts/evaluate_dynamic_mobility.py-321-        ),
+scripts/evaluate_dynamic_mobility.py:322:        handover_probability=float(
+scripts/evaluate_dynamic_mobility.py-323-            profile[
+scripts/evaluate_dynamic_mobility.py:324:                "handover_probability"
+scripts/evaluate_dynamic_mobility.py-325-            ]
+scripts/evaluate_dynamic_mobility.py-326-        ),
+scripts/evaluate_dynamic_mobility.py-327-    )
+--
+scripts/evaluate_dynamic_mobility.py-340-    if np.isfinite(
+scripts/evaluate_dynamic_mobility.py-341-        state.next_handover_ms
+scripts/evaluate_dynamic_mobility.py-342-    ):
+scripts/evaluate_dynamic_mobility.py:343:        raw_residual_dwell_ms = max(
+scripts/evaluate_dynamic_mobility.py-344-            state.next_handover_ms
+scripts/evaluate_dynamic_mobility.py-345-            - now_ms,
+scripts/evaluate_dynamic_mobility.py-346-            1.0,
+scripts/evaluate_dynamic_mobility.py-347-        )
+scripts/evaluate_dynamic_mobility.py-348-    else:
+scripts/evaluate_dynamic_mobility.py:349:        raw_residual_dwell_ms = (
+scripts/evaluate_dynamic_mobility.py-350-            mobility_feature_dwell_cap_ms
+scripts/evaluate_dynamic_mobility.py-351-        )
+scripts/evaluate_dynamic_mobility.py-352-
+scripts/evaluate_dynamic_mobility.py:353:    residual_dwell_ms = float(
+scripts/evaluate_dynamic_mobility.py-354-        np.clip(
+scripts/evaluate_dynamic_mobility.py:355:            raw_residual_dwell_ms,
+scripts/evaluate_dynamic_mobility.py-356-            1.0,
+scripts/evaluate_dynamic_mobility.py-357-            mobility_feature_dwell_cap_ms,
+scripts/evaluate_dynamic_mobility.py-358-        )
+--
+scripts/evaluate_dynamic_mobility.py-360-
+scripts/evaluate_dynamic_mobility.py-361-    return replace(
+scripts/evaluate_dynamic_mobility.py-362-        request,
+scripts/evaluate_dynamic_mobility.py:363:        anchor_node=state.current_anchor,
+scripts/evaluate_dynamic_mobility.py:364:        next_anchor_node=(
+scripts/evaluate_dynamic_mobility.py-365-            state.predicted_next_anchor
+scripts/evaluate_dynamic_mobility.py-366-        ),
+scripts/evaluate_dynamic_mobility.py:367:        handover_probability=(
+scripts/evaluate_dynamic_mobility.py:368:            state.handover_probability
+scripts/evaluate_dynamic_mobility.py-369-        ),
+scripts/evaluate_dynamic_mobility.py:370:        residual_dwell_ms=(
+scripts/evaluate_dynamic_mobility.py:371:            residual_dwell_ms
+scripts/evaluate_dynamic_mobility.py-372-        ),
+scripts/evaluate_dynamic_mobility.py-373-    )
+scripts/evaluate_dynamic_mobility.py-374-
+--
+scripts/evaluate_dynamic_mobility.py-444-
+scripts/evaluate_dynamic_mobility.py-445-    for request in queue:
+scripts/evaluate_dynamic_mobility.py-446-        current_anchor = (
+scripts/evaluate_dynamic_mobility.py:447:            request.anchor_node
+scripts/evaluate_dynamic_mobility.py:448:            if request.anchor_node
+scripts/evaluate_dynamic_mobility.py-449-            in edge_ids
+scripts/evaluate_dynamic_mobility.py:450:            else infra.anchor_node
+scripts/evaluate_dynamic_mobility.py-451-        )
+scripts/evaluate_dynamic_mobility.py-452-
+scripts/evaluate_dynamic_mobility.py-453-        state = create_mobility_state(
+--
+scripts/evaluate_dynamic_mobility.py-464-                prediction_error
+scripts/evaluate_dynamic_mobility.py-465-            ),
+scripts/evaluate_dynamic_mobility.py-466-            preferred_prediction=(
+scripts/evaluate_dynamic_mobility.py:467:                request.next_anchor_node
+scripts/evaluate_dynamic_mobility.py-468-            ),
+scripts/evaluate_dynamic_mobility.py-469-        )
+scripts/evaluate_dynamic_mobility.py-470-

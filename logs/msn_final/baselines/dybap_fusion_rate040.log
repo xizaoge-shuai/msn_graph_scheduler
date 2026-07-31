@@ -1,0 +1,19 @@
+Using request trace: data/processed/azure_2024_final_test.csv rows=400,000
+Starting evaluation: episodes=100, batchers=['dybap_fusion'], full_queue=True, total_runs=100
+episode=   1/100 runs=   1/100 elapsed=     0.9s eta=    84.7s
+episode=  10/100 runs=  10/100 elapsed=     7.8s eta=    70.3s
+episode=  20/100 runs=  20/100 elapsed=    15.9s eta=    63.8s
+episode=  30/100 runs=  30/100 elapsed=    23.5s eta=    54.9s
+episode=  40/100 runs=  40/100 elapsed=    31.7s eta=    47.6s
+episode=  50/100 runs=  50/100 elapsed=    39.6s eta=    39.6s
+episode=  60/100 runs=  60/100 elapsed=    47.3s eta=    31.5s
+episode=  70/100 runs=  70/100 elapsed=    55.0s eta=    23.6s
+episode=  80/100 runs=  80/100 elapsed=    62.9s eta=    15.7s
+episode=  90/100 runs=  90/100 elapsed=    70.9s eta=     7.9s
+episode= 100/100 runs= 100/100 elapsed=    79.1s eta=     0.0s
+              episodes  completion_ratio  ...  goodput_rps   reward
+batcher                                   ...                      
+dybap_fusion       100               1.0  ...        0.197 -158.951
+
+[1 rows x 11 columns]
+Saved outputs/msn_final/baselines/dybap_fusion_rate040.csv

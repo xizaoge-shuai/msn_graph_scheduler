@@ -25,7 +25,6 @@ download_file() {
     --show-error \
     --retry 30 \
     --retry-delay 5 \
-    --retry-all-errors \
     --connect-timeout 30 \
     --max-time 0 \
     --continue-at - \

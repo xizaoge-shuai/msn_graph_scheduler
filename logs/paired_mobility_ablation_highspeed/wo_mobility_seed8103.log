@@ -1,0 +1,11 @@
+Starting dynamic mobility test: method=full, mode=high_speed, policy=keep, prediction_error=0.1, rate=0.4, episodes=10
+episode=   1/10 elapsed=     2.3s slo=0.6667 handover=1.00
+episode=   2/10 elapsed=     3.9s slo=0.5833 handover=4.00
+episode=   4/10 elapsed=     8.0s slo=0.5833 handover=0.00
+episode=   6/10 elapsed=    10.7s slo=0.6667 handover=0.00
+episode=   8/10 elapsed=    12.5s slo=0.6667 handover=0.00
+episode=  10/10 elapsed=    14.2s slo=0.6667 handover=2.00
+      avg_e2e_ms  p95_e2e_ms  slo_satisfaction  throughput_rps  goodput_rps  handover_events  handover_slo_satisfaction  migration_mb  migration_ms  mean_batch_size
+mean   2740.8037   5599.8905            0.6333          0.4033       0.2509           1.2000                     0.6667           0.0           0.0           1.2688
+std    1996.3254   4727.1295            0.1192          0.1264       0.0697           2.3944                     0.3333           0.0           0.0           0.2906
+Saved outputs/paired_mobility_ablation_highspeed/wo_mobility_seed8103_n10.csv

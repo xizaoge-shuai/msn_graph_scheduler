@@ -1,0 +1,48 @@
+Starting dynamic mobility test: method=node_dp, mode=driving, policy=keep, prediction_error=0.1, rate=0.4, episodes=100
+episode=   1/100 elapsed=     0.9s slo=0.5000 handover=1.00
+episode=  10/100 elapsed=    12.2s slo=0.4167 handover=3.10
+episode=  20/100 elapsed=    26.3s slo=0.5167 handover=2.70
+episode=  30/100 elapsed=    35.8s slo=0.5250 handover=2.90
+episode=  40/100 elapsed=    47.2s slo=0.3833 handover=4.90
+episode=  50/100 elapsed=    60.4s slo=0.3833 handover=2.80
+episode=  60/100 elapsed=    70.7s slo=0.5000 handover=2.70
+episode=  70/100 elapsed=    81.0s slo=0.4833 handover=2.60
+episode=  80/100 elapsed=    95.3s slo=0.4417 handover=2.40
+episode=  90/100 elapsed=   105.0s slo=0.4833 handover=2.50
+episode= 100/100 elapsed=   116.6s slo=0.4833 handover=2.00
+      avg_e2e_ms  p95_e2e_ms  slo_satisfaction  throughput_rps  goodput_rps  handover_events  handover_slo_satisfaction  migration_mb  migration_ms  mean_batch_size
+mean  11943.6263  22325.2635            0.4617          0.2846       0.1327            2.860                     0.5455           0.0           0.0           2.1803
+std    5754.1419  10981.8296            0.1994          0.0728       0.0647            2.466                     0.3609           0.0           0.0           0.6043
+Saved outputs/mobility_calibration_policy_100/keep.csv
+Starting dynamic mobility test: method=node_dp, mode=driving, policy=reactive, prediction_error=0.1, rate=0.4, episodes=100
+episode=   1/100 elapsed=     0.8s slo=0.4167 handover=1.00
+episode=  10/100 elapsed=    13.5s slo=0.3833 handover=3.30
+episode=  20/100 elapsed=    29.5s slo=0.5083 handover=2.80
+episode=  30/100 elapsed=    39.9s slo=0.5083 handover=2.40
+episode=  40/100 elapsed=    54.7s slo=0.3583 handover=4.50
+episode=  50/100 elapsed=    69.7s slo=0.3917 handover=2.90
+episode=  60/100 elapsed=    81.1s slo=0.4250 handover=3.00
+episode=  70/100 elapsed=    90.7s slo=0.4667 handover=2.40
+episode=  80/100 elapsed=   104.7s slo=0.4333 handover=2.30
+episode=  90/100 elapsed=   114.9s slo=0.4917 handover=2.50
+episode= 100/100 elapsed=   127.5s slo=0.4667 handover=2.10
+      avg_e2e_ms  p95_e2e_ms  slo_satisfaction  throughput_rps  goodput_rps  handover_events  handover_slo_satisfaction  migration_mb  migration_ms  mean_batch_size
+mean  13051.9791  25259.1948            0.4433          0.2690       0.1223            2.820                     0.4907      535.3359     6033.6270           2.2192
+std    6768.7046  13559.9581            0.1992          0.0733       0.0637            2.496                     0.3916      500.0484     6056.4352           0.6309
+Saved outputs/mobility_calibration_policy_100/reactive.csv
+Starting dynamic mobility test: method=node_dp, mode=driving, policy=prefetch, prediction_error=0.1, rate=0.4, episodes=100
+episode=   1/100 elapsed=     0.8s slo=0.5000 handover=1.00
+episode=  10/100 elapsed=    12.1s slo=0.4167 handover=3.10
+episode=  20/100 elapsed=    28.0s slo=0.5167 handover=2.70
+episode=  30/100 elapsed=    37.6s slo=0.5333 handover=2.80
+episode=  40/100 elapsed=    49.7s slo=0.3833 handover=4.90
+episode=  50/100 elapsed=    63.0s slo=0.3917 handover=2.80
+episode=  60/100 elapsed=    73.9s slo=0.4833 handover=2.70
+episode=  70/100 elapsed=    84.1s slo=0.4750 handover=2.50
+episode=  80/100 elapsed=    97.8s slo=0.4417 handover=2.50
+episode=  90/100 elapsed=   107.0s slo=0.4833 handover=2.40
+episode= 100/100 elapsed=   119.0s slo=0.4833 handover=2.10
+      avg_e2e_ms  p95_e2e_ms  slo_satisfaction  throughput_rps  goodput_rps  handover_events  handover_slo_satisfaction  migration_mb  migration_ms  mean_batch_size
+mean  12160.5959  22888.1882            0.4608          0.2814       0.1313           2.8500                     0.5408      605.8221     1266.0188           2.1817
+std    5967.1895  11393.3812            0.1998          0.0728       0.0648           2.4756                     0.3575      537.7511     1652.9018           0.6023
+Saved outputs/mobility_calibration_policy_100/prefetch.csv

@@ -1,0 +1,3 @@
+comparison,paired_episodes,avg_e2e_ms_improvement_pct,p95_e2e_ms_improvement_pct,slo_improvement_pp,throughput_rps_improvement_pct,goodput_rps_improvement_pct,mean_batch_size_difference
+full_vs_wo_dp,30,0.9693126392686133,0.748687064254088,1.3888888888889062,1.6062572514215316,5.138496209214464,0.06349206349206349
+full_vs_wo_mobility,30,0.0,0.0,0.0,0.0,0.0,0.0

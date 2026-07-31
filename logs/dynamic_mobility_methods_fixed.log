@@ -1,0 +1,371 @@
+
+==========================================
+Method:   node_dp
+Mobility: stationary
+Rate:     0.40
+Started:  2026年 07月 29日 星期三 17:56:13 CST
+==========================================
+Starting dynamic mobility test: method=node_dp, mode=stationary, policy=keep, prediction_error=0.1, rate=0.4, episodes=100
+episode=   1/100 elapsed=     1.1s slo=0.4167 handover=0.00
+episode=  10/100 elapsed=     9.2s slo=0.5000 handover=0.00
+episode=  20/100 elapsed=    18.6s slo=0.4833 handover=0.00
+episode=  30/100 elapsed=    27.9s slo=0.5333 handover=0.00
+episode=  40/100 elapsed=    36.6s slo=0.4667 handover=0.00
+episode=  50/100 elapsed=    45.6s slo=0.5333 handover=0.00
+episode=  60/100 elapsed=    53.2s slo=0.4750 handover=0.00
+episode=  70/100 elapsed=    62.1s slo=0.5333 handover=0.00
+episode=  80/100 elapsed=    71.2s slo=0.5583 handover=0.00
+episode=  90/100 elapsed=    79.6s slo=0.4917 handover=0.00
+episode= 100/100 elapsed=    90.6s slo=0.5500 handover=0.00
+      avg_e2e_ms  p95_e2e_ms  slo_satisfaction  throughput_rps  goodput_rps  handover_events  handover_slo_satisfaction  migration_mb  migration_ms  mean_batch_size
+mean   3425.2518   6844.3297            0.5125          0.4221       0.2143              0.0                        NaN           0.0           0.0           1.3425
+std    1811.7939   4097.7722            0.1940          0.1098       0.1004              0.0                        NaN           0.0           0.0           0.3238
+Saved outputs/dynamic_mobility_methods/node_dp_stationary_r040_100.csv
+
+==========================================
+Method:   node_dp
+Mobility: walking
+Rate:     0.40
+Started:  2026年 07月 29日 星期三 17:57:50 CST
+==========================================
+Starting dynamic mobility test: method=node_dp, mode=walking, policy=keep, prediction_error=0.1, rate=0.4, episodes=100
+episode=   1/100 elapsed=     1.0s slo=0.4167 handover=0.00
+episode=  10/100 elapsed=     9.1s slo=0.5000 handover=0.00
+episode=  20/100 elapsed=    18.8s slo=0.4833 handover=0.00
+episode=  30/100 elapsed=    28.1s slo=0.5333 handover=0.00
+episode=  40/100 elapsed=    37.0s slo=0.4667 handover=0.00
+episode=  50/100 elapsed=    46.2s slo=0.5333 handover=0.00
+episode=  60/100 elapsed=    54.3s slo=0.4750 handover=0.00
+episode=  70/100 elapsed=    63.3s slo=0.5333 handover=0.00
+episode=  80/100 elapsed=    72.6s slo=0.5583 handover=0.00
+episode=  90/100 elapsed=    81.1s slo=0.4917 handover=0.00
+episode= 100/100 elapsed=    92.3s slo=0.5500 handover=0.00
+      avg_e2e_ms  p95_e2e_ms  slo_satisfaction  throughput_rps  goodput_rps  handover_events  handover_slo_satisfaction  migration_mb  migration_ms  mean_batch_size
+mean   3425.2518   6844.3297            0.5125          0.4221       0.2143              0.0                        NaN           0.0           0.0           1.3425
+std    1811.7939   4097.7722            0.1940          0.1098       0.1004              0.0                        NaN           0.0           0.0           0.3238
+Saved outputs/dynamic_mobility_methods/node_dp_walking_r040_100.csv
+
+==========================================
+Method:   node_dp
+Mobility: driving
+Rate:     0.40
+Started:  2026年 07月 29日 星期三 17:59:28 CST
+==========================================
+Starting dynamic mobility test: method=node_dp, mode=driving, policy=keep, prediction_error=0.1, rate=0.4, episodes=100
+episode=   1/100 elapsed=     1.0s slo=0.4167 handover=0.00
+episode=  10/100 elapsed=     9.2s slo=0.5000 handover=0.10
+episode=  20/100 elapsed=    18.8s slo=0.4833 handover=0.10
+episode=  30/100 elapsed=    28.1s slo=0.5333 handover=0.20
+episode=  40/100 elapsed=    36.8s slo=0.4667 handover=0.30
+episode=  50/100 elapsed=    45.9s slo=0.5333 handover=0.00
+episode=  60/100 elapsed=    53.5s slo=0.4750 handover=0.00
+episode=  70/100 elapsed=    62.4s slo=0.5333 handover=0.10
+episode=  80/100 elapsed=    72.4s slo=0.5583 handover=0.10
+episode=  90/100 elapsed=    80.8s slo=0.4917 handover=0.10
+episode= 100/100 elapsed=    93.3s slo=0.5500 handover=0.40
+      avg_e2e_ms  p95_e2e_ms  slo_satisfaction  throughput_rps  goodput_rps  handover_events  handover_slo_satisfaction  migration_mb  migration_ms  mean_batch_size
+mean   3422.5709   6845.4238            0.5125          0.4222       0.2143           0.1400                     0.4848           0.0           0.0           1.3425
+std    1801.1539   4099.3221            0.1940          0.1098       0.1004           0.4499                     0.5025           0.0           0.0           0.3238
+Saved outputs/dynamic_mobility_methods/node_dp_driving_r040_100.csv
+
+==========================================
+Method:   node_dp
+Mobility: high_speed
+Rate:     0.40
+Started:  2026年 07月 29日 星期三 18:01:08 CST
+==========================================
+Starting dynamic mobility test: method=node_dp, mode=high_speed, policy=keep, prediction_error=0.1, rate=0.4, episodes=100
+episode=   1/100 elapsed=     1.0s slo=0.4167 handover=1.00
+episode=  10/100 elapsed=     9.0s slo=0.5000 handover=0.90
+episode=  20/100 elapsed=    18.6s slo=0.4833 handover=1.50
+episode=  30/100 elapsed=    27.9s slo=0.5250 handover=1.70
+episode=  40/100 elapsed=    36.6s slo=0.4667 handover=2.50
+episode=  50/100 elapsed=    45.7s slo=0.5333 handover=1.40
+episode=  60/100 elapsed=    53.3s slo=0.4750 handover=1.70
+episode=  70/100 elapsed=    62.2s slo=0.5250 handover=1.60
+episode=  80/100 elapsed=    71.3s slo=0.5583 handover=1.10
+episode=  90/100 elapsed=    79.8s slo=0.4917 handover=2.40
+episode= 100/100 elapsed=    92.2s slo=0.5500 handover=1.40
+      avg_e2e_ms  p95_e2e_ms  slo_satisfaction  throughput_rps  goodput_rps  handover_events  handover_slo_satisfaction  migration_mb  migration_ms  mean_batch_size
+mean   3436.6643   6884.0857            0.5108          0.4219       0.2136           1.6200                     0.5175           0.0           0.0           1.3425
+std    1829.1230   4192.7825            0.1956          0.1098       0.1008           1.9425                     0.3712           0.0           0.0           0.3238
+Saved outputs/dynamic_mobility_methods/node_dp_high_speed_r040_100.csv
+
+==========================================
+Method:   lecu_rba
+Mobility: stationary
+Rate:     0.40
+Started:  2026年 07月 29日 星期三 18:02:46 CST
+==========================================
+Starting dynamic mobility test: method=lecu_rba, mode=stationary, policy=keep, prediction_error=0.1, rate=0.4, episodes=100
+episode=   1/100 elapsed=     1.2s slo=0.2500 handover=0.00
+episode=  10/100 elapsed=     9.4s slo=0.3500 handover=0.00
+episode=  20/100 elapsed=    20.1s slo=0.3667 handover=0.00
+episode=  30/100 elapsed=    29.1s slo=0.4000 handover=0.00
+episode=  40/100 elapsed=    37.8s slo=0.1583 handover=0.00
+episode=  50/100 elapsed=    46.9s slo=0.2000 handover=0.00
+episode=  60/100 elapsed=    54.9s slo=0.2417 handover=0.00
+episode=  70/100 elapsed=    64.2s slo=0.3083 handover=0.00
+episode=  80/100 elapsed=    73.6s slo=0.4167 handover=0.00
+episode=  90/100 elapsed=    82.9s slo=0.2917 handover=0.00
+episode= 100/100 elapsed=    95.9s slo=0.3167 handover=0.00
+      avg_e2e_ms  p95_e2e_ms  slo_satisfaction  throughput_rps  goodput_rps  handover_events  handover_slo_satisfaction  migration_mb  migration_ms  mean_batch_size
+mean   5978.0212  11825.6247            0.3050          0.3697       0.1182              0.0                        NaN           0.0           0.0           1.5691
+std    4200.5933   9670.9740            0.2297          0.1040       0.0980              0.0                        NaN           0.0           0.0           0.4727
+Saved outputs/dynamic_mobility_methods/lecu_rba_stationary_r040_100.csv
+
+==========================================
+Method:   lecu_rba
+Mobility: walking
+Rate:     0.40
+Started:  2026年 07月 29日 星期三 18:04:29 CST
+==========================================
+Starting dynamic mobility test: method=lecu_rba, mode=walking, policy=keep, prediction_error=0.1, rate=0.4, episodes=100
+episode=   1/100 elapsed=     1.2s slo=0.2500 handover=0.00
+episode=  10/100 elapsed=     9.3s slo=0.3500 handover=0.00
+episode=  20/100 elapsed=    20.2s slo=0.3667 handover=0.00
+episode=  30/100 elapsed=    29.4s slo=0.4000 handover=0.20
+episode=  40/100 elapsed=    38.1s slo=0.1583 handover=0.10
+episode=  50/100 elapsed=    47.4s slo=0.2000 handover=0.10
+episode=  60/100 elapsed=    55.4s slo=0.2417 handover=0.10
+episode=  70/100 elapsed=    64.7s slo=0.3083 handover=0.00
+episode=  80/100 elapsed=    74.2s slo=0.4167 handover=0.00
+episode=  90/100 elapsed=    83.6s slo=0.2917 handover=0.10
+episode= 100/100 elapsed=    96.6s slo=0.3167 handover=0.10
+      avg_e2e_ms  p95_e2e_ms  slo_satisfaction  throughput_rps  goodput_rps  handover_events  handover_slo_satisfaction  migration_mb  migration_ms  mean_batch_size
+mean   5977.7498  11824.1663            0.3050          0.3697       0.1182           0.0700                        0.0           0.0           0.0           1.5691
+std    4200.1549   9666.5039            0.2297          0.1040       0.0980           0.2932                        0.0           0.0           0.0           0.4727
+Saved outputs/dynamic_mobility_methods/lecu_rba_walking_r040_100.csv
+
+==========================================
+Method:   lecu_rba
+Mobility: driving
+Rate:     0.40
+Started:  2026年 07月 29日 星期三 18:06:11 CST
+==========================================
+Starting dynamic mobility test: method=lecu_rba, mode=driving, policy=keep, prediction_error=0.1, rate=0.4, episodes=100
+episode=   1/100 elapsed=     1.2s slo=0.2500 handover=0.00
+episode=  10/100 elapsed=     9.2s slo=0.3500 handover=0.30
+episode=  20/100 elapsed=    20.0s slo=0.3667 handover=0.30
+episode=  30/100 elapsed=    29.1s slo=0.4000 handover=1.00
+episode=  40/100 elapsed=    37.7s slo=0.1583 handover=1.40
+episode=  50/100 elapsed=    46.9s slo=0.2000 handover=0.80
+episode=  60/100 elapsed=    55.0s slo=0.2417 handover=0.80
+episode=  70/100 elapsed=    64.3s slo=0.3083 handover=0.50
+episode=  80/100 elapsed=    73.9s slo=0.4167 handover=0.00
+episode=  90/100 elapsed=    83.3s slo=0.2917 handover=1.60
+episode= 100/100 elapsed=    96.4s slo=0.3167 handover=0.70
+      avg_e2e_ms  p95_e2e_ms  slo_satisfaction  throughput_rps  goodput_rps  handover_events  handover_slo_satisfaction  migration_mb  migration_ms  mean_batch_size
+mean   5984.9628  11854.3117            0.3050          0.3696       0.1182           0.7400                     0.1875           0.0           0.0           1.5691
+std    4219.7392   9775.9346            0.2297          0.1042       0.0980           1.3971                     0.3484           0.0           0.0           0.4727
+Saved outputs/dynamic_mobility_methods/lecu_rba_driving_r040_100.csv
+
+==========================================
+Method:   lecu_rba
+Mobility: high_speed
+Rate:     0.40
+Started:  2026年 07月 29日 星期三 18:07:54 CST
+==========================================
+Starting dynamic mobility test: method=lecu_rba, mode=high_speed, policy=keep, prediction_error=0.1, rate=0.4, episodes=100
+episode=   1/100 elapsed=     1.2s slo=0.2500 handover=1.00
+episode=  10/100 elapsed=     9.4s slo=0.3500 handover=2.50
+episode=  20/100 elapsed=    20.5s slo=0.3667 handover=2.30
+episode=  30/100 elapsed=    29.8s slo=0.4000 handover=3.60
+episode=  40/100 elapsed=    38.6s slo=0.1583 handover=6.30
+episode=  50/100 elapsed=    48.0s slo=0.2000 handover=4.30
+episode=  60/100 elapsed=    56.1s slo=0.2417 handover=5.60
+episode=  70/100 elapsed=    65.5s slo=0.3083 handover=3.50
+episode=  80/100 elapsed=    75.0s slo=0.4167 handover=1.70
+episode=  90/100 elapsed=    84.5s slo=0.2917 handover=5.20
+episode= 100/100 elapsed=    97.7s slo=0.3167 handover=4.20
+      avg_e2e_ms  p95_e2e_ms  slo_satisfaction  throughput_rps  goodput_rps  handover_events  handover_slo_satisfaction  migration_mb  migration_ms  mean_batch_size
+mean   5974.0563  11859.6396            0.3050          0.3695       0.1182            3.920                     0.2579           0.0           0.0           1.5631
+std    4184.7839   9735.4101            0.2297          0.1042       0.0980            3.757                     0.3438           0.0           0.0           0.4579
+Saved outputs/dynamic_mobility_methods/lecu_rba_high_speed_r040_100.csv
+
+==========================================
+Method:   dybap_adapted
+Mobility: stationary
+Rate:     0.40
+Started:  2026年 07月 29日 星期三 18:09:38 CST
+==========================================
+Starting dynamic mobility test: method=dybap_adapted, mode=stationary, policy=keep, prediction_error=0.1, rate=0.4, episodes=100
+episode=   1/100 elapsed=     1.6s slo=0.4167 handover=0.00
+episode=  10/100 elapsed=    14.6s slo=0.4333 handover=0.00
+episode=  20/100 elapsed=    29.0s slo=0.4417 handover=0.00
+episode=  30/100 elapsed=    43.5s slo=0.4000 handover=0.00
+episode=  40/100 elapsed=    57.2s slo=0.3667 handover=0.00
+episode=  50/100 elapsed=    71.6s slo=0.5500 handover=0.00
+episode=  60/100 elapsed=    85.2s slo=0.3750 handover=0.00
+episode=  70/100 elapsed=    99.5s slo=0.4833 handover=0.00
+episode=  80/100 elapsed=   113.9s slo=0.4417 handover=0.00
+episode=  90/100 elapsed=   128.0s slo=0.4583 handover=0.00
+episode= 100/100 elapsed=   142.4s slo=0.3750 handover=0.00
+      avg_e2e_ms  p95_e2e_ms  slo_satisfaction  throughput_rps  goodput_rps  handover_events  handover_slo_satisfaction  migration_mb  migration_ms  mean_batch_size
+mean   5879.7397  10339.1270            0.4325          0.3866       0.1777              0.0                        NaN           0.0           0.0           1.1973
+std    7165.4847  10002.3297            0.2586          0.1151       0.1315              0.0                        NaN           0.0           0.0           0.2636
+Saved outputs/dynamic_mobility_methods/dybap_adapted_stationary_r040_100.csv
+
+==========================================
+Method:   dybap_adapted
+Mobility: walking
+Rate:     0.40
+Started:  2026年 07月 29日 星期三 18:12:07 CST
+==========================================
+Starting dynamic mobility test: method=dybap_adapted, mode=walking, policy=keep, prediction_error=0.1, rate=0.4, episodes=100
+episode=   1/100 elapsed=     1.6s slo=0.4167 handover=0.00
+episode=  10/100 elapsed=    14.6s slo=0.3333 handover=0.00
+episode=  20/100 elapsed=    29.3s slo=0.3583 handover=0.00
+episode=  30/100 elapsed=    43.6s slo=0.3333 handover=0.20
+episode=  40/100 elapsed=    57.7s slo=0.3667 handover=0.20
+episode=  50/100 elapsed=    72.0s slo=0.5333 handover=0.00
+episode=  60/100 elapsed=    85.7s slo=0.3750 handover=0.00
+episode=  70/100 elapsed=    99.7s slo=0.4083 handover=0.00
+episode=  80/100 elapsed=   114.2s slo=0.4667 handover=0.00
+episode=  90/100 elapsed=   128.2s slo=0.3167 handover=0.00
+episode= 100/100 elapsed=   142.2s slo=0.3500 handover=0.60
+      avg_e2e_ms  p95_e2e_ms  slo_satisfaction  throughput_rps  goodput_rps  handover_events  handover_slo_satisfaction  migration_mb  migration_ms  mean_batch_size
+mean   6295.4304  11345.3561            0.3842          0.3778       0.1561           0.1000                     0.1667           0.0           0.0           1.2178
+std    6690.8731   9761.7827            0.2459          0.1149       0.1239           0.4381                     0.4082           0.0           0.0           0.2879
+Saved outputs/dynamic_mobility_methods/dybap_adapted_walking_r040_100.csv
+
+==========================================
+Method:   dybap_adapted
+Mobility: driving
+Rate:     0.40
+Started:  2026年 07月 29日 星期三 18:14:35 CST
+==========================================
+Starting dynamic mobility test: method=dybap_adapted, mode=driving, policy=keep, prediction_error=0.1, rate=0.4, episodes=100
+episode=   1/100 elapsed=     1.6s slo=0.4167 handover=0.00
+episode=  10/100 elapsed=    14.7s slo=0.3333 handover=0.20
+episode=  20/100 elapsed=    29.3s slo=0.3583 handover=0.30
+episode=  30/100 elapsed=    43.5s slo=0.3333 handover=1.40
+episode=  40/100 elapsed=    57.6s slo=0.3667 handover=0.70
+episode=  50/100 elapsed=    71.9s slo=0.5333 handover=0.30
+episode=  60/100 elapsed=    85.6s slo=0.3833 handover=0.40
+episode=  70/100 elapsed=    99.5s slo=0.4083 handover=0.40
+episode=  80/100 elapsed=   114.1s slo=0.4667 handover=0.50
+episode=  90/100 elapsed=   128.0s slo=0.3167 handover=0.90
+episode= 100/100 elapsed=   142.1s slo=0.3500 handover=1.40
+      avg_e2e_ms  p95_e2e_ms  slo_satisfaction  throughput_rps  goodput_rps  handover_events  handover_slo_satisfaction  migration_mb  migration_ms  mean_batch_size
+mean   6264.3670  11317.7668             0.385          0.3784       0.1565           0.6500                     0.2126           0.0           0.0           1.2222
+std    6655.3753   9748.5198             0.245          0.1146       0.1235           1.3286                     0.3855           0.0           0.0           0.2899
+Saved outputs/dynamic_mobility_methods/dybap_adapted_driving_r040_100.csv
+
+==========================================
+Method:   dybap_adapted
+Mobility: high_speed
+Rate:     0.40
+Started:  2026年 07月 29日 星期三 18:17:03 CST
+==========================================
+Starting dynamic mobility test: method=dybap_adapted, mode=high_speed, policy=keep, prediction_error=0.1, rate=0.4, episodes=100
+episode=   1/100 elapsed=     1.6s slo=0.4167 handover=1.00
+episode=  10/100 elapsed=    14.6s slo=0.3333 handover=2.00
+episode=  20/100 elapsed=    29.1s slo=0.3500 handover=2.70
+episode=  30/100 elapsed=    43.8s slo=0.3333 handover=4.20
+episode=  40/100 elapsed=    57.9s slo=0.3667 handover=3.00
+episode=  50/100 elapsed=    72.2s slo=0.5333 handover=1.80
+episode=  60/100 elapsed=    85.9s slo=0.3750 handover=3.30
+episode=  70/100 elapsed=    99.9s slo=0.3917 handover=2.60
+episode=  80/100 elapsed=   114.4s slo=0.4667 handover=2.10
+episode=  90/100 elapsed=   128.3s slo=0.3167 handover=3.20
+episode= 100/100 elapsed=   142.3s slo=0.3500 handover=4.40
+      avg_e2e_ms  p95_e2e_ms  slo_satisfaction  throughput_rps  goodput_rps  handover_events  handover_slo_satisfaction  migration_mb  migration_ms  mean_batch_size
+mean   6205.2177  11185.0035            0.3817          0.3792       0.1551           2.9300                     0.2949           0.0           0.0           1.2219
+std    6481.9862   9453.7935            0.2445          0.1131       0.1226           3.0559                     0.3782           0.0           0.0           0.2890
+Saved outputs/dynamic_mobility_methods/dybap_adapted_high_speed_r040_100.csv
+
+==========================================
+Method:   full
+Mobility: stationary
+Rate:     0.40
+Started:  2026年 07月 29日 星期三 18:19:31 CST
+==========================================
+Starting dynamic mobility test: method=full, mode=stationary, policy=keep, prediction_error=0.1, rate=0.4, episodes=100
+episode=   1/100 elapsed=     2.6s slo=0.9167 handover=0.00
+episode=  10/100 elapsed=    21.6s slo=0.6250 handover=0.00
+episode=  20/100 elapsed=    43.0s slo=0.5167 handover=0.00
+episode=  30/100 elapsed=    64.6s slo=0.5167 handover=0.00
+episode=  40/100 elapsed=    85.4s slo=0.5083 handover=0.00
+episode=  50/100 elapsed=   108.1s slo=0.6667 handover=0.00
+episode=  60/100 elapsed=   127.4s slo=0.5083 handover=0.00
+episode=  70/100 elapsed=   149.0s slo=0.6250 handover=0.00
+episode=  80/100 elapsed=   171.4s slo=0.6500 handover=0.00
+episode=  90/100 elapsed=   191.8s slo=0.5333 handover=0.00
+episode= 100/100 elapsed=   215.4s slo=0.5667 handover=0.00
+      avg_e2e_ms  p95_e2e_ms  slo_satisfaction  throughput_rps  goodput_rps  handover_events  handover_slo_satisfaction  migration_mb  migration_ms  mean_batch_size
+mean   3163.7085   6520.6315            0.5717          0.4258       0.2433              0.0                        NaN           0.0           0.0           1.2916
+std    1933.0393   4631.0349            0.1993          0.1125       0.1088              0.0                        NaN           0.0           0.0           0.3237
+Saved outputs/dynamic_mobility_methods/full_stationary_r040_100.csv
+
+==========================================
+Method:   full
+Mobility: walking
+Rate:     0.40
+Started:  2026年 07月 29日 星期三 18:23:15 CST
+==========================================
+Starting dynamic mobility test: method=full, mode=walking, policy=keep, prediction_error=0.1, rate=0.4, episodes=100
+episode=   1/100 elapsed=     2.6s slo=0.9167 handover=0.00
+episode=  10/100 elapsed=    21.7s slo=0.6250 handover=0.00
+episode=  20/100 elapsed=    43.1s slo=0.5167 handover=0.00
+episode=  30/100 elapsed=    64.7s slo=0.5167 handover=0.00
+episode=  40/100 elapsed=    85.7s slo=0.5083 handover=0.00
+episode=  50/100 elapsed=   108.4s slo=0.6667 handover=0.00
+episode=  60/100 elapsed=   127.7s slo=0.5083 handover=0.00
+episode=  70/100 elapsed=   149.3s slo=0.6250 handover=0.00
+episode=  80/100 elapsed=   171.7s slo=0.6500 handover=0.00
+episode=  90/100 elapsed=   192.2s slo=0.5333 handover=0.00
+episode= 100/100 elapsed=   215.9s slo=0.5667 handover=0.00
+      avg_e2e_ms  p95_e2e_ms  slo_satisfaction  throughput_rps  goodput_rps  handover_events  handover_slo_satisfaction  migration_mb  migration_ms  mean_batch_size
+mean   3163.7085   6520.6315            0.5717          0.4258       0.2433              0.0                        NaN           0.0           0.0           1.2916
+std    1933.0393   4631.0349            0.1993          0.1125       0.1088              0.0                        NaN           0.0           0.0           0.3237
+Saved outputs/dynamic_mobility_methods/full_walking_r040_100.csv
+
+==========================================
+Method:   full
+Mobility: driving
+Rate:     0.40
+Started:  2026年 07月 29日 星期三 18:26:59 CST
+==========================================
+Starting dynamic mobility test: method=full, mode=driving, policy=keep, prediction_error=0.1, rate=0.4, episodes=100
+episode=   1/100 elapsed=     2.5s slo=0.9167 handover=0.00
+episode=  10/100 elapsed=    21.3s slo=0.6250 handover=0.00
+episode=  20/100 elapsed=    42.6s slo=0.5167 handover=0.10
+episode=  30/100 elapsed=    64.2s slo=0.5167 handover=0.30
+episode=  40/100 elapsed=    84.8s slo=0.5083 handover=0.20
+episode=  50/100 elapsed=   107.2s slo=0.6667 handover=0.00
+episode=  60/100 elapsed=   126.2s slo=0.5083 handover=0.10
+episode=  70/100 elapsed=   147.4s slo=0.6250 handover=0.00
+episode=  80/100 elapsed=   169.8s slo=0.6500 handover=0.10
+episode=  90/100 elapsed=   190.1s slo=0.5333 handover=0.00
+episode= 100/100 elapsed=   214.7s slo=0.5667 handover=0.30
+      avg_e2e_ms  p95_e2e_ms  slo_satisfaction  throughput_rps  goodput_rps  handover_events  handover_slo_satisfaction  migration_mb  migration_ms  mean_batch_size
+mean   3160.8579   6521.3609            0.5717          0.4258       0.2433           0.1100                     0.4815           0.0           0.0           1.2916
+std    1922.2337   4631.1130            0.1993          0.1125       0.1088           0.3994                     0.5031           0.0           0.0           0.3237
+Saved outputs/dynamic_mobility_methods/full_driving_r040_100.csv
+
+==========================================
+Method:   full
+Mobility: high_speed
+Rate:     0.40
+Started:  2026年 07月 29日 星期三 18:30:42 CST
+==========================================
+Starting dynamic mobility test: method=full, mode=high_speed, policy=keep, prediction_error=0.1, rate=0.4, episodes=100
+episode=   1/100 elapsed=     2.5s slo=0.9167 handover=0.00
+episode=  10/100 elapsed=    21.5s slo=0.6250 handover=0.40
+episode=  20/100 elapsed=    42.8s slo=0.5167 handover=1.40
+episode=  30/100 elapsed=    64.7s slo=0.5083 handover=2.40
+episode=  40/100 elapsed=    85.3s slo=0.5083 handover=2.00
+episode=  50/100 elapsed=   107.7s slo=0.6667 handover=0.70
+episode=  60/100 elapsed=   126.9s slo=0.5083 handover=1.50
+episode=  70/100 elapsed=   148.5s slo=0.6167 handover=1.20
+episode=  80/100 elapsed=   170.7s slo=0.6500 handover=1.10
+episode=  90/100 elapsed=   191.0s slo=0.5333 handover=1.60
+episode= 100/100 elapsed=   216.0s slo=0.5667 handover=1.40
+      avg_e2e_ms  p95_e2e_ms  slo_satisfaction  throughput_rps  goodput_rps  handover_events  handover_slo_satisfaction  migration_mb  migration_ms  mean_batch_size
+mean   3171.1647   6552.3866            0.5700          0.4256       0.2426           1.3700                     0.5796           0.0           0.0           1.2916
+std    1945.7751   4708.7270            0.2006          0.1126       0.1092           1.8891                     0.3829           0.0           0.0           0.3237
+Saved outputs/dynamic_mobility_methods/full_high_speed_r040_100.csv
+
+All dynamic mobility method tests completed
+Finished: 2026年 07月 29日 星期三 18:34:26 CST

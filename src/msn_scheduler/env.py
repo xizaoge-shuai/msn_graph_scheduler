@@ -69,31 +69,131 @@ class SchedulingEnv:
             raise RuntimeError("No feasible initial batch/action. Increase deadlines or free capacity.")
         return self._observation()
 
-    def _batch_feature_vector(self, batch: BatchCandidate | None) -> np.ndarray:
+    def _batch_feature_vector(
+        self,
+        batch: BatchCandidate | None,
+    ) -> np.ndarray:
+        mask_mobility = bool(
+            self.cfg.get(
+                "ablation",
+                {},
+            ).get(
+                "mask_mobility_features",
+                False,
+            )
+        )
+
         if batch is None:
-            # Initial action candidates each carry their own batch; use queue summary as state context.
-            reqs = self.queue[: self.batcher.window_size]
+            reqs = self.queue[
+                : self.batcher.window_size
+            ]
+
+            mobility_probability = (
+                0.0
+                if mask_mobility
+                else float(
+                    np.mean(
+                        [
+                            r.handover_probability
+                            for r in reqs
+                        ]
+                    )
+                )
+            )
+
+            residual_dwell = (
+                0.0
+                if mask_mobility
+                else float(
+                    np.mean(
+                        [
+                            r.residual_dwell_ms
+                            for r in reqs
+                        ]
+                    )
+                    / 3000.0
+                )
+            )
+
             return np.array(
                 [
                     0.0,
-                    np.mean([r.input_tokens for r in reqs]) / 1024.0,
-                    sum(r.input_tokens for r in reqs) / 8192.0,
-                    np.mean([r.expected_output_tokens for r in reqs]) / 512.0,
-                    min(r.remaining_deadline_ms(self.now_ms) for r in reqs) / 5000.0,
-                    np.mean([r.handover_probability for r in reqs]),
-                    np.mean([r.residual_dwell_ms for r in reqs]) / 3000.0,
+                    np.mean(
+                        [
+                            r.input_tokens
+                            for r in reqs
+                        ]
+                    )
+                    / 1024.0,
+                    sum(
+                        r.input_tokens
+                        for r in reqs
+                    )
+                    / 8192.0,
+                    np.mean(
+                        [
+                            r.expected_output_tokens
+                            for r in reqs
+                        ]
+                    )
+                    / 512.0,
+                    min(
+                        r.remaining_deadline_ms(
+                            self.now_ms
+                        )
+                        for r in reqs
+                    )
+                    / 5000.0,
+                    mobility_probability,
+                    residual_dwell,
                 ],
                 dtype=np.float32,
             )
+
+        mobility_probability = (
+            0.0
+            if mask_mobility
+            else float(
+                np.mean(
+                    [
+                        r.handover_probability
+                        for r in batch.requests
+                    ]
+                )
+            )
+        )
+
+        residual_dwell = (
+            0.0
+            if mask_mobility
+            else float(
+                np.mean(
+                    [
+                        r.residual_dwell_ms
+                        for r in batch.requests
+                    ]
+                )
+                / 3000.0
+            )
+        )
+
         return np.array(
             [
-                batch.batch_size / max(self.batcher.max_batch_size, 1),
-                batch.max_input_tokens / 1024.0,
-                batch.token_sum / 8192.0,
-                batch.expected_output_mean / 512.0,
-                batch.min_remaining_deadline_ms / 5000.0,
-                np.mean([r.handover_probability for r in batch.requests]),
-                np.mean([r.residual_dwell_ms for r in batch.requests]) / 3000.0,
+                batch.batch_size
+                / max(
+                    self.batcher.max_batch_size,
+                    1,
+                ),
+                batch.max_input_tokens
+                / 1024.0,
+                batch.token_sum
+                / 8192.0,
+                batch.expected_output_mean
+                / 512.0,
+                batch.min_remaining_deadline_ms
+                / 5000.0,
+                mobility_probability,
+                residual_dwell,
             ],
             dtype=np.float32,
         )
@@ -121,6 +221,16 @@ class SchedulingEnv:
             1,
         )
 
+        mask_mobility = bool(
+            self.cfg.get(
+                "ablation",
+                {},
+            ).get(
+                "mask_mobility_features",
+                False,
+            )
+        )
+
         mobility_features = np.asarray(
             [
                 [
@@ -129,18 +239,30 @@ class SchedulingEnv:
                         0,
                     )
                     / node_scale,
-                    node_to_idx.get(
-                        request.next_anchor_node,
-                        0,
-                    )
-                    / node_scale,
-                    float(
-                        request.handover_probability
+                    (
+                        0.0
+                        if mask_mobility
+                        else node_to_idx.get(
+                            request.next_anchor_node,
+                            0,
+                        )
+                        / node_scale
                     ),
-                    float(
-                        request.residual_dwell_ms
-                    )
-                    / 3000.0,
+                    (
+                        0.0
+                        if mask_mobility
+                        else float(
+                            request.handover_probability
+                        )
+                    ),
+                    (
+                        0.0
+                        if mask_mobility
+                        else float(
+                            request.residual_dwell_ms
+                        )
+                        / 3000.0
+                    ),
                 ]
                 for request in active_requests
             ],

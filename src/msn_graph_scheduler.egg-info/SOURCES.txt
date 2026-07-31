@@ -13,7 +13,9 @@ src/msn_scheduler/candidates.py
 src/msn_scheduler/config.py
 src/msn_scheduler/datatypes.py
 src/msn_scheduler/deployment.py
+src/msn_scheduler/dybap.py
 src/msn_scheduler/env.py
+src/msn_scheduler/external_baselines.py
 src/msn_scheduler/graph.py
 src/msn_scheduler/models.py
 src/msn_scheduler/profiles.py

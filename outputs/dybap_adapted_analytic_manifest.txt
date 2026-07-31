@@ -1,0 +1,13 @@
+method=DyBAP-Adapted
+profile=analytical
+trace=data/processed/azure_2024_test_sample.csv
+episodes_per_rate=100
+arrival_rates=0.10,0.20,0.40,0.60
+max_requests=12
+max_steps=64
+max_batches=32
+config=configs/train_online_cpu.yaml
+git_commit=fc6d5ebb30063d6ac0076e7dc306a87814d165d2
+python=Python 3.10.20
+torch=2.5.1+cpu
+created_at=2026-07-29T13:40:46+08:00

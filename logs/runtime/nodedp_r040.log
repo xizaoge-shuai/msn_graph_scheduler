@@ -1,0 +1,13 @@
+Using request trace: data/processed/azure_2024_test_sample.csv rows=500,000
+Starting evaluation: episodes=5, batchers=['node_conditioned_dp'], full_queue=True, total_runs=5
+episode=   1/5 runs=   1/5 elapsed=     1.7s eta=     6.8s
+episode=   2/5 runs=   2/5 elapsed=     2.9s eta=     4.4s
+episode=   3/5 runs=   3/5 elapsed=     4.4s eta=     2.9s
+episode=   4/5 runs=   4/5 elapsed=     6.3s eta=     1.6s
+episode=   5/5 runs=   5/5 elapsed=     7.7s eta=     0.0s
+                     episodes  completion_ratio  ...  goodput_rps    reward
+batcher                                          ...                       
+node_conditioned_dp         5               1.0  ...       0.2289 -138.9326
+
+[1 rows x 11 columns]
+Saved outputs/runtime/nodedp_r040.csv

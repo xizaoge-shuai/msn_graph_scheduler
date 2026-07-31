@@ -1,0 +1,201 @@
+method,baseline,condition_name,condition,metric,metric_label,improvement,unit
+Ours w/o DDQN,NoBatch-LB,arrival_rate_rps,0.1,avg_e2e_reduction_pct,Average E2E reduction,1.410677923832653,%
+Ours w/o DDQN,NoBatch-LB,arrival_rate_rps,0.1,p95_e2e_reduction_pct,P95 E2E reduction,0.2602607075929373,%
+Ours w/o DDQN,NoBatch-LB,arrival_rate_rps,0.1,slo_gain_pp,SLO satisfaction gain,0.33333333333334103,percentage points
+Ours w/o DDQN,NoBatch-LB,arrival_rate_rps,0.1,throughput_gain_pct,Throughput gain,0.04493945647153393,%
+Ours w/o DDQN,NoBatch-LB,arrival_rate_rps,0.1,goodput_gain_pct,Goodput gain,0.4319018020240243,%
+Ours w/o DDQN,Fixed4-LB,arrival_rate_rps,0.1,avg_e2e_reduction_pct,Average E2E reduction,-0.029376269622519005,%
+Ours w/o DDQN,Fixed4-LB,arrival_rate_rps,0.1,p95_e2e_reduction_pct,P95 E2E reduction,-0.14433375324888142,%
+Ours w/o DDQN,Fixed4-LB,arrival_rate_rps,0.1,slo_gain_pp,SLO satisfaction gain,0.0,percentage points
+Ours w/o DDQN,Fixed4-LB,arrival_rate_rps,0.1,throughput_gain_pct,Throughput gain,0.0,%
+Ours w/o DDQN,Fixed4-LB,arrival_rate_rps,0.1,goodput_gain_pct,Goodput gain,0.0,%
+Ours w/o DDQN,SeqGreedy-LB,arrival_rate_rps,0.1,avg_e2e_reduction_pct,Average E2E reduction,-0.2262181225880548,%
+Ours w/o DDQN,SeqGreedy-LB,arrival_rate_rps,0.1,p95_e2e_reduction_pct,P95 E2E reduction,-0.6874777983374902,%
+Ours w/o DDQN,SeqGreedy-LB,arrival_rate_rps,0.1,slo_gain_pp,SLO satisfaction gain,0.08333333333333526,percentage points
+Ours w/o DDQN,SeqGreedy-LB,arrival_rate_rps,0.1,throughput_gain_pct,Throughput gain,0.0,%
+Ours w/o DDQN,SeqGreedy-LB,arrival_rate_rps,0.1,goodput_gain_pct,Goodput gain,0.11316515848838941,%
+Ours w/o DDQN,LECU-RBA (adapted),arrival_rate_rps,0.1,avg_e2e_reduction_pct,Average E2E reduction,36.218503064121755,%
+Ours w/o DDQN,LECU-RBA (adapted),arrival_rate_rps,0.1,p95_e2e_reduction_pct,P95 E2E reduction,36.48064177153626,%
+Ours w/o DDQN,LECU-RBA (adapted),arrival_rate_rps,0.1,slo_gain_pp,SLO satisfaction gain,23.08333333333334,percentage points
+Ours w/o DDQN,LECU-RBA (adapted),arrival_rate_rps,0.1,throughput_gain_pct,Throughput gain,1.5012479141270358,%
+Ours w/o DDQN,LECU-RBA (adapted),arrival_rate_rps,0.1,goodput_gain_pct,Goodput gain,50.86972610795175,%
+Ours w/o DDQN,DyBAP-Adapted,arrival_rate_rps,0.1,avg_e2e_reduction_pct,Average E2E reduction,28.45939121523952,%
+Ours w/o DDQN,DyBAP-Adapted,arrival_rate_rps,0.1,p95_e2e_reduction_pct,P95 E2E reduction,33.80860146244098,%
+Ours w/o DDQN,DyBAP-Adapted,arrival_rate_rps,0.1,slo_gain_pp,SLO satisfaction gain,12.250000000000005,percentage points
+Ours w/o DDQN,DyBAP-Adapted,arrival_rate_rps,0.1,throughput_gain_pct,Throughput gain,0.628550393223383,%
+Ours w/o DDQN,DyBAP-Adapted,arrival_rate_rps,0.1,goodput_gain_pct,Goodput gain,20.438389052888628,%
+Full,NoBatch-LB,arrival_rate_rps,0.1,avg_e2e_reduction_pct,Average E2E reduction,8.022022563037016,%
+Full,NoBatch-LB,arrival_rate_rps,0.1,p95_e2e_reduction_pct,P95 E2E reduction,7.04447688496532,%
+Full,NoBatch-LB,arrival_rate_rps,0.1,slo_gain_pp,SLO satisfaction gain,3.6666666666666736,percentage points
+Full,NoBatch-LB,arrival_rate_rps,0.1,throughput_gain_pct,Throughput gain,0.19082562077014115,%
+Full,NoBatch-LB,arrival_rate_rps,0.1,goodput_gain_pct,Goodput gain,5.5276216564371214,%
+Full,Fixed4-LB,arrival_rate_rps,0.1,avg_e2e_reduction_pct,Average E2E reduction,6.678537596061646,%
+Full,Fixed4-LB,arrival_rate_rps,0.1,p95_e2e_reduction_pct,P95 E2E reduction,6.667402611222359,%
+Full,Fixed4-LB,arrival_rate_rps,0.1,slo_gain_pp,SLO satisfaction gain,3.3333333333333326,percentage points
+Full,Fixed4-LB,arrival_rate_rps,0.1,throughput_gain_pct,Throughput gain,0.14582063329857947,%
+Full,Fixed4-LB,arrival_rate_rps,0.1,goodput_gain_pct,Goodput gain,5.073805994889964,%
+Full,SeqGreedy-LB,arrival_rate_rps,0.1,avg_e2e_reduction_pct,Average E2E reduction,6.49489584734644,%
+Full,SeqGreedy-LB,arrival_rate_rps,0.1,p95_e2e_reduction_pct,P95 E2E reduction,6.16120278358885,%
+Full,SeqGreedy-LB,arrival_rate_rps,0.1,slo_gain_pp,SLO satisfaction gain,3.416666666666668,percentage points
+Full,SeqGreedy-LB,arrival_rate_rps,0.1,throughput_gain_pct,Throughput gain,0.14582063329857947,%
+Full,SeqGreedy-LB,arrival_rate_rps,0.1,goodput_gain_pct,Goodput gain,5.192712933973864,%
+Full,LECU-RBA (adapted),arrival_rate_rps,0.1,avg_e2e_reduction_pct,Average E2E reduction,40.49565447329433,%
+Full,LECU-RBA (adapted),arrival_rate_rps,0.1,p95_e2e_reduction_pct,P95 E2E reduction,40.80117700380212,%
+Full,LECU-RBA (adapted),arrival_rate_rps,0.1,slo_gain_pp,SLO satisfaction gain,26.41666666666667,percentage points
+Full,LECU-RBA (adapted),arrival_rate_rps,0.1,throughput_gain_pct,Throughput gain,1.6492576766413771,%
+Full,LECU-RBA (adapted),arrival_rate_rps,0.1,goodput_gain_pct,Goodput gain,58.52456331569108,%
+Full,DyBAP-Adapted,arrival_rate_rps,0.1,avg_e2e_reduction_pct,Average E2E reduction,33.25686431287511,%
+Full,DyBAP-Adapted,arrival_rate_rps,0.1,p95_e2e_reduction_pct,P95 E2E reduction,38.31088670949693,%
+Full,DyBAP-Adapted,arrival_rate_rps,0.1,slo_gain_pp,SLO satisfaction gain,15.583333333333337,percentage points
+Full,DyBAP-Adapted,arrival_rate_rps,0.1,throughput_gain_pct,Throughput gain,0.7752875826859615,%
+Full,DyBAP-Adapted,arrival_rate_rps,0.1,goodput_gain_pct,Goodput gain,26.549199256802993,%
+Ours w/o DDQN,NoBatch-LB,arrival_rate_rps,0.2,avg_e2e_reduction_pct,Average E2E reduction,7.67486562693966,%
+Ours w/o DDQN,NoBatch-LB,arrival_rate_rps,0.2,p95_e2e_reduction_pct,P95 E2E reduction,5.070601321807393,%
+Ours w/o DDQN,NoBatch-LB,arrival_rate_rps,0.2,slo_gain_pp,SLO satisfaction gain,1.8333333333333424,percentage points
+Ours w/o DDQN,NoBatch-LB,arrival_rate_rps,0.2,throughput_gain_pct,Throughput gain,0.5825366983339161,%
+Ours w/o DDQN,NoBatch-LB,arrival_rate_rps,0.2,goodput_gain_pct,Goodput gain,3.861601669066528,%
+Ours w/o DDQN,Fixed4-LB,arrival_rate_rps,0.2,avg_e2e_reduction_pct,Average E2E reduction,0.03693990445158831,%
+Ours w/o DDQN,Fixed4-LB,arrival_rate_rps,0.2,p95_e2e_reduction_pct,P95 E2E reduction,-0.5665004233237055,%
+Ours w/o DDQN,Fixed4-LB,arrival_rate_rps,0.2,slo_gain_pp,SLO satisfaction gain,0.08333333333333526,percentage points
+Ours w/o DDQN,Fixed4-LB,arrival_rate_rps,0.2,throughput_gain_pct,Throughput gain,0.016300210978402598,%
+Ours w/o DDQN,Fixed4-LB,arrival_rate_rps,0.2,goodput_gain_pct,Goodput gain,0.31555213821411954,%
+Ours w/o DDQN,SeqGreedy-LB,arrival_rate_rps,0.2,avg_e2e_reduction_pct,Average E2E reduction,0.22695124728267022,%
+Ours w/o DDQN,SeqGreedy-LB,arrival_rate_rps,0.2,p95_e2e_reduction_pct,P95 E2E reduction,-0.10327063340561077,%
+Ours w/o DDQN,SeqGreedy-LB,arrival_rate_rps,0.2,slo_gain_pp,SLO satisfaction gain,0.2500000000000058,percentage points
+Ours w/o DDQN,SeqGreedy-LB,arrival_rate_rps,0.2,throughput_gain_pct,Throughput gain,0.03544110830429121,%
+Ours w/o DDQN,SeqGreedy-LB,arrival_rate_rps,0.2,goodput_gain_pct,Goodput gain,0.689299167708033,%
+Ours w/o DDQN,LECU-RBA (adapted),arrival_rate_rps,0.2,avg_e2e_reduction_pct,Average E2E reduction,39.65404168508518,%
+Ours w/o DDQN,LECU-RBA (adapted),arrival_rate_rps,0.2,p95_e2e_reduction_pct,P95 E2E reduction,38.014504504390835,%
+Ours w/o DDQN,LECU-RBA (adapted),arrival_rate_rps,0.2,slo_gain_pp,SLO satisfaction gain,22.666666666666675,percentage points
+Ours w/o DDQN,LECU-RBA (adapted),arrival_rate_rps,0.2,throughput_gain_pct,Throughput gain,4.4187059381937654,%
+Ours w/o DDQN,LECU-RBA (adapted),arrival_rate_rps,0.2,goodput_gain_pct,Goodput gain,61.84665092776132,%
+Ours w/o DDQN,DyBAP-Adapted,arrival_rate_rps,0.2,avg_e2e_reduction_pct,Average E2E reduction,37.93245310619758,%
+Ours w/o DDQN,DyBAP-Adapted,arrival_rate_rps,0.2,p95_e2e_reduction_pct,P95 E2E reduction,36.25324868520469,%
+Ours w/o DDQN,DyBAP-Adapted,arrival_rate_rps,0.2,slo_gain_pp,SLO satisfaction gain,12.416666666666675,percentage points
+Ours w/o DDQN,DyBAP-Adapted,arrival_rate_rps,0.2,throughput_gain_pct,Throughput gain,3.1192057705731986,%
+Ours w/o DDQN,DyBAP-Adapted,arrival_rate_rps,0.2,goodput_gain_pct,Goodput gain,24.5944528325089,%
+Full,NoBatch-LB,arrival_rate_rps,0.2,avg_e2e_reduction_pct,Average E2E reduction,13.406262972887678,%
+Full,NoBatch-LB,arrival_rate_rps,0.2,p95_e2e_reduction_pct,P95 E2E reduction,9.576237915407859,%
+Full,NoBatch-LB,arrival_rate_rps,0.2,slo_gain_pp,SLO satisfaction gain,6.500000000000017,percentage points
+Full,NoBatch-LB,arrival_rate_rps,0.2,throughput_gain_pct,Throughput gain,0.7756476810964958,%
+Full,NoBatch-LB,arrival_rate_rps,0.2,goodput_gain_pct,Goodput gain,11.79394477509934,%
+Full,Fixed4-LB,arrival_rate_rps,0.2,avg_e2e_reduction_pct,Average E2E reduction,6.242487518489436,%
+Full,Fixed4-LB,arrival_rate_rps,0.2,p95_e2e_reduction_pct,P95 E2E reduction,4.206690081481997,%
+Full,Fixed4-LB,arrival_rate_rps,0.2,slo_gain_pp,SLO satisfaction gain,4.75000000000001,percentage points
+Full,Fixed4-LB,arrival_rate_rps,0.2,throughput_gain_pct,Throughput gain,0.20832406183778523,%
+Full,Fixed4-LB,arrival_rate_rps,0.2,goodput_gain_pct,Goodput gain,7.9770686721771735,%
+Full,SeqGreedy-LB,arrival_rate_rps,0.2,avg_e2e_reduction_pct,Average E2E reduction,6.420703259685088,%
+Full,SeqGreedy-LB,arrival_rate_rps,0.2,p95_e2e_reduction_pct,P95 E2E reduction,4.647933583466507,%
+Full,SeqGreedy-LB,arrival_rate_rps,0.2,slo_gain_pp,SLO satisfaction gain,4.91666666666668,percentage points
+Full,SeqGreedy-LB,arrival_rate_rps,0.2,throughput_gain_pct,Throughput gain,0.22750170826162758,%
+Full,SeqGreedy-LB,arrival_rate_rps,0.2,goodput_gain_pct,Goodput gain,8.379360318980693,%
+Full,LECU-RBA (adapted),arrival_rate_rps,0.2,avg_e2e_reduction_pct,Average E2E reduction,43.4002226971511,%
+Full,LECU-RBA (adapted),arrival_rate_rps,0.2,p95_e2e_reduction_pct,P95 E2E reduction,40.956523738329494,%
+Full,LECU-RBA (adapted),arrival_rate_rps,0.2,slo_gain_pp,SLO satisfaction gain,27.33333333333335,percentage points
+Full,LECU-RBA (adapted),arrival_rate_rps,0.2,throughput_gain_pct,Throughput gain,4.619182080319692,%
+Full,LECU-RBA (adapted),arrival_rate_rps,0.2,goodput_gain_pct,Goodput gain,74.20755375508304,%
+Full,DyBAP-Adapted,arrival_rate_rps,0.2,avg_e2e_reduction_pct,Average E2E reduction,41.78550759620484,%
+Full,DyBAP-Adapted,arrival_rate_rps,0.2,p95_e2e_reduction_pct,P95 E2E reduction,39.27886245129157,%
+Full,DyBAP-Adapted,arrival_rate_rps,0.2,slo_gain_pp,SLO satisfaction gain,17.08333333333335,percentage points
+Full,DyBAP-Adapted,arrival_rate_rps,0.2,throughput_gain_pct,Throughput gain,3.3171869691164035,%
+Full,DyBAP-Adapted,arrival_rate_rps,0.2,goodput_gain_pct,Goodput gain,34.110250134816816,%
+Ours w/o DDQN,NoBatch-LB,arrival_rate_rps,0.4,avg_e2e_reduction_pct,Average E2E reduction,23.626898518640427,%
+Ours w/o DDQN,NoBatch-LB,arrival_rate_rps,0.4,p95_e2e_reduction_pct,P95 E2E reduction,15.821770914575877,%
+Ours w/o DDQN,NoBatch-LB,arrival_rate_rps,0.4,slo_gain_pp,SLO satisfaction gain,4.499999999999998,percentage points
+Ours w/o DDQN,NoBatch-LB,arrival_rate_rps,0.4,throughput_gain_pct,Throughput gain,7.510349922072401,%
+Ours w/o DDQN,NoBatch-LB,arrival_rate_rps,0.4,goodput_gain_pct,Goodput gain,15.398222511648829,%
+Ours w/o DDQN,Fixed4-LB,arrival_rate_rps,0.4,avg_e2e_reduction_pct,Average E2E reduction,3.3496891061710707,%
+Ours w/o DDQN,Fixed4-LB,arrival_rate_rps,0.4,p95_e2e_reduction_pct,P95 E2E reduction,-0.13603369442855964,%
+Ours w/o DDQN,Fixed4-LB,arrival_rate_rps,0.4,slo_gain_pp,SLO satisfaction gain,0.666666666666671,percentage points
+Ours w/o DDQN,Fixed4-LB,arrival_rate_rps,0.4,throughput_gain_pct,Throughput gain,0.1849005640729551,%
+Ours w/o DDQN,Fixed4-LB,arrival_rate_rps,0.4,goodput_gain_pct,Goodput gain,1.4779424780499641,%
+Ours w/o DDQN,SeqGreedy-LB,arrival_rate_rps,0.4,avg_e2e_reduction_pct,Average E2E reduction,1.8030609508743645,%
+Ours w/o DDQN,SeqGreedy-LB,arrival_rate_rps,0.4,p95_e2e_reduction_pct,P95 E2E reduction,0.9548787821366419,%
+Ours w/o DDQN,SeqGreedy-LB,arrival_rate_rps,0.4,slo_gain_pp,SLO satisfaction gain,0.16666666666667052,percentage points
+Ours w/o DDQN,SeqGreedy-LB,arrival_rate_rps,0.4,throughput_gain_pct,Throughput gain,0.502565595797015,%
+Ours w/o DDQN,SeqGreedy-LB,arrival_rate_rps,0.4,goodput_gain_pct,Goodput gain,0.7856604690813812,%
+Ours w/o DDQN,LECU-RBA (adapted),arrival_rate_rps,0.4,avg_e2e_reduction_pct,Average E2E reduction,41.65496902028696,%
+Ours w/o DDQN,LECU-RBA (adapted),arrival_rate_rps,0.4,p95_e2e_reduction_pct,P95 E2E reduction,41.58737256086141,%
+Ours w/o DDQN,LECU-RBA (adapted),arrival_rate_rps,0.4,slo_gain_pp,SLO satisfaction gain,20.16666666666667,percentage points
+Ours w/o DDQN,LECU-RBA (adapted),arrival_rate_rps,0.4,throughput_gain_pct,Throughput gain,13.865490407093093,%
+Ours w/o DDQN,LECU-RBA (adapted),arrival_rate_rps,0.4,goodput_gain_pct,Goodput gain,83.6329816590044,%
+Ours w/o DDQN,DyBAP-Adapted,arrival_rate_rps,0.4,avg_e2e_reduction_pct,Average E2E reduction,44.829658707781334,%
+Ours w/o DDQN,DyBAP-Adapted,arrival_rate_rps,0.4,p95_e2e_reduction_pct,P95 E2E reduction,39.375868605744884,%
+Ours w/o DDQN,DyBAP-Adapted,arrival_rate_rps,0.4,slo_gain_pp,SLO satisfaction gain,12.83333333333333,percentage points
+Ours w/o DDQN,DyBAP-Adapted,arrival_rate_rps,0.4,throughput_gain_pct,Throughput gain,11.854071212967611,%
+Ours w/o DDQN,DyBAP-Adapted,arrival_rate_rps,0.4,goodput_gain_pct,Goodput gain,39.89586434182467,%
+Full,NoBatch-LB,arrival_rate_rps,0.4,avg_e2e_reduction_pct,Average E2E reduction,29.170515797184116,%
+Full,NoBatch-LB,arrival_rate_rps,0.4,p95_e2e_reduction_pct,P95 E2E reduction,19.693999583935014,%
+Full,NoBatch-LB,arrival_rate_rps,0.4,slo_gain_pp,SLO satisfaction gain,10.416666666666668,percentage points
+Full,NoBatch-LB,arrival_rate_rps,0.4,throughput_gain_pct,Throughput gain,8.401886641910895,%
+Full,NoBatch-LB,arrival_rate_rps,0.4,goodput_gain_pct,Goodput gain,31.024503782854325,%
+Full,Fixed4-LB,arrival_rate_rps,0.4,avg_e2e_reduction_pct,Average E2E reduction,10.365147730414852,%
+Full,Fixed4-LB,arrival_rate_rps,0.4,p95_e2e_reduction_pct,P95 E2E reduction,4.470259699009193,%
+Full,Fixed4-LB,arrival_rate_rps,0.4,slo_gain_pp,SLO satisfaction gain,6.583333333333341,percentage points
+Full,Fixed4-LB,arrival_rate_rps,0.4,throughput_gain_pct,Throughput gain,1.0156905083990675,%
+Full,Fixed4-LB,arrival_rate_rps,0.4,goodput_gain_pct,Goodput gain,15.219253543956118,%
+Full,SeqGreedy-LB,arrival_rate_rps,0.4,avg_e2e_reduction_pct,Average E2E reduction,8.930783112919837,%
+Full,SeqGreedy-LB,arrival_rate_rps,0.4,p95_e2e_reduction_pct,P95 E2E reduction,5.510989811162444,%
+Full,SeqGreedy-LB,arrival_rate_rps,0.4,slo_gain_pp,SLO satisfaction gain,6.083333333333341,percentage points
+Full,SeqGreedy-LB,arrival_rate_rps,0.4,throughput_gain_pct,Throughput gain,1.3359897985047244,%
+Full,SeqGreedy-LB,arrival_rate_rps,0.4,goodput_gain_pct,Goodput gain,14.433228380581095,%
+Full,LECU-RBA (adapted),arrival_rate_rps,0.4,avg_e2e_reduction_pct,Average E2E reduction,45.890000930510574,%
+Full,LECU-RBA (adapted),arrival_rate_rps,0.4,p95_e2e_reduction_pct,P95 E2E reduction,44.274374331745555,%
+Full,LECU-RBA (adapted),arrival_rate_rps,0.4,slo_gain_pp,SLO satisfaction gain,26.083333333333343,percentage points
+Full,LECU-RBA (adapted),arrival_rate_rps,0.4,throughput_gain_pct,Throughput gain,14.80972755164637,%
+Full,LECU-RBA (adapted),arrival_rate_rps,0.4,goodput_gain_pct,Goodput gain,108.49905463325722,%
+Full,DyBAP-Adapted,arrival_rate_rps,0.4,avg_e2e_reduction_pct,Average E2E reduction,48.83425262001552,%
+Full,DyBAP-Adapted,arrival_rate_rps,0.4,p95_e2e_reduction_pct,P95 E2E reduction,42.16460035016784,%
+Full,DyBAP-Adapted,arrival_rate_rps,0.4,slo_gain_pp,SLO satisfaction gain,18.75,percentage points
+Full,DyBAP-Adapted,arrival_rate_rps,0.4,throughput_gain_pct,Throughput gain,12.781628530212627,%
+Full,DyBAP-Adapted,arrival_rate_rps,0.4,goodput_gain_pct,Goodput gain,58.83941544082959,%
+Ours w/o DDQN,NoBatch-LB,arrival_rate_rps,0.6,avg_e2e_reduction_pct,Average E2E reduction,30.85745140534574,%
+Ours w/o DDQN,NoBatch-LB,arrival_rate_rps,0.6,p95_e2e_reduction_pct,P95 E2E reduction,23.95003187436434,%
+Ours w/o DDQN,NoBatch-LB,arrival_rate_rps,0.6,slo_gain_pp,SLO satisfaction gain,6.333333333333341,percentage points
+Ours w/o DDQN,NoBatch-LB,arrival_rate_rps,0.6,throughput_gain_pct,Throughput gain,16.301062380110583,%
+Ours w/o DDQN,NoBatch-LB,arrival_rate_rps,0.6,goodput_gain_pct,Goodput gain,31.300231401138173,%
+Ours w/o DDQN,Fixed4-LB,arrival_rate_rps,0.6,avg_e2e_reduction_pct,Average E2E reduction,6.713204998246241,%
+Ours w/o DDQN,Fixed4-LB,arrival_rate_rps,0.6,p95_e2e_reduction_pct,P95 E2E reduction,0.9768763278367463,%
+Ours w/o DDQN,Fixed4-LB,arrival_rate_rps,0.6,slo_gain_pp,SLO satisfaction gain,1.0833333333333417,percentage points
+Ours w/o DDQN,Fixed4-LB,arrival_rate_rps,0.6,throughput_gain_pct,Throughput gain,0.8353314586219893,%
+Ours w/o DDQN,Fixed4-LB,arrival_rate_rps,0.6,goodput_gain_pct,Goodput gain,3.020640887192313,%
+Ours w/o DDQN,SeqGreedy-LB,arrival_rate_rps,0.6,avg_e2e_reduction_pct,Average E2E reduction,3.081334432616198,%
+Ours w/o DDQN,SeqGreedy-LB,arrival_rate_rps,0.6,p95_e2e_reduction_pct,P95 E2E reduction,1.3278957219529286,%
+Ours w/o DDQN,SeqGreedy-LB,arrival_rate_rps,0.6,slo_gain_pp,SLO satisfaction gain,0.33333333333334103,percentage points
+Ours w/o DDQN,SeqGreedy-LB,arrival_rate_rps,0.6,throughput_gain_pct,Throughput gain,0.21159114509042912,%
+Ours w/o DDQN,SeqGreedy-LB,arrival_rate_rps,0.6,goodput_gain_pct,Goodput gain,0.9297890819822029,%
+Ours w/o DDQN,LECU-RBA (adapted),arrival_rate_rps,0.6,avg_e2e_reduction_pct,Average E2E reduction,40.077907690192106,%
+Ours w/o DDQN,LECU-RBA (adapted),arrival_rate_rps,0.6,p95_e2e_reduction_pct,P95 E2E reduction,39.46503089071239,%
+Ours w/o DDQN,LECU-RBA (adapted),arrival_rate_rps,0.6,slo_gain_pp,SLO satisfaction gain,18.583333333333343,percentage points
+Ours w/o DDQN,LECU-RBA (adapted),arrival_rate_rps,0.6,throughput_gain_pct,Throughput gain,19.38738194530777,%
+Ours w/o DDQN,LECU-RBA (adapted),arrival_rate_rps,0.6,goodput_gain_pct,Goodput gain,108.13551789679634,%
+Ours w/o DDQN,DyBAP-Adapted,arrival_rate_rps,0.6,avg_e2e_reduction_pct,Average E2E reduction,44.6083676300592,%
+Ours w/o DDQN,DyBAP-Adapted,arrival_rate_rps,0.6,p95_e2e_reduction_pct,P95 E2E reduction,40.353490534266456,%
+Ours w/o DDQN,DyBAP-Adapted,arrival_rate_rps,0.6,slo_gain_pp,SLO satisfaction gain,11.58333333333334,percentage points
+Ours w/o DDQN,DyBAP-Adapted,arrival_rate_rps,0.6,throughput_gain_pct,Throughput gain,18.119430088600623,%
+Ours w/o DDQN,DyBAP-Adapted,arrival_rate_rps,0.6,goodput_gain_pct,Goodput gain,50.37854678565565,%
+Full,NoBatch-LB,arrival_rate_rps,0.6,avg_e2e_reduction_pct,Average E2E reduction,35.81291514073535,%
+Full,NoBatch-LB,arrival_rate_rps,0.6,p95_e2e_reduction_pct,P95 E2E reduction,28.608527634847757,%
+Full,NoBatch-LB,arrival_rate_rps,0.6,slo_gain_pp,SLO satisfaction gain,11.249999999999998,percentage points
+Full,NoBatch-LB,arrival_rate_rps,0.6,throughput_gain_pct,Throughput gain,19.58465843301277,%
+Full,NoBatch-LB,arrival_rate_rps,0.6,goodput_gain_pct,Goodput gain,51.48131330155208,%
+Full,Fixed4-LB,arrival_rate_rps,0.6,avg_e2e_reduction_pct,Average E2E reduction,13.3990929068915,%
+Full,Fixed4-LB,arrival_rate_rps,0.6,p95_e2e_reduction_pct,P95 E2E reduction,7.042609334516318,%
+Full,Fixed4-LB,arrival_rate_rps,0.6,slo_gain_pp,SLO satisfaction gain,6.0,percentage points
+Full,Fixed4-LB,arrival_rate_rps,0.6,throughput_gain_pct,Throughput gain,3.682274466661432,%
+Full,Fixed4-LB,arrival_rate_rps,0.6,goodput_gain_pct,Goodput gain,18.855098823719114,%
+Full,SeqGreedy-LB,arrival_rate_rps,0.6,avg_e2e_reduction_pct,Average E2E reduction,10.027519412246198,%
+Full,SeqGreedy-LB,arrival_rate_rps,0.6,p95_e2e_reduction_pct,P95 E2E reduction,7.372126781956648,%
+Full,SeqGreedy-LB,arrival_rate_rps,0.6,slo_gain_pp,SLO satisfaction gain,5.249999999999999,percentage points
+Full,SeqGreedy-LB,arrival_rate_rps,0.6,throughput_gain_pct,Throughput gain,3.0409237273123138,%
+Full,SeqGreedy-LB,arrival_rate_rps,0.6,goodput_gain_pct,Goodput gain,16.4428793326162,%
+Full,LECU-RBA (adapted),arrival_rate_rps,0.6,avg_e2e_reduction_pct,Average E2E reduction,44.37253901960306,%
+Full,LECU-RBA (adapted),arrival_rate_rps,0.6,p95_e2e_reduction_pct,P95 E2E reduction,43.17314417342594,%
+Full,LECU-RBA (adapted),arrival_rate_rps,0.6,slo_gain_pp,SLO satisfaction gain,23.5,percentage points
+Full,LECU-RBA (adapted),arrival_rate_rps,0.6,throughput_gain_pct,Throughput gain,22.758115867244673,%
+Full,LECU-RBA (adapted),arrival_rate_rps,0.6,goodput_gain_pct,Goodput gain,140.12632163138824,%
+Full,DyBAP-Adapted,arrival_rate_rps,0.6,avg_e2e_reduction_pct,Average E2E reduction,48.57829976349082,%
+Full,DyBAP-Adapted,arrival_rate_rps,0.6,p95_e2e_reduction_pct,P95 E2E reduction,44.0071805794052,%
+Full,DyBAP-Adapted,arrival_rate_rps,0.6,slo_gain_pp,SLO satisfaction gain,16.499999999999996,percentage points
+Full,DyBAP-Adapted,arrival_rate_rps,0.6,throughput_gain_pct,Throughput gain,21.454365182678618,%
+Full,DyBAP-Adapted,arrival_rate_rps,0.6,goodput_gain_pct,Goodput gain,73.49200010071382,%

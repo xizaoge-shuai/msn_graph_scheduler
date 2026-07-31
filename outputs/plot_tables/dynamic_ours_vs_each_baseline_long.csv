@@ -1,0 +1,81 @@
+method,baseline,condition_name,condition,metric,metric_label,improvement,unit
+Ours w/o DDQN,LECU-RBA (adapted),mobility_mode,stationary,avg_e2e_reduction_pct,Average E2E reduction,42.70258251559909,%
+Ours w/o DDQN,LECU-RBA (adapted),mobility_mode,stationary,p95_e2e_reduction_pct,P95 E2E reduction,42.12289075501086,%
+Ours w/o DDQN,LECU-RBA (adapted),mobility_mode,stationary,slo_gain_pp,SLO satisfaction gain,20.750000000000007,percentage points
+Ours w/o DDQN,LECU-RBA (adapted),mobility_mode,stationary,throughput_gain_pct,Throughput gain,14.17454065466662,%
+Ours w/o DDQN,LECU-RBA (adapted),mobility_mode,stationary,goodput_gain_pct,Goodput gain,81.28478781686157,%
+Ours w/o DDQN,DyBAP-Adapted,mobility_mode,stationary,avg_e2e_reduction_pct,Average E2E reduction,41.74484029983298,%
+Ours w/o DDQN,DyBAP-Adapted,mobility_mode,stationary,p95_e2e_reduction_pct,P95 E2E reduction,33.80166708400775,%
+Ours w/o DDQN,DyBAP-Adapted,mobility_mode,stationary,slo_gain_pp,SLO satisfaction gain,7.9999999999999964,percentage points
+Ours w/o DDQN,DyBAP-Adapted,mobility_mode,stationary,throughput_gain_pct,Throughput gain,9.186384217356915,%
+Ours w/o DDQN,DyBAP-Adapted,mobility_mode,stationary,goodput_gain_pct,Goodput gain,20.59554313644677,%
+Full,LECU-RBA (adapted),mobility_mode,stationary,avg_e2e_reduction_pct,Average E2E reduction,47.07766392592237,%
+Full,LECU-RBA (adapted),mobility_mode,stationary,p95_e2e_reduction_pct,P95 E2E reduction,44.86015165537448,%
+Full,LECU-RBA (adapted),mobility_mode,stationary,slo_gain_pp,SLO satisfaction gain,26.66666666666668,percentage points
+Full,LECU-RBA (adapted),mobility_mode,stationary,throughput_gain_pct,Throughput gain,15.165643134238998,%
+Full,LECU-RBA (adapted),mobility_mode,stationary,goodput_gain_pct,Goodput gain,105.78365510613959,%
+Full,DyBAP-Adapted,mobility_mode,stationary,avg_e2e_reduction_pct,Average E2E reduction,46.19305240867721,%
+Full,DyBAP-Adapted,mobility_mode,stationary,p95_e2e_reduction_pct,P95 E2E reduction,36.932474940930696,%
+Full,DyBAP-Adapted,mobility_mode,stationary,slo_gain_pp,SLO satisfaction gain,13.916666666666666,percentage points
+Full,DyBAP-Adapted,mobility_mode,stationary,throughput_gain_pct,Throughput gain,10.134186551510133,%
+Full,DyBAP-Adapted,mobility_mode,stationary,goodput_gain_pct,Goodput gain,36.892852152594756,%
+Ours w/o DDQN,LECU-RBA (adapted),mobility_mode,walking,avg_e2e_reduction_pct,Average E2E reduction,42.73412506385254,%
+Ours w/o DDQN,LECU-RBA (adapted),mobility_mode,walking,p95_e2e_reduction_pct,P95 E2E reduction,42.217387045393025,%
+Ours w/o DDQN,LECU-RBA (adapted),mobility_mode,walking,slo_gain_pp,SLO satisfaction gain,20.750000000000007,percentage points
+Ours w/o DDQN,LECU-RBA (adapted),mobility_mode,walking,throughput_gain_pct,Throughput gain,14.183202118322285,%
+Ours w/o DDQN,LECU-RBA (adapted),mobility_mode,walking,goodput_gain_pct,Goodput gain,81.28987442839559,%
+Ours w/o DDQN,DyBAP-Adapted,mobility_mode,walking,avg_e2e_reduction_pct,Average E2E reduction,45.23044874322224,%
+Ours w/o DDQN,DyBAP-Adapted,mobility_mode,walking,p95_e2e_reduction_pct,P95 E2E reduction,39.94400020430025,%
+Ours w/o DDQN,DyBAP-Adapted,mobility_mode,walking,slo_gain_pp,SLO satisfaction gain,12.499999999999995,percentage points
+Ours w/o DDQN,DyBAP-Adapted,mobility_mode,walking,throughput_gain_pct,Throughput gain,11.754317026520225,%
+Ours w/o DDQN,DyBAP-Adapted,mobility_mode,walking,goodput_gain_pct,Goodput gain,36.364078843232996,%
+Full,LECU-RBA (adapted),mobility_mode,walking,avg_e2e_reduction_pct,Average E2E reduction,47.10675152819228,%
+Full,LECU-RBA (adapted),mobility_mode,walking,p95_e2e_reduction_pct,P95 E2E reduction,44.950120706029246,%
+Full,LECU-RBA (adapted),mobility_mode,walking,slo_gain_pp,SLO satisfaction gain,26.66666666666668,percentage points
+Full,LECU-RBA (adapted),mobility_mode,walking,throughput_gain_pct,Throughput gain,15.174379784517322,%
+Full,LECU-RBA (adapted),mobility_mode,walking,goodput_gain_pct,Goodput gain,105.78942912350853,%
+Full,DyBAP-Adapted,mobility_mode,walking,avg_e2e_reduction_pct,Average E2E reduction,49.4124644643202,%
+Full,DyBAP-Adapted,mobility_mode,walking,p95_e2e_reduction_pct,P95 E2E reduction,42.78424995717657,%
+Full,DyBAP-Adapted,mobility_mode,walking,slo_gain_pp,SLO satisfaction gain,18.416666666666664,percentage points
+Full,DyBAP-Adapted,mobility_mode,walking,throughput_gain_pct,Throughput gain,12.724410534869932,%
+Full,DyBAP-Adapted,mobility_mode,walking,goodput_gain_pct,Goodput gain,54.79235134660452,%
+Ours w/o DDQN,LECU-RBA (adapted),mobility_mode,driving,avg_e2e_reduction_pct,Average E2E reduction,42.705678584087785,%
+Ours w/o DDQN,LECU-RBA (adapted),mobility_mode,driving,p95_e2e_reduction_pct,P95 E2E reduction,42.07008671587138,%
+Ours w/o DDQN,LECU-RBA (adapted),mobility_mode,driving,slo_gain_pp,SLO satisfaction gain,20.66666666666667,percentage points
+Ours w/o DDQN,LECU-RBA (adapted),mobility_mode,driving,throughput_gain_pct,Throughput gain,14.179164910995867,%
+Ours w/o DDQN,LECU-RBA (adapted),mobility_mode,driving,goodput_gain_pct,Goodput gain,81.07297032326068,%
+Ours w/o DDQN,DyBAP-Adapted,mobility_mode,driving,avg_e2e_reduction_pct,Average E2E reduction,46.30077012872283,%
+Ours w/o DDQN,DyBAP-Adapted,mobility_mode,driving,p95_e2e_reduction_pct,P95 E2E reduction,40.56167863527063,%
+Ours w/o DDQN,DyBAP-Adapted,mobility_mode,driving,slo_gain_pp,SLO satisfaction gain,12.416666666666659,percentage points
+Ours w/o DDQN,DyBAP-Adapted,mobility_mode,driving,throughput_gain_pct,Throughput gain,11.799260501343692,%
+Ours w/o DDQN,DyBAP-Adapted,mobility_mode,driving,goodput_gain_pct,Goodput gain,36.1341937513328,%
+Full,LECU-RBA (adapted),mobility_mode,driving,avg_e2e_reduction_pct,Average E2E reduction,47.081385596641596,%
+Full,LECU-RBA (adapted),mobility_mode,driving,p95_e2e_reduction_pct,P95 E2E reduction,44.809330992015255,%
+Full,LECU-RBA (adapted),mobility_mode,driving,slo_gain_pp,SLO satisfaction gain,26.583333333333343,percentage points
+Full,LECU-RBA (adapted),mobility_mode,driving,throughput_gain_pct,Throughput gain,15.173118221135299,%
+Full,LECU-RBA (adapted),mobility_mode,driving,goodput_gain_pct,Goodput gain,105.57594586402968,%
+Full,DyBAP-Adapted,mobility_mode,driving,avg_e2e_reduction_pct,Average E2E reduction,50.40191123502501,%
+Full,DyBAP-Adapted,mobility_mode,driving,p95_e2e_reduction_pct,P95 E2E reduction,43.37224872508539,%
+Full,DyBAP-Adapted,mobility_mode,driving,slo_gain_pp,SLO satisfaction gain,18.33333333333333,percentage points
+Full,DyBAP-Adapted,mobility_mode,driving,throughput_gain_pct,Throughput gain,12.772496250029306,%
+Full,DyBAP-Adapted,mobility_mode,driving,goodput_gain_pct,Goodput gain,54.55600907692318,%
+Ours w/o DDQN,LECU-RBA (adapted),mobility_mode,high_speed,avg_e2e_reduction_pct,Average E2E reduction,42.5597283857379,%
+Ours w/o DDQN,LECU-RBA (adapted),mobility_mode,high_speed,p95_e2e_reduction_pct,P95 E2E reduction,42.109872918607934,%
+Ours w/o DDQN,LECU-RBA (adapted),mobility_mode,high_speed,slo_gain_pp,SLO satisfaction gain,20.66666666666667,percentage points
+Ours w/o DDQN,LECU-RBA (adapted),mobility_mode,high_speed,throughput_gain_pct,Throughput gain,14.236116698809623,%
+Ours w/o DDQN,LECU-RBA (adapted),mobility_mode,high_speed,goodput_gain_pct,Goodput gain,81.14664444894433,%
+Ours w/o DDQN,DyBAP-Adapted,mobility_mode,high_speed,avg_e2e_reduction_pct,Average E2E reduction,45.4453973496998,%
+Ours w/o DDQN,DyBAP-Adapted,mobility_mode,high_speed,p95_e2e_reduction_pct,P95 E2E reduction,40.374212923251484,%
+Ours w/o DDQN,DyBAP-Adapted,mobility_mode,high_speed,slo_gain_pp,SLO satisfaction gain,12.58333333333333,percentage points
+Ours w/o DDQN,DyBAP-Adapted,mobility_mode,high_speed,throughput_gain_pct,Throughput gain,12.079570224711981,%
+Ours w/o DDQN,DyBAP-Adapted,mobility_mode,high_speed,goodput_gain_pct,Goodput gain,37.45388701748518,%
+Full,LECU-RBA (adapted),mobility_mode,high_speed,avg_e2e_reduction_pct,Average E2E reduction,47.01751199201292,%
+Full,LECU-RBA (adapted),mobility_mode,high_speed,p95_e2e_reduction_pct,P95 E2E reduction,44.919466749121945,%
+Full,LECU-RBA (adapted),mobility_mode,high_speed,slo_gain_pp,SLO satisfaction gain,26.500000000000007,percentage points
+Full,LECU-RBA (adapted),mobility_mode,high_speed,throughput_gain_pct,Throughput gain,15.237775143666294,%
+Full,LECU-RBA (adapted),mobility_mode,high_speed,goodput_gain_pct,Goodput gain,105.35413632991315,%
+Full,DyBAP-Adapted,mobility_mode,high_speed,avg_e2e_reduction_pct,Average E2E reduction,49.679232018423285,%
+Full,DyBAP-Adapted,mobility_mode,high_speed,p95_e2e_reduction_pct,P95 E2E reduction,43.268043908884664,%
+Full,DyBAP-Adapted,mobility_mode,high_speed,slo_gain_pp,SLO satisfaction gain,18.416666666666664,percentage points
+Full,DyBAP-Adapted,mobility_mode,high_speed,throughput_gain_pct,Throughput gain,13.06231938719869,%
+Full,DyBAP-Adapted,mobility_mode,high_speed,goodput_gain_pct,Goodput gain,55.82250689507393,%
