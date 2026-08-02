@@ -852,7 +852,10 @@ def choose_action(
                 )
             )
 
-        if mobility_prior_beta > 0.0:
+        if (
+            mobility_prior_beta > 0.0
+            and env.batch is not None
+        ):
             if env.infra is None:
                 raise RuntimeError(
                     "Environment infrastructure "
