@@ -14,24 +14,108 @@ from .replay import ReplayBuffer
 
 
 class DDQNAgent:
-    def __init__(self, cfg: dict, node_dim: int, edge_dim: int, batch_dim: int, device: str | None = None):
+    def __init__(
+        self,
+        cfg: dict,
+        node_dim: int,
+        edge_dim: int,
+        batch_dim: int,
+        device: str | None = None,
+    ):
         scfg = cfg["scheduler"]
-        self.device = torch.device(device or ("cuda" if torch.cuda.is_available() else "cpu"))
+
+        self.device = torch.device(
+            device
+            or (
+                "cuda"
+                if torch.cuda.is_available()
+                else "cpu"
+            )
+        )
+
+        tmc_cfg = cfg.get(
+            "tmc_mobility",
+            {},
+        )
+
         self.online = GraphDuelingQNetwork(
             node_dim=node_dim,
             edge_dim=edge_dim,
             batch_dim=batch_dim,
-            num_blocks=int(cfg["model"]["num_blocks"]),
-        ).to(self.device)
-        self.target = copy.deepcopy(self.online).to(self.device)
-        self.optimizer = torch.optim.Adam(self.online.parameters(), lr=float(scfg["learning_rate"]))
-        self.gamma = float(scfg["gamma"])
-        self.batch_size = int(scfg["batch_size"])
-        self.target_interval = int(scfg["target_update_interval"])
-        self.eps_start = float(scfg["epsilon_start"])
-        self.eps_end = float(scfg["epsilon_end"])
-        self.eps_decay = int(scfg["epsilon_decay_steps"])
-        self.replay = ReplayBuffer(int(scfg["replay_capacity"]))
+            num_blocks=int(
+                cfg["model"]["num_blocks"]
+            ),
+            mobility_dim=int(
+                tmc_cfg.get(
+                    "mobility_input_dim",
+                    4,
+                )
+            ),
+            mobility_hidden_dim=int(
+                tmc_cfg.get(
+                    "mobility_hidden_dim",
+                    64,
+                )
+            ),
+            mobility_residual_scale=float(
+                tmc_cfg.get(
+                    "mobility_residual_scale",
+                    1.0,
+                )
+            ),
+            use_mobility=bool(
+                tmc_cfg.get(
+                    "enabled",
+                    False,
+                )
+            ),
+        ).to(
+            self.device
+        )
+
+        self.target = copy.deepcopy(
+            self.online
+        ).to(
+            self.device
+        )
+
+        self.optimizer = torch.optim.Adam(
+            self.online.parameters(),
+            lr=float(
+                scfg["learning_rate"]
+            ),
+        )
+
+        self.gamma = float(
+            scfg["gamma"]
+        )
+
+        self.batch_size = int(
+            scfg["batch_size"]
+        )
+
+        self.target_interval = int(
+            scfg["target_update_interval"]
+        )
+
+        self.eps_start = float(
+            scfg["epsilon_start"]
+        )
+
+        self.eps_end = float(
+            scfg["epsilon_end"]
+        )
+
+        self.eps_decay = int(
+            scfg["epsilon_decay_steps"]
+        )
+
+        self.replay = ReplayBuffer(
+            int(
+                scfg["replay_capacity"]
+            )
+        )
+
         self.steps = 0
         self.updates = 0
 
