@@ -30,6 +30,10 @@ from msn_scheduler.dybap import (
     DyBAPFusionBatcher,
 )
 from msn_scheduler.env import SchedulingEnv
+from msn_scheduler.mobility import (
+    adjust_q_values_with_mobility_prior,
+    candidate_mobility_costs_ms,
+)
 from msn_scheduler.external_baselines import (
     choose_external_action,
 )
@@ -825,6 +829,8 @@ def choose_action(
     method: str,
     cfg: dict,
     agent: DDQNAgent | None,
+    env: SchedulingEnv,
+    mobility_prior_beta: float,
 ) -> int:
     if method == "full":
         if agent is None:
@@ -833,15 +839,69 @@ def choose_action(
             )
 
         with torch.no_grad():
-            q_values = agent.online(
-                observation,
-                agent.device,
+            q_values = (
+                agent.online(
+                    observation,
+                    agent.device,
+                )
+                .detach()
+                .cpu()
+                .numpy()
+                .astype(
+                    np.float64
+                )
             )
 
+        if mobility_prior_beta > 0.0:
+            if env.infra is None:
+                raise RuntimeError(
+                    "Environment infrastructure "
+                    "is unavailable."
+                )
+
+            fallback_requests = (
+                list(
+                    env.batch.requests
+                )
+                if env.batch is not None
+                else list(
+                    env.queue[
+                        : env.batcher.window_size
+                    ]
+                )
+            )
+
+            mobility_costs_ms = (
+                candidate_mobility_costs_ms(
+                    infra=env.infra,
+                    actions=list(
+                        observation
+                        .candidate_payloads
+                    ),
+                    fallback_requests=(
+                        fallback_requests
+                    ),
+                )
+            )
+
+            decision_scores = (
+                adjust_q_values_with_mobility_prior(
+                    q_values=q_values,
+                    mobility_costs_ms=(
+                        mobility_costs_ms
+                    ),
+                    beta=(
+                        mobility_prior_beta
+                    ),
+                )
+            )
+        else:
+            decision_scores = q_values
+
         return int(
-            torch.argmax(
-                q_values
-            ).item()
+            np.argmax(
+                decision_scores
+            )
         )
 
     if method == "lecu_rba":
@@ -872,6 +932,7 @@ def run_one_mapping(
     method: str,
     cfg: dict,
     agent: DDQNAgent | None,
+    mobility_prior_beta: float,
 ):
     observation = env.reset(
         infra,
@@ -887,6 +948,10 @@ def run_one_mapping(
             method=method,
             cfg=cfg,
             agent=agent,
+            env=env,
+            mobility_prior_beta=(
+                mobility_prior_beta
+            ),
         )
 
         (
@@ -958,6 +1023,7 @@ def run_dynamic_episode(
     max_steps: int,
     max_batches: int,
     agent: DDQNAgent | None,
+    mobility_prior_beta: float,
 ) -> dict:
     (
         future,
@@ -1085,6 +1151,9 @@ def run_dynamic_episode(
                 method=method,
                 cfg=cfg,
                 agent=agent,
+                mobility_prior_beta=(
+                    mobility_prior_beta
+                ),
             )
 
         except RuntimeError as error:
@@ -1319,6 +1388,9 @@ def run_dynamic_episode(
 
     return {
         "method": method,
+        "mobility_prior_beta": float(
+            mobility_prior_beta
+        ),
         "mobility_mode": mobility_mode,
         "migration_policy": (
             migration_policy
@@ -1627,6 +1699,12 @@ def main() -> None:
     )
 
     parser.add_argument(
+        "--mobility-prior-beta",
+        type=float,
+        default=0.0,
+    )
+
+    parser.add_argument(
         "--arrival-rate-rps",
         type=float,
         default=0.4,
@@ -1682,6 +1760,12 @@ def main() -> None:
         raise ValueError(
             "--prediction-error must "
             "be in [0, 1]"
+        )
+
+    if args.mobility_prior_beta < 0.0:
+        raise ValueError(
+            "--mobility-prior-beta must "
+            "be non-negative"
         )
 
     if (
@@ -1753,6 +1837,8 @@ def main() -> None:
         f"policy={args.migration_policy}, "
         f"prediction_error="
         f"{args.prediction_error}, "
+        f"prior_beta="
+        f"{args.mobility_prior_beta}, "
         f"rate={args.arrival_rate_rps}, "
         f"episodes={args.episodes}",
         flush=True,
@@ -1820,6 +1906,9 @@ def main() -> None:
             max_steps=args.max_steps,
             max_batches=args.max_batches,
             agent=agent,
+            mobility_prior_beta=(
+                args.mobility_prior_beta
+            ),
         )
 
         rows.append(
