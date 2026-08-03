@@ -335,10 +335,9 @@ def refresh_request(
     state: MobilityState,
     now_ms: float,
 ):
-    # The existing Full checkpoint was trained with
-    # residual dwell times in [150, 2500] ms. Keep the
-    # observation inside that range while the event model
-    # still retains the true, potentially infinite dwell.
+    # Keep the uncapped residual dwell in Request for
+    # analytical mobility decisions. SchedulingEnv clips
+    # it only when constructing frozen-network features.
     mobility_feature_dwell_cap_ms = 2500.0
 
     if np.isfinite(
@@ -355,10 +354,9 @@ def refresh_request(
         )
 
     residual_dwell_ms = float(
-        np.clip(
+        max(
             raw_residual_dwell_ms,
             1.0,
-            mobility_feature_dwell_cap_ms,
         )
     )
 

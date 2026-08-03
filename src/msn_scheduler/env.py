@@ -113,7 +113,11 @@ class SchedulingEnv:
                 else float(
                     np.mean(
                         [
-                            request.residual_dwell_ms
+                            np.clip(
+                                request.residual_dwell_ms,
+                                1.0,
+                                2500.0,
+                            )
                             for request in reqs
                         ]
                     )
@@ -175,7 +179,11 @@ class SchedulingEnv:
             else float(
                 np.mean(
                     [
-                        request.residual_dwell_ms
+                        np.clip(
+                                request.residual_dwell_ms,
+                                1.0,
+                                2500.0,
+                            )
                         for request in batch.requests
                     ]
                 )
@@ -277,7 +285,11 @@ class SchedulingEnv:
                         0.0
                         if mask_mobility
                         else float(
-                            request.residual_dwell_ms
+                            np.clip(
+                                request.residual_dwell_ms,
+                                1.0,
+                                2500.0,
+                            )
                         )
                         / 3000.0
                     ),
