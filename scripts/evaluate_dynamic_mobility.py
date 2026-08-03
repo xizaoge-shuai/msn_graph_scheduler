@@ -672,7 +672,10 @@ def simulate_handover_overhead(
             )
         )
 
-        if migration_policy == "keep":
+        if migration_policy in {
+            "keep",
+            "oracle_guarded",
+        }:
             old_latency = (
                 shortest_path_latency_ms(
                     infra,
@@ -712,6 +715,71 @@ def simulate_handover_overhead(
             )
 
             migrated_mb = 0.0
+
+            if (
+                migration_policy
+                == "oracle_guarded"
+            ):
+                transfer_ms = transfer_time_ms(
+                    infra,
+                    old_anchor,
+                    new_anchor,
+                    kv_cache_mb,
+                )
+
+                if not np.isfinite(
+                    transfer_ms
+                ):
+                    raise RuntimeError(
+                        "No migration path from "
+                        f"{old_anchor} to "
+                        f"{new_anchor}"
+                    )
+
+                if prediction_correct:
+                    prefetch_lead_ms = max(
+                        event_ms
+                        - prediction_available_ms,
+                        0.0,
+                    )
+
+                    remaining_transfer_ms = max(
+                        transfer_ms
+                        - prefetch_lead_ms,
+                        0.0,
+                    )
+
+                    prefetch_interruption_ms = (
+                        2.0
+                        + remaining_transfer_ms
+                    )
+
+                    prefetch_migrated_mb = (
+                        kv_cache_mb
+                    )
+
+                else:
+                    prefetch_interruption_ms = (
+                        handover_setup_ms
+                        + transfer_ms
+                    )
+
+                    prefetch_migrated_mb = (
+                        2.0
+                        * kv_cache_mb
+                    )
+
+                if (
+                    prefetch_interruption_ms
+                    < interruption_ms
+                ):
+                    interruption_ms = (
+                        prefetch_interruption_ms
+                    )
+
+                    migrated_mb = (
+                        prefetch_migrated_mb
+                    )
 
         else:
             transfer_ms = (
@@ -1686,6 +1754,7 @@ def main() -> None:
             "keep",
             "reactive",
             "prefetch",
+            "oracle_guarded",
         ],
     )
 
