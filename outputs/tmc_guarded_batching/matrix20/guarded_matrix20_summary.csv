@@ -1,0 +1,7 @@
+tag,proposal_weight,utility_regret,changed_episodes,changed_rate,avg_change_pct,avg_delta_ms,avg_ci_low,avg_ci_high,p95_change_pct,p95_delta_ms,p95_ci_low,p95_ci_high,slo_change_pp,goodput_change_pct,handover_delta,batch_size_delta,mapping_steps_delta
+p0p6_r0,0.6,0.0,0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+p0p6_r0p01,0.6,0.01,0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+p0p6_r0p03,0.6,0.03,0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+p1p0_r0,1.0,0.0,0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+p1p0_r0p01,1.0,0.01,0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+p1p0_r0p03,1.0,0.03,0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0

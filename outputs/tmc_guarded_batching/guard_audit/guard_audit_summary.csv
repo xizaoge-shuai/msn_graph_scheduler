@@ -1,0 +1,3 @@
+proposal_weight,candidate_cases,proposal_missing,changed_proposals,changed_rate,risk_reducing_changed,risk_reducing_rate,regret_q50,regret_q90,regret_q95,regret_max,accepted_r0,accepted_episodes_r0,accepted_r0p01,accepted_episodes_r0p01,accepted_r0p03,accepted_episodes_r0p03,accepted_r0p1,accepted_episodes_r0p1,accepted_r0p3,accepted_episodes_r0p3
+0.6,705,0,12,0.01702127659574468,12,0.01702127659574468,0.25100753993621483,2.7400346137894798,2.7594395158910126,2.768278686571944,0,0,0,0,0,0,0,0,8,3
+1.0,705,0,24,0.03404255319148936,24,0.03404255319148936,1.6416799817668255,2.773943309439712,2.7801255701658865,2.785139644809556,0,0,0,0,0,0,0,0,9,3
