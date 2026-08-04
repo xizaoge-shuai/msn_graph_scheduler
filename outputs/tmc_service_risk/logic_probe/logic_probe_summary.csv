@@ -1,0 +1,2 @@
+episodes,candidate_cases,batch_change_rate,utility_change_rate,mean_utility_delta,mean_p_prefill,mean_p_service,service_saturation_rate,mean_penalty_delta,max_penalty_delta,dwell_cap_rate,median_physical_dwell_ms,median_request_dwell_ms
+20,166,0.006024096385542169,1.0,-0.017027718852829526,0.05369248567847477,0.48990663580375,0.1976907630522088,0.01689947611391259,0.04663475469285241,0.6625,3666.0777780332332,2500.0

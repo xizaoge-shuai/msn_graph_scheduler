@@ -43,49 +43,493 @@ class GraphDuelingQNetwork(nn.Module):
         num_blocks: int,
         hidden_dim: int = 128,
         num_gat_layers: int = 2,
+        mobility_dim: int = 4,
+        mobility_hidden_dim: int = 64,
+        mobility_residual_scale: float = 1.0,
+        use_mobility: bool = False,
     ):
         super().__init__()
+
         layers = []
         current = node_dim
-        for _ in range(num_gat_layers):
-            layers.append(EdgeAwareGATLayer(current, edge_dim, hidden_dim))
+
+        for _ in range(
+            num_gat_layers
+        ):
+            layers.append(
+                EdgeAwareGATLayer(
+                    current,
+                    edge_dim,
+                    hidden_dim,
+                )
+            )
+
             current = hidden_dim
-        self.gat_layers = nn.ModuleList(layers)
+
+        self.gat_layers = nn.ModuleList(
+            layers
+        )
+
         self.batch_encoder = nn.Sequential(
-            nn.Linear(batch_dim, hidden_dim), nn.ReLU(), nn.Linear(hidden_dim, hidden_dim)
-        )
-        self.group_encoder = nn.Sequential(nn.Linear(1, 32), nn.ReLU(), nn.Linear(32, 32))
-        self.block_encoder = nn.Embedding(num_blocks + 1, 32)
-        state_dim = hidden_dim + hidden_dim + 32
-        self.value_head = nn.Sequential(
-            nn.Linear(state_dim, hidden_dim), nn.ReLU(), nn.Linear(hidden_dim, 1)
-        )
-        self.advantage_head = nn.Sequential(
-            nn.Linear(state_dim + hidden_dim + 32, hidden_dim),
+            nn.Linear(
+                batch_dim,
+                hidden_dim,
+            ),
             nn.ReLU(),
-            nn.Linear(hidden_dim, 1),
+            nn.Linear(
+                hidden_dim,
+                hidden_dim,
+            ),
         )
-        self.num_blocks = num_blocks
+
+        self.group_encoder = nn.Sequential(
+            nn.Linear(
+                1,
+                32,
+            ),
+            nn.ReLU(),
+            nn.Linear(
+                32,
+                32,
+            ),
+        )
+
+        self.block_encoder = nn.Embedding(
+            num_blocks + 1,
+            32,
+        )
+
+        self.use_mobility = bool(
+            use_mobility
+        )
+
+        self.mobility_dim = int(
+            mobility_dim
+        )
+
+        self.mobility_hidden_dim = int(
+            mobility_hidden_dim
+        )
+
+        self.mobility_residual_scale = float(
+            mobility_residual_scale
+        )
+
+        if self.use_mobility:
+            self.mobility_scalar_encoder = (
+                nn.Sequential(
+                    nn.Linear(
+                        2,
+                        32,
+                    ),
+                    nn.ReLU(),
+                    nn.Linear(
+                        32,
+                        32,
+                    ),
+                    nn.ReLU(),
+                )
+            )
+
+            self.mobility_encoder = (
+                nn.Sequential(
+                    nn.Linear(
+                        hidden_dim
+                        + hidden_dim
+                        + 32,
+                        mobility_hidden_dim,
+                    ),
+                    nn.ReLU(),
+                    nn.Linear(
+                        mobility_hidden_dim,
+                        mobility_hidden_dim,
+                    ),
+                    nn.ReLU(),
+                )
+            )
+
+            self.mobility_query = nn.Linear(
+                hidden_dim,
+                mobility_hidden_dim,
+                bias=False,
+            )
+
+            self.mobility_key = nn.Linear(
+                mobility_hidden_dim,
+                mobility_hidden_dim,
+                bias=False,
+            )
+
+            self.mobility_value = nn.Linear(
+                mobility_hidden_dim,
+                mobility_hidden_dim,
+                bias=False,
+            )
+
+            self.relative_mobility_encoder = (
+                nn.Sequential(
+                    nn.Linear(
+                        6,
+                        mobility_hidden_dim,
+                    ),
+                    nn.ReLU(),
+                    nn.Linear(
+                        mobility_hidden_dim,
+                        mobility_hidden_dim,
+                    ),
+                    nn.ReLU(),
+                )
+            )
+
+            self.mobility_context_norm = (
+                nn.LayerNorm(
+                    mobility_hidden_dim
+                )
+            )
+
+        state_dim = (
+            hidden_dim
+            + hidden_dim
+            + 32
+        )
+
+        self.value_head = nn.Sequential(
+            nn.Linear(
+                state_dim,
+                hidden_dim,
+            ),
+            nn.ReLU(),
+            nn.Linear(
+                hidden_dim,
+                1,
+            ),
+        )
+
+        advantage_dim = (
+            state_dim
+            + hidden_dim
+            + 32
+        )
+
+        if self.use_mobility:
+            advantage_dim += (
+                mobility_hidden_dim
+            )
+
+        self.advantage_head = nn.Sequential(
+            nn.Linear(
+                advantage_dim,
+                hidden_dim,
+            ),
+            nn.ReLU(),
+            nn.Linear(
+                hidden_dim,
+                1,
+            ),
+        )
+
+        self.num_blocks = int(
+            num_blocks
+        )
+
+    def _candidate_mobility_context(
+        self,
+        obs: Observation,
+        graph_x: torch.Tensor,
+        candidate_node_h: torch.Tensor,
+        candidate_node_indices: torch.Tensor,
+        device: torch.device,
+    ) -> torch.Tensor:
+        mobility = torch.as_tensor(
+            obs.mobility_features,
+            dtype=torch.float32,
+            device=device,
+        )
+
+        if mobility.ndim == 1:
+            mobility = mobility.unsqueeze(
+                0
+            )
+
+        if (
+            mobility.shape[0] == 0
+            or mobility.shape[1]
+            < self.mobility_dim
+        ):
+            mobility = torch.zeros(
+                (
+                    1,
+                    self.mobility_dim,
+                ),
+                dtype=torch.float32,
+                device=device,
+            )
+
+        mobility = mobility[
+            :,
+            : self.mobility_dim,
+        ]
+
+        num_nodes = int(
+            graph_x.shape[0]
+        )
+
+        node_scale = max(
+            num_nodes - 1,
+            1,
+        )
+
+        current_anchor_indices = (
+            torch.round(
+                mobility[:, 0]
+                * node_scale
+            )
+            .long()
+            .clamp(
+                0,
+                num_nodes - 1,
+            )
+        )
+
+        next_anchor_indices = (
+            torch.round(
+                mobility[:, 1]
+                * node_scale
+            )
+            .long()
+            .clamp(
+                0,
+                num_nodes - 1,
+            )
+        )
+
+        scalar_h = (
+            self.mobility_scalar_encoder(
+                mobility[:, 2:4]
+            )
+        )
+
+        request_input = torch.cat(
+            [
+                graph_x[
+                    current_anchor_indices
+                ],
+                graph_x[
+                    next_anchor_indices
+                ],
+                scalar_h,
+            ],
+            dim=-1,
+        )
+
+        request_h = self.mobility_encoder(
+            request_input
+        )
+
+        query = self.mobility_query(
+            candidate_node_h
+        )
+
+        key = self.mobility_key(
+            request_h
+        )
+
+        value = self.mobility_value(
+            request_h
+        )
+
+        scores = (
+            query
+            @ key.transpose(
+                0,
+                1,
+            )
+            / math.sqrt(
+                float(
+                    self.mobility_hidden_dim
+                )
+            )
+        )
+
+        weights = torch.softmax(
+            scores,
+            dim=-1,
+        )
+
+        attention_context = (
+            weights
+            @ value
+        )
+
+        candidate_indices = (
+            candidate_node_indices
+            .reshape(
+                -1,
+                1,
+            )
+        )
+
+        current_indices = (
+            current_anchor_indices
+            .reshape(
+                1,
+                -1,
+            )
+        )
+
+        next_indices = (
+            next_anchor_indices
+            .reshape(
+                1,
+                -1,
+            )
+        )
+
+        current_match = (
+            candidate_indices
+            == current_indices
+        ).float()
+
+        next_match = (
+            candidate_indices
+            == next_indices
+        ).float()
+
+        probability = (
+            mobility[:, 2]
+            .clamp(
+                0.0,
+                1.0,
+            )
+            .reshape(
+                1,
+                -1,
+            )
+        )
+
+        dwell = (
+            mobility[:, 3]
+            .clamp_min(
+                1e-3
+            )
+            .reshape(
+                1,
+                -1,
+            )
+        )
+
+        urgency = (
+            probability
+            / dwell
+        ).clamp(
+            0.0,
+            1.0,
+        )
+
+        candidate_normalized = F.normalize(
+            candidate_node_h,
+            dim=-1,
+        )
+
+        current_normalized = F.normalize(
+            graph_x[
+                current_anchor_indices
+            ],
+            dim=-1,
+        )
+
+        next_normalized = F.normalize(
+            graph_x[
+                next_anchor_indices
+            ],
+            dim=-1,
+        )
+
+        current_similarity = (
+            candidate_normalized
+            @ current_normalized.transpose(
+                0,
+                1,
+            )
+        )
+
+        next_similarity = (
+            candidate_normalized
+            @ next_normalized.transpose(
+                0,
+                1,
+            )
+        )
+
+        relative_features = torch.stack(
+            [
+                current_match.mean(
+                    dim=-1
+                ),
+                next_match.mean(
+                    dim=-1
+                ),
+                (
+                    (
+                        1.0
+                        - probability
+                    )
+                    * current_match
+                ).mean(
+                    dim=-1
+                ),
+                (
+                    probability
+                    * next_match
+                ).mean(
+                    dim=-1
+                ),
+                (
+                    urgency
+                    * next_match
+                ).mean(
+                    dim=-1
+                ),
+                (
+                    probability
+                    * (
+                        next_similarity
+                        - current_similarity
+                    )
+                ).mean(
+                    dim=-1
+                ),
+            ],
+            dim=-1,
+        )
+
+        relative_context = (
+            self.relative_mobility_encoder(
+                relative_features
+            )
+        )
+
+        return self.mobility_context_norm(
+            attention_context
+            + self.mobility_residual_scale
+            * relative_context
+        )
 
     def forward_batch(
         self,
         observations: list[Observation],
         device: torch.device,
     ) -> list[torch.Tensor]:
-        """Encode multiple variable-action graphs together.
-
-        Node and edge tensors are concatenated into a disjoint
-        graph, so all replay samples share the same GAT passes.
-        Candidate-action heads remain graph-specific because
-        each observation has a variable action count.
-        """
         if not observations:
             return []
 
         node_tensors = []
         edge_index_tensors = []
         edge_attr_tensors = []
-        node_ranges: list[tuple[int, int]] = []
+
+        node_ranges: list[
+            tuple[int, int]
+        ] = []
 
         node_offset = 0
 
@@ -108,14 +552,20 @@ class GraphDuelingQNetwork(nn.Module):
                 device=device,
             )
 
-            node_count = int(node_x.shape[0])
+            node_count = int(
+                node_x.shape[0]
+            )
 
-            node_tensors.append(node_x)
+            node_tensors.append(
+                node_x
+            )
 
             if edge_index.numel() > 0:
                 edge_index_tensors.append(
-                    edge_index + node_offset
+                    edge_index
+                    + node_offset
                 )
+
                 edge_attr_tensors.append(
                     edge_attr
                 )
@@ -123,11 +573,14 @@ class GraphDuelingQNetwork(nn.Module):
             node_ranges.append(
                 (
                     node_offset,
-                    node_offset + node_count,
+                    node_offset
+                    + node_count,
                 )
             )
 
-            node_offset += node_count
+            node_offset += (
+                node_count
+            )
 
         x = torch.cat(
             node_tensors,
@@ -151,13 +604,19 @@ class GraphDuelingQNetwork(nn.Module):
             )
 
             edge_index = torch.empty(
-                (2, 0),
+                (
+                    2,
+                    0,
+                ),
                 dtype=torch.long,
                 device=device,
             )
 
             edge_attr = torch.empty(
-                (0, edge_dim),
+                (
+                    0,
+                    edge_dim,
+                ),
                 dtype=torch.float32,
                 device=device,
             )
@@ -169,11 +628,16 @@ class GraphDuelingQNetwork(nn.Module):
                 edge_attr,
             )
 
-        outputs: list[torch.Tensor] = []
+        outputs: list[
+            torch.Tensor
+        ] = []
 
-        for obs, (
-            node_start,
-            node_end,
+        for (
+            obs,
+            (
+                node_start,
+                node_end,
+            ),
         ) in zip(
             observations,
             node_ranges,
@@ -197,7 +661,9 @@ class GraphDuelingQNetwork(nn.Module):
 
             block_idx = min(
                 max(
-                    int(obs.current_block),
+                    int(
+                        obs.current_block
+                    ),
                     0,
                 ),
                 self.num_blocks,
@@ -222,50 +688,87 @@ class GraphDuelingQNetwork(nn.Module):
 
             value = self.value_head(
                 state
-            ).squeeze(-1)
+            ).squeeze(
+                -1
+            )
 
-            candidate_nodes = (
-                torch.as_tensor(
-                    obs.candidate_node_indices,
-                    dtype=torch.long,
-                    device=device,
-                )
+            candidate_nodes = torch.as_tensor(
+                obs.candidate_node_indices,
+                dtype=torch.long,
+                device=device,
             )
 
             groups = torch.as_tensor(
                 obs.candidate_group_sizes,
                 dtype=torch.float32,
                 device=device,
-            ).unsqueeze(-1)
+            ).unsqueeze(
+                -1
+            )
 
             group_h = self.group_encoder(
                 groups
                 / max(
-                    float(self.num_blocks),
+                    float(
+                        self.num_blocks
+                    ),
                     1.0,
                 )
             )
 
+            candidate_node_h = graph_x[
+                candidate_nodes
+            ]
+
             state_expand = (
-                state.unsqueeze(0)
+                state.unsqueeze(
+                    0
+                )
                 .expand(
-                    len(candidate_nodes),
+                    len(
+                        candidate_nodes
+                    ),
                     -1,
                 )
             )
 
-            advantages = self.advantage_head(
-                torch.cat(
-                    [
-                        state_expand,
-                        graph_x[
+            advantage_parts = [
+                state_expand,
+                candidate_node_h,
+                group_h,
+            ]
+
+            if self.use_mobility:
+                mobility_context = (
+                    self
+                    ._candidate_mobility_context(
+                        obs=obs,
+                        graph_x=graph_x,
+                        candidate_node_h=(
+                            candidate_node_h
+                        ),
+                        candidate_node_indices=(
                             candidate_nodes
-                        ],
-                        group_h,
-                    ],
-                    dim=-1,
+                        ),
+                        device=device,
+                    )
                 )
-            ).squeeze(-1)
+
+                advantage_parts.append(
+                    mobility_context
+                )
+
+            advantages = (
+                self.advantage_head(
+                    torch.cat(
+                        advantage_parts,
+                        dim=-1,
+                    )
+                )
+                .squeeze(
+                    -1
+                )
+            )
 
             outputs.append(
                 value
@@ -281,6 +784,9 @@ class GraphDuelingQNetwork(nn.Module):
         device: torch.device,
     ) -> torch.Tensor:
         return self.forward_batch(
-            [obs],
+            [
+                obs
+            ],
             device,
         )[0]
+

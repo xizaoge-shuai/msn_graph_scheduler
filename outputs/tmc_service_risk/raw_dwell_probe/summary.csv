@@ -1,0 +1,2 @@
+episodes,candidate_cases,batch_change_rate,utility_change_rate,mean_utility_delta,max_abs_utility_delta,dwell_mismatch_rate,max_dwell_error_ms,median_physical_dwell_ms,median_decision_dwell_ms
+20,166,0.0,1.0,-0.011771345405046795,0.03361691063455474,0.0,0.0,3666.0777780332332,3666.0777780332332

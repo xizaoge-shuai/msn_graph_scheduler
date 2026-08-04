@@ -88,14 +88,20 @@ class SchedulingEnv:
                 : self.batcher.window_size
             ]
 
+            if not reqs:
+                return np.zeros(
+                    7,
+                    dtype=np.float32,
+                )
+
             mobility_probability = (
                 0.0
                 if mask_mobility
                 else float(
                     np.mean(
                         [
-                            r.handover_probability
-                            for r in reqs
+                            request.handover_probability
+                            for request in reqs
                         ]
                     )
                 )
@@ -107,8 +113,12 @@ class SchedulingEnv:
                 else float(
                     np.mean(
                         [
-                            r.residual_dwell_ms
-                            for r in reqs
+                            np.clip(
+                                request.residual_dwell_ms,
+                                1.0,
+                                2500.0,
+                            )
+                            for request in reqs
                         ]
                     )
                     / 3000.0
@@ -120,28 +130,28 @@ class SchedulingEnv:
                     0.0,
                     np.mean(
                         [
-                            r.input_tokens
-                            for r in reqs
+                            request.input_tokens
+                            for request in reqs
                         ]
                     )
                     / 1024.0,
                     sum(
-                        r.input_tokens
-                        for r in reqs
+                        request.input_tokens
+                        for request in reqs
                     )
                     / 8192.0,
                     np.mean(
                         [
-                            r.expected_output_tokens
-                            for r in reqs
+                            request.expected_output_tokens
+                            for request in reqs
                         ]
                     )
                     / 512.0,
                     min(
-                        r.remaining_deadline_ms(
+                        request.remaining_deadline_ms(
                             self.now_ms
                         )
-                        for r in reqs
+                        for request in reqs
                     )
                     / 5000.0,
                     mobility_probability,
@@ -156,8 +166,8 @@ class SchedulingEnv:
             else float(
                 np.mean(
                     [
-                        r.handover_probability
-                        for r in batch.requests
+                        request.handover_probability
+                        for request in batch.requests
                     ]
                 )
             )
@@ -169,8 +179,12 @@ class SchedulingEnv:
             else float(
                 np.mean(
                     [
-                        r.residual_dwell_ms
-                        for r in batch.requests
+                        np.clip(
+                                request.residual_dwell_ms,
+                                1.0,
+                                2500.0,
+                            )
+                        for request in batch.requests
                     ]
                 )
                 / 3000.0
@@ -198,10 +212,22 @@ class SchedulingEnv:
             dtype=np.float32,
         )
 
-    def _observation(self) -> Observation:
+    def _observation(
+        self,
+    ) -> Observation:
         assert self.infra is not None
-        node_features, edge_index, edge_features, node_ids = infrastructure_to_tensors(self.infra)
+
+        (
+            node_features,
+            edge_index,
+            edge_features,
+            node_ids,
+        ) = infrastructure_to_tensors(
+            self.infra
+        )
+
         self.node_ids = node_ids
+
         node_to_idx = {
             node_id: index
             for index, node_id
@@ -212,7 +238,7 @@ class SchedulingEnv:
             self.batch.requests
             if self.batch is not None
             else self.queue[
-                :self.batcher.window_size
+                : self.batcher.window_size
             ]
         )
 
@@ -259,7 +285,11 @@ class SchedulingEnv:
                         0.0
                         if mask_mobility
                         else float(
-                            request.residual_dwell_ms
+                            np.clip(
+                                request.residual_dwell_ms,
+                                1.0,
+                                2500.0,
+                            )
                         )
                         / 3000.0
                     ),
@@ -279,11 +309,17 @@ class SchedulingEnv:
             node_features=node_features,
             edge_index=edge_index,
             edge_features=edge_features,
-            batch_features=self._batch_feature_vector(self.batch),
+            batch_features=(
+                self._batch_feature_vector(
+                    self.batch
+                )
+            ),
             current_block=self.current_block,
             candidate_node_indices=np.array(
                 [
-                    node_to_idx[action.node_id]
+                    node_to_idx[
+                        action.node_id
+                    ]
                     for action in self.actions
                 ],
                 dtype=np.int64,
@@ -295,8 +331,12 @@ class SchedulingEnv:
                 ],
                 dtype=np.int64,
             ),
-            candidate_payloads=list(self.actions),
-            mobility_features=mobility_features,
+            candidate_payloads=list(
+                self.actions
+            ),
+            mobility_features=(
+                mobility_features
+            ),
             agent_id=int(
                 node_to_idx.get(
                     self.infra.anchor_node,

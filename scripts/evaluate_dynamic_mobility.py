@@ -30,6 +30,10 @@ from msn_scheduler.dybap import (
     DyBAPFusionBatcher,
 )
 from msn_scheduler.env import SchedulingEnv
+from msn_scheduler.mobility import (
+    adjust_q_values_with_mobility_prior,
+    candidate_mobility_costs_ms,
+)
 from msn_scheduler.external_baselines import (
     choose_external_action,
 )
@@ -331,10 +335,9 @@ def refresh_request(
     state: MobilityState,
     now_ms: float,
 ):
-    # The existing Full checkpoint was trained with
-    # residual dwell times in [150, 2500] ms. Keep the
-    # observation inside that range while the event model
-    # still retains the true, potentially infinite dwell.
+    # Keep the uncapped residual dwell in Request for
+    # analytical mobility decisions. SchedulingEnv clips
+    # it only when constructing frozen-network features.
     mobility_feature_dwell_cap_ms = 2500.0
 
     if np.isfinite(
@@ -351,10 +354,9 @@ def refresh_request(
         )
 
     residual_dwell_ms = float(
-        np.clip(
+        max(
             raw_residual_dwell_ms,
             1.0,
-            mobility_feature_dwell_cap_ms,
         )
     )
 
@@ -668,7 +670,10 @@ def simulate_handover_overhead(
             )
         )
 
-        if migration_policy == "keep":
+        if migration_policy in {
+            "keep",
+            "oracle_guarded",
+        }:
             old_latency = (
                 shortest_path_latency_ms(
                     infra,
@@ -708,6 +713,71 @@ def simulate_handover_overhead(
             )
 
             migrated_mb = 0.0
+
+            if (
+                migration_policy
+                == "oracle_guarded"
+            ):
+                transfer_ms = transfer_time_ms(
+                    infra,
+                    old_anchor,
+                    new_anchor,
+                    kv_cache_mb,
+                )
+
+                if not np.isfinite(
+                    transfer_ms
+                ):
+                    raise RuntimeError(
+                        "No migration path from "
+                        f"{old_anchor} to "
+                        f"{new_anchor}"
+                    )
+
+                if prediction_correct:
+                    prefetch_lead_ms = max(
+                        event_ms
+                        - prediction_available_ms,
+                        0.0,
+                    )
+
+                    remaining_transfer_ms = max(
+                        transfer_ms
+                        - prefetch_lead_ms,
+                        0.0,
+                    )
+
+                    prefetch_interruption_ms = (
+                        2.0
+                        + remaining_transfer_ms
+                    )
+
+                    prefetch_migrated_mb = (
+                        kv_cache_mb
+                    )
+
+                else:
+                    prefetch_interruption_ms = (
+                        handover_setup_ms
+                        + transfer_ms
+                    )
+
+                    prefetch_migrated_mb = (
+                        2.0
+                        * kv_cache_mb
+                    )
+
+                if (
+                    prefetch_interruption_ms
+                    < interruption_ms
+                ):
+                    interruption_ms = (
+                        prefetch_interruption_ms
+                    )
+
+                    migrated_mb = (
+                        prefetch_migrated_mb
+                    )
 
         else:
             transfer_ms = (
@@ -825,6 +895,8 @@ def choose_action(
     method: str,
     cfg: dict,
     agent: DDQNAgent | None,
+    env: SchedulingEnv,
+    mobility_prior_beta: float,
 ) -> int:
     if method == "full":
         if agent is None:
@@ -833,15 +905,72 @@ def choose_action(
             )
 
         with torch.no_grad():
-            q_values = agent.online(
-                observation,
-                agent.device,
+            q_values = (
+                agent.online(
+                    observation,
+                    agent.device,
+                )
+                .detach()
+                .cpu()
+                .numpy()
+                .astype(
+                    np.float64
+                )
             )
 
+        if (
+            mobility_prior_beta > 0.0
+            and env.batch is not None
+        ):
+            if env.infra is None:
+                raise RuntimeError(
+                    "Environment infrastructure "
+                    "is unavailable."
+                )
+
+            fallback_requests = (
+                list(
+                    env.batch.requests
+                )
+                if env.batch is not None
+                else list(
+                    env.queue[
+                        : env.batcher.window_size
+                    ]
+                )
+            )
+
+            mobility_costs_ms = (
+                candidate_mobility_costs_ms(
+                    infra=env.infra,
+                    actions=list(
+                        observation
+                        .candidate_payloads
+                    ),
+                    fallback_requests=(
+                        fallback_requests
+                    ),
+                )
+            )
+
+            decision_scores = (
+                adjust_q_values_with_mobility_prior(
+                    q_values=q_values,
+                    mobility_costs_ms=(
+                        mobility_costs_ms
+                    ),
+                    beta=(
+                        mobility_prior_beta
+                    ),
+                )
+            )
+        else:
+            decision_scores = q_values
+
         return int(
-            torch.argmax(
-                q_values
-            ).item()
+            np.argmax(
+                decision_scores
+            )
         )
 
     if method == "lecu_rba":
@@ -872,6 +1001,7 @@ def run_one_mapping(
     method: str,
     cfg: dict,
     agent: DDQNAgent | None,
+    mobility_prior_beta: float,
 ):
     observation = env.reset(
         infra,
@@ -887,6 +1017,10 @@ def run_one_mapping(
             method=method,
             cfg=cfg,
             agent=agent,
+            env=env,
+            mobility_prior_beta=(
+                mobility_prior_beta
+            ),
         )
 
         (
@@ -958,6 +1092,7 @@ def run_dynamic_episode(
     max_steps: int,
     max_batches: int,
     agent: DDQNAgent | None,
+    mobility_prior_beta: float,
 ) -> dict:
     (
         future,
@@ -1085,6 +1220,9 @@ def run_dynamic_episode(
                 method=method,
                 cfg=cfg,
                 agent=agent,
+                mobility_prior_beta=(
+                    mobility_prior_beta
+                ),
             )
 
         except RuntimeError as error:
@@ -1319,6 +1457,9 @@ def run_dynamic_episode(
 
     return {
         "method": method,
+        "mobility_prior_beta": float(
+            mobility_prior_beta
+        ),
         "mobility_mode": mobility_mode,
         "migration_policy": (
             migration_policy
@@ -1611,6 +1752,7 @@ def main() -> None:
             "keep",
             "reactive",
             "prefetch",
+            "oracle_guarded",
         ],
     )
 
@@ -1624,6 +1766,12 @@ def main() -> None:
         "--handover-setup-ms",
         type=float,
         default=12.0,
+    )
+
+    parser.add_argument(
+        "--mobility-prior-beta",
+        type=float,
+        default=0.0,
     )
 
     parser.add_argument(
@@ -1682,6 +1830,12 @@ def main() -> None:
         raise ValueError(
             "--prediction-error must "
             "be in [0, 1]"
+        )
+
+    if args.mobility_prior_beta < 0.0:
+        raise ValueError(
+            "--mobility-prior-beta must "
+            "be non-negative"
         )
 
     if (
@@ -1753,6 +1907,8 @@ def main() -> None:
         f"policy={args.migration_policy}, "
         f"prediction_error="
         f"{args.prediction_error}, "
+        f"prior_beta="
+        f"{args.mobility_prior_beta}, "
         f"rate={args.arrival_rate_rps}, "
         f"episodes={args.episodes}",
         flush=True,
@@ -1820,6 +1976,9 @@ def main() -> None:
             max_steps=args.max_steps,
             max_batches=args.max_batches,
             agent=agent,
+            mobility_prior_beta=(
+                args.mobility_prior_beta
+            ),
         )
 
         rows.append(

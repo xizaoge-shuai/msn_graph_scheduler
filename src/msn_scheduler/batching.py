@@ -127,6 +127,27 @@ class NodeConditionedDPBatcher:
         self.profile = profile
         self.cloud_reserve_gb = float(cfg["system"]["cloud_reserved_memory_gb"])
 
+        tmc_cfg = cfg.get(
+            "tmc_mobility",
+            {},
+        )
+
+        self.mobility_risk_horizon = str(
+            tmc_cfg.get(
+                "batch_risk_horizon",
+                "prefill",
+            )
+        )
+
+        if self.mobility_risk_horizon not in {
+            "prefill",
+            "service",
+        }:
+            raise ValueError(
+                "tmc_mobility.batch_risk_horizon "
+                "must be either 'prefill' or 'service'"
+            )
+
     def _handover_cost_ms(self, req: Request, infra: Infrastructure, node_id: str) -> float:
         reroute_ms = 12.0
         old_path = shortest_path_latency_ms(infra, req.anchor_node, node_id)
@@ -356,6 +377,8 @@ class NodeConditionedDPBatcher:
                 round(r.deadline_ms, 3),
                 round(r.arrival_ms, 3),
                 round(r.handover_probability, 4),
+                round(r.residual_dwell_ms, 3),
+                r.anchor_node,
                 r.next_anchor_node,
             )
             for r in queue[: self.window_size]
@@ -465,13 +488,12 @@ class NodeConditionedDPBatcher:
                         2.0,
                     )
 
-                    handover = self._handover_cost_ms(req, infra, node_id)
-                    p_ho = min(
-                        1.0,
-                        req.handover_probability
-                        * batch_prefill
-                        / max(req.residual_dwell_ms, 1.0),
+                    handover = self._handover_cost_ms(
+                        req,
+                        infra,
+                        node_id,
                     )
+
                     estimated_decode_ms = (
                         self._estimate_request_decode_ms(
                             infra=infra,
@@ -486,6 +508,23 @@ class NodeConditionedDPBatcher:
                     predicted_total_ms = (
                         batch_prefill
                         + estimated_decode_ms
+                    )
+
+                    mobility_horizon_ms = (
+                        predicted_total_ms
+                        if self.mobility_risk_horizon
+                        == "service"
+                        else batch_prefill
+                    )
+
+                    p_ho = min(
+                        1.0,
+                        req.handover_probability
+                        * mobility_horizon_ms
+                        / max(
+                            req.residual_dwell_ms,
+                            1.0,
+                        ),
                     )
 
                     # Soft and bounded SLO risk.
