@@ -1,0 +1,288 @@
+
+==========================================
+Full seed=7, rate=0.10
+==========================================
+Using request trace: data/processed/azure_2024_test_sample.csv rows=500,000
+Using deterministic DDQN: outputs/train_online_ddqn_cpu_300_analytic/agent_ep150.pt device=cpu
+Starting evaluation: episodes=100, batchers=['node_conditioned_dp'], full_queue=True, total_runs=100
+episode=   1/100 runs=   1/100 elapsed=     2.4s eta=   237.6s
+episode=  10/100 runs=  10/100 elapsed=    24.0s eta=   215.8s
+episode=  20/100 runs=  20/100 elapsed=    47.5s eta=   190.0s
+episode=  30/100 runs=  30/100 elapsed=    70.1s eta=   163.6s
+episode=  40/100 runs=  40/100 elapsed=    95.0s eta=   142.5s
+episode=  50/100 runs=  50/100 elapsed=   120.2s eta=   120.2s
+episode=  60/100 runs=  60/100 elapsed=   146.8s eta=    97.9s
+episode=  70/100 runs=  70/100 elapsed=   174.5s eta=    74.8s
+episode=  80/100 runs=  80/100 elapsed=   202.1s eta=    50.5s
+episode=  90/100 runs=  90/100 elapsed=   229.8s eta=    25.5s
+episode= 100/100 runs= 100/100 elapsed=   258.1s eta=     0.0s
+                     episodes  completion_ratio  ...  goodput_rps    reward
+batcher                                          ...                       
+node_conditioned_dp       100               1.0  ...       0.0907 -158.6246
+
+[1 rows x 11 columns]
+Saved outputs/three_seed_eval/seed7_r010_100.csv
+
+==========================================
+Full seed=7, rate=0.20
+==========================================
+Using request trace: data/processed/azure_2024_test_sample.csv rows=500,000
+Using deterministic DDQN: outputs/train_online_ddqn_cpu_300_analytic/agent_ep150.pt device=cpu
+Starting evaluation: episodes=100, batchers=['node_conditioned_dp'], full_queue=True, total_runs=100
+episode=   1/100 runs=   1/100 elapsed=     2.3s eta=   232.4s
+episode=  10/100 runs=  10/100 elapsed=    23.4s eta=   210.2s
+episode=  20/100 runs=  20/100 elapsed=    48.1s eta=   192.3s
+episode=  30/100 runs=  30/100 elapsed=    70.4s eta=   164.3s
+episode=  40/100 runs=  40/100 elapsed=    94.9s eta=   142.3s
+episode=  50/100 runs=  50/100 elapsed=   119.6s eta=   119.6s
+episode=  60/100 runs=  60/100 elapsed=   142.5s eta=    95.0s
+episode=  70/100 runs=  70/100 elapsed=   165.7s eta=    71.0s
+episode=  80/100 runs=  80/100 elapsed=   189.3s eta=    47.3s
+episode=  90/100 runs=  90/100 elapsed=   212.3s eta=    23.6s
+episode= 100/100 runs= 100/100 elapsed=   236.9s eta=     0.0s
+                     episodes  completion_ratio  ...  goodput_rps    reward
+batcher                                          ...                       
+node_conditioned_dp       100               1.0  ...       0.1581 -153.9344
+
+[1 rows x 11 columns]
+Saved outputs/three_seed_eval/seed7_r020_100.csv
+
+==========================================
+Full seed=7, rate=0.40
+==========================================
+Using request trace: data/processed/azure_2024_test_sample.csv rows=500,000
+Using deterministic DDQN: outputs/train_online_ddqn_cpu_300_analytic/agent_ep150.pt device=cpu
+Starting evaluation: episodes=100, batchers=['node_conditioned_dp'], full_queue=True, total_runs=100
+episode=   1/100 runs=   1/100 elapsed=     3.0s eta=   292.2s
+episode=  10/100 runs=  10/100 elapsed=    23.6s eta=   212.7s
+episode=  20/100 runs=  20/100 elapsed=    44.0s eta=   175.9s
+episode=  30/100 runs=  30/100 elapsed=    64.5s eta=   150.6s
+episode=  40/100 runs=  40/100 elapsed=    84.2s eta=   126.4s
+episode=  50/100 runs=  50/100 elapsed=   105.7s eta=   105.7s
+episode=  60/100 runs=  60/100 elapsed=   124.0s eta=    82.6s
+episode=  70/100 runs=  70/100 elapsed=   144.5s eta=    61.9s
+episode=  80/100 runs=  80/100 elapsed=   165.5s eta=    41.4s
+episode=  90/100 runs=  90/100 elapsed=   184.8s eta=    20.5s
+episode= 100/100 runs= 100/100 elapsed=   208.8s eta=     0.0s
+                     episodes  completion_ratio  ...  goodput_rps    reward
+batcher                                          ...                       
+node_conditioned_dp       100               1.0  ...       0.2336 -143.8395
+
+[1 rows x 11 columns]
+Saved outputs/three_seed_eval/seed7_r040_100.csv
+
+==========================================
+Full seed=7, rate=0.60
+==========================================
+Using request trace: data/processed/azure_2024_test_sample.csv rows=500,000
+Using deterministic DDQN: outputs/train_online_ddqn_cpu_300_analytic/agent_ep150.pt device=cpu
+Starting evaluation: episodes=100, batchers=['node_conditioned_dp'], full_queue=True, total_runs=100
+episode=   1/100 runs=   1/100 elapsed=     2.3s eta=   231.8s
+episode=  10/100 runs=  10/100 elapsed=    18.2s eta=   163.5s
+episode=  20/100 runs=  20/100 elapsed=    35.9s eta=   143.6s
+episode=  30/100 runs=  30/100 elapsed=    53.6s eta=   125.1s
+episode=  40/100 runs=  40/100 elapsed=    69.7s eta=   104.6s
+episode=  50/100 runs=  50/100 elapsed=    87.5s eta=    87.5s
+episode=  60/100 runs=  60/100 elapsed=   103.3s eta=    68.8s
+episode=  70/100 runs=  70/100 elapsed=   122.3s eta=    52.4s
+episode=  80/100 runs=  80/100 elapsed=   144.4s eta=    36.1s
+episode=  90/100 runs=  90/100 elapsed=   162.4s eta=    18.0s
+episode= 100/100 runs= 100/100 elapsed=   185.6s eta=     0.0s
+                     episodes  completion_ratio  ...  goodput_rps    reward
+batcher                                          ...                       
+node_conditioned_dp       100               1.0  ...       0.2595 -131.7521
+
+[1 rows x 11 columns]
+Saved outputs/three_seed_eval/seed7_r060_100.csv
+
+==========================================
+Full seed=17, rate=0.10
+==========================================
+Using request trace: data/processed/azure_2024_test_sample.csv rows=500,000
+Using deterministic DDQN: outputs/train_online_ddqn_cpu_300_analytic_seed17/agent_ep150.pt device=cpu
+Starting evaluation: episodes=100, batchers=['node_conditioned_dp'], full_queue=True, total_runs=100
+episode=   1/100 runs=   1/100 elapsed=     2.5s eta=   243.5s
+episode=  10/100 runs=  10/100 elapsed=    23.9s eta=   214.9s
+episode=  20/100 runs=  20/100 elapsed=    46.8s eta=   187.1s
+episode=  30/100 runs=  30/100 elapsed=    71.1s eta=   165.9s
+episode=  40/100 runs=  40/100 elapsed=    95.1s eta=   142.6s
+episode=  50/100 runs=  50/100 elapsed=   119.0s eta=   119.0s
+episode=  60/100 runs=  60/100 elapsed=   143.0s eta=    95.4s
+episode=  70/100 runs=  70/100 elapsed=   166.9s eta=    71.5s
+episode=  80/100 runs=  80/100 elapsed=   191.3s eta=    47.8s
+episode=  90/100 runs=  90/100 elapsed=   218.9s eta=    24.3s
+episode= 100/100 runs= 100/100 elapsed=   245.0s eta=     0.0s
+                     episodes  completion_ratio  ...  goodput_rps    reward
+batcher                                          ...                       
+node_conditioned_dp       100               1.0  ...        0.069 -209.1728
+
+[1 rows x 11 columns]
+Saved outputs/three_seed_eval/seed17_r010_100.csv
+
+==========================================
+Full seed=17, rate=0.20
+==========================================
+Using request trace: data/processed/azure_2024_test_sample.csv rows=500,000
+Using deterministic DDQN: outputs/train_online_ddqn_cpu_300_analytic_seed17/agent_ep150.pt device=cpu
+Starting evaluation: episodes=100, batchers=['node_conditioned_dp'], full_queue=True, total_runs=100
+episode=   1/100 runs=   1/100 elapsed=     2.1s eta=   207.3s
+episode=  10/100 runs=  10/100 elapsed=    24.3s eta=   219.1s
+episode=  20/100 runs=  20/100 elapsed=    46.2s eta=   184.6s
+episode=  30/100 runs=  30/100 elapsed=    69.2s eta=   161.5s
+episode=  40/100 runs=  40/100 elapsed=    92.9s eta=   139.3s
+episode=  50/100 runs=  50/100 elapsed=   115.1s eta=   115.1s
+episode=  60/100 runs=  60/100 elapsed=   137.8s eta=    91.8s
+episode=  70/100 runs=  70/100 elapsed=   161.0s eta=    69.0s
+episode=  80/100 runs=  80/100 elapsed=   183.9s eta=    46.0s
+episode=  90/100 runs=  90/100 elapsed=   209.9s eta=    23.3s
+episode= 100/100 runs= 100/100 elapsed=   234.0s eta=     0.0s
+                     episodes  completion_ratio  ...  goodput_rps    reward
+batcher                                          ...                       
+node_conditioned_dp       100               1.0  ...       0.1183 -194.5369
+
+[1 rows x 11 columns]
+Saved outputs/three_seed_eval/seed17_r020_100.csv
+
+==========================================
+Full seed=17, rate=0.40
+==========================================
+Using request trace: data/processed/azure_2024_test_sample.csv rows=500,000
+Using deterministic DDQN: outputs/train_online_ddqn_cpu_300_analytic_seed17/agent_ep150.pt device=cpu
+Starting evaluation: episodes=100, batchers=['node_conditioned_dp'], full_queue=True, total_runs=100
+episode=   1/100 runs=   1/100 elapsed=     1.6s eta=   155.2s
+episode=  10/100 runs=  10/100 elapsed=    19.7s eta=   177.2s
+episode=  20/100 runs=  20/100 elapsed=    38.9s eta=   155.7s
+episode=  30/100 runs=  30/100 elapsed=    59.5s eta=   138.8s
+episode=  40/100 runs=  40/100 elapsed=    78.0s eta=   117.0s
+episode=  50/100 runs=  50/100 elapsed=    95.4s eta=    95.4s
+episode=  60/100 runs=  60/100 elapsed=   115.9s eta=    77.3s
+episode=  70/100 runs=  70/100 elapsed=   136.4s eta=    58.5s
+episode=  80/100 runs=  80/100 elapsed=   156.4s eta=    39.1s
+episode=  90/100 runs=  90/100 elapsed=   181.7s eta=    20.2s
+episode= 100/100 runs= 100/100 elapsed=   203.8s eta=     0.0s
+                     episodes  completion_ratio  ...  goodput_rps    reward
+batcher                                          ...                       
+node_conditioned_dp       100               1.0  ...       0.1651 -169.0842
+
+[1 rows x 11 columns]
+Saved outputs/three_seed_eval/seed17_r040_100.csv
+
+==========================================
+Full seed=17, rate=0.60
+==========================================
+Using request trace: data/processed/azure_2024_test_sample.csv rows=500,000
+Using deterministic DDQN: outputs/train_online_ddqn_cpu_300_analytic_seed17/agent_ep150.pt device=cpu
+Starting evaluation: episodes=100, batchers=['node_conditioned_dp'], full_queue=True, total_runs=100
+episode=   1/100 runs=   1/100 elapsed=     1.6s eta=   161.4s
+episode=  10/100 runs=  10/100 elapsed=    18.1s eta=   162.7s
+episode=  20/100 runs=  20/100 elapsed=    36.4s eta=   145.7s
+episode=  30/100 runs=  30/100 elapsed=    54.3s eta=   126.6s
+episode=  40/100 runs=  40/100 elapsed=    70.8s eta=   106.2s
+episode=  50/100 runs=  50/100 elapsed=    86.1s eta=    86.1s
+episode=  60/100 runs=  60/100 elapsed=   106.1s eta=    70.7s
+episode=  70/100 runs=  70/100 elapsed=   128.0s eta=    54.9s
+episode=  80/100 runs=  80/100 elapsed=   145.7s eta=    36.4s
+episode=  90/100 runs=  90/100 elapsed=   170.6s eta=    19.0s
+episode= 100/100 runs= 100/100 elapsed=   191.1s eta=     0.0s
+                     episodes  completion_ratio  ...  goodput_rps    reward
+batcher                                          ...                       
+node_conditioned_dp       100               1.0  ...       0.1833 -150.9279
+
+[1 rows x 11 columns]
+Saved outputs/three_seed_eval/seed17_r060_100.csv
+
+==========================================
+Full seed=29, rate=0.10
+==========================================
+Using request trace: data/processed/azure_2024_test_sample.csv rows=500,000
+Using deterministic DDQN: outputs/train_online_ddqn_cpu_300_analytic_seed29/agent_ep150.pt device=cpu
+Starting evaluation: episodes=100, batchers=['node_conditioned_dp'], full_queue=True, total_runs=100
+episode=   1/100 runs=   1/100 elapsed=     1.9s eta=   186.3s
+episode=  10/100 runs=  10/100 elapsed=    24.4s eta=   219.3s
+episode=  20/100 runs=  20/100 elapsed=    49.0s eta=   196.1s
+episode=  30/100 runs=  30/100 elapsed=    73.3s eta=   171.1s
+episode=  40/100 runs=  40/100 elapsed=    97.3s eta=   145.9s
+episode=  50/100 runs=  50/100 elapsed=   122.1s eta=   122.1s
+episode=  60/100 runs=  60/100 elapsed=   146.6s eta=    97.7s
+episode=  70/100 runs=  70/100 elapsed=   171.4s eta=    73.5s
+episode=  80/100 runs=  80/100 elapsed=   196.2s eta=    49.0s
+episode=  90/100 runs=  90/100 elapsed=   221.7s eta=    24.6s
+episode= 100/100 runs= 100/100 elapsed=   246.1s eta=     0.0s
+                     episodes  completion_ratio  ...  goodput_rps    reward
+batcher                                          ...                       
+node_conditioned_dp       100               1.0  ...       0.0825 -169.4609
+
+[1 rows x 11 columns]
+Saved outputs/three_seed_eval/seed29_r010_100.csv
+
+==========================================
+Full seed=29, rate=0.20
+==========================================
+Using request trace: data/processed/azure_2024_test_sample.csv rows=500,000
+Using deterministic DDQN: outputs/train_online_ddqn_cpu_300_analytic_seed29/agent_ep150.pt device=cpu
+Starting evaluation: episodes=100, batchers=['node_conditioned_dp'], full_queue=True, total_runs=100
+episode=   1/100 runs=   1/100 elapsed=     1.5s eta=   147.4s
+episode=  10/100 runs=  10/100 elapsed=    22.6s eta=   203.0s
+episode=  20/100 runs=  20/100 elapsed=    46.2s eta=   184.8s
+episode=  30/100 runs=  30/100 elapsed=    70.1s eta=   163.7s
+episode=  40/100 runs=  40/100 elapsed=    92.7s eta=   139.1s
+episode=  50/100 runs=  50/100 elapsed=   116.0s eta=   116.0s
+episode=  60/100 runs=  60/100 elapsed=   139.1s eta=    92.8s
+episode=  70/100 runs=  70/100 elapsed=   162.2s eta=    69.5s
+episode=  80/100 runs=  80/100 elapsed=   186.0s eta=    46.5s
+episode=  90/100 runs=  90/100 elapsed=   210.6s eta=    23.4s
+episode= 100/100 runs= 100/100 elapsed=   233.4s eta=     0.0s
+                     episodes  completion_ratio  ...  goodput_rps    reward
+batcher                                          ...                       
+node_conditioned_dp       100               1.0  ...       0.1435 -163.0334
+
+[1 rows x 11 columns]
+Saved outputs/three_seed_eval/seed29_r020_100.csv
+
+==========================================
+Full seed=29, rate=0.40
+==========================================
+Using request trace: data/processed/azure_2024_test_sample.csv rows=500,000
+Using deterministic DDQN: outputs/train_online_ddqn_cpu_300_analytic_seed29/agent_ep150.pt device=cpu
+Starting evaluation: episodes=100, batchers=['node_conditioned_dp'], full_queue=True, total_runs=100
+episode=   1/100 runs=   1/100 elapsed=     1.4s eta=   134.2s
+episode=  10/100 runs=  10/100 elapsed=    19.6s eta=   176.1s
+episode=  20/100 runs=  20/100 elapsed=    39.8s eta=   159.4s
+episode=  30/100 runs=  30/100 elapsed=    59.6s eta=   139.0s
+episode=  40/100 runs=  40/100 elapsed=    80.4s eta=   120.6s
+episode=  50/100 runs=  50/100 elapsed=   100.8s eta=   100.8s
+episode=  60/100 runs=  60/100 elapsed=   121.0s eta=    80.7s
+episode=  70/100 runs=  70/100 elapsed=   140.1s eta=    60.0s
+episode=  80/100 runs=  80/100 elapsed=   163.4s eta=    40.8s
+episode=  90/100 runs=  90/100 elapsed=   185.1s eta=    20.6s
+episode= 100/100 runs= 100/100 elapsed=   206.6s eta=     0.0s
+                     episodes  completion_ratio  ...  goodput_rps    reward
+batcher                                          ...                       
+node_conditioned_dp       100               1.0  ...         0.21 -151.3297
+
+[1 rows x 11 columns]
+Saved outputs/three_seed_eval/seed29_r040_100.csv
+
+==========================================
+Full seed=29, rate=0.60
+==========================================
+Using request trace: data/processed/azure_2024_test_sample.csv rows=500,000
+Using deterministic DDQN: outputs/train_online_ddqn_cpu_300_analytic_seed29/agent_ep150.pt device=cpu
+Starting evaluation: episodes=100, batchers=['node_conditioned_dp'], full_queue=True, total_runs=100
+episode=   1/100 runs=   1/100 elapsed=     1.6s eta=   154.9s
+episode=  10/100 runs=  10/100 elapsed=    18.3s eta=   164.9s
+episode=  20/100 runs=  20/100 elapsed=    35.9s eta=   143.7s
+episode=  30/100 runs=  30/100 elapsed=    52.7s eta=   122.9s
+episode=  40/100 runs=  40/100 elapsed=    71.5s eta=   107.3s
+episode=  50/100 runs=  50/100 elapsed=    89.3s eta=    89.3s
+episode=  60/100 runs=  60/100 elapsed=   109.2s eta=    72.8s
+episode=  70/100 runs=  70/100 elapsed=   126.2s eta=    54.1s
+episode=  80/100 runs=  80/100 elapsed=   148.5s eta=    37.1s
+episode=  90/100 runs=  90/100 elapsed=   168.4s eta=    18.7s
+episode= 100/100 runs= 100/100 elapsed=   187.9s eta=     0.0s
+                     episodes  completion_ratio  ...  goodput_rps    reward
+batcher                                          ...                       
+node_conditioned_dp       100               1.0  ...        0.238 -139.7113
+
+[1 rows x 11 columns]
+Saved outputs/three_seed_eval/seed29_r060_100.csv

@@ -1,0 +1,81 @@
+experiment,condition_name,condition,method,method_group,metric,metric_label,value,unit,better_direction
+dynamic_mobility,mobility_mode,stationary,LECU-RBA (adapted),External adapted baseline,avg_e2e_ms,Average E2E latency,5978.021188577054,ms,lower
+dynamic_mobility,mobility_mode,stationary,LECU-RBA (adapted),External adapted baseline,p95_e2e_ms,P95 E2E latency,11825.624655963504,ms,lower
+dynamic_mobility,mobility_mode,stationary,LECU-RBA (adapted),External adapted baseline,slo_satisfaction,SLO satisfaction,0.3049999999999999,ratio,higher
+dynamic_mobility,mobility_mode,stationary,LECU-RBA (adapted),External adapted baseline,throughput_rps,Throughput,0.3697253083692648,requests/s,higher
+dynamic_mobility,mobility_mode,stationary,LECU-RBA (adapted),External adapted baseline,goodput_rps,Goodput,0.1182073032095302,requests/s,higher
+dynamic_mobility,mobility_mode,stationary,DyBAP-Adapted,External adapted baseline,avg_e2e_ms,Average E2E latency,5879.73970950271,ms,lower
+dynamic_mobility,mobility_mode,stationary,DyBAP-Adapted,External adapted baseline,p95_e2e_ms,P95 E2E latency,10339.126983333608,ms,lower
+dynamic_mobility,mobility_mode,stationary,DyBAP-Adapted,External adapted baseline,slo_satisfaction,SLO satisfaction,0.4325,ratio,higher
+dynamic_mobility,mobility_mode,stationary,DyBAP-Adapted,External adapted baseline,throughput_rps,Throughput,0.3866161294198743,requests/s,higher
+dynamic_mobility,mobility_mode,stationary,DyBAP-Adapted,External adapted baseline,goodput_rps,Goodput,0.1776946753040221,requests/s,higher
+dynamic_mobility,mobility_mode,stationary,Ours w/o DDQN,Ablation,avg_e2e_ms,Average E2E latency,3425.25175772494,ms,lower
+dynamic_mobility,mobility_mode,stationary,Ours w/o DDQN,Ablation,p95_e2e_ms,P95 E2E latency,6844.329701034369,ms,lower
+dynamic_mobility,mobility_mode,stationary,Ours w/o DDQN,Ablation,slo_satisfaction,SLO satisfaction,0.5125,ratio,higher
+dynamic_mobility,mobility_mode,stationary,Ours w/o DDQN,Ablation,throughput_rps,Throughput,0.4221321725146578,requests/s,higher
+dynamic_mobility,mobility_mode,stationary,Ours w/o DDQN,Ablation,goodput_rps,Goodput,0.214291858807431,requests/s,higher
+dynamic_mobility,mobility_mode,stationary,Full,Ours,avg_e2e_ms,Average E2E latency,3163.708463998318,ms,lower
+dynamic_mobility,mobility_mode,stationary,Full,Ours,p95_e2e_ms,P95 E2E latency,6520.631501102919,ms,lower
+dynamic_mobility,mobility_mode,stationary,Full,Ours,slo_satisfaction,SLO satisfaction,0.5716666666666667,ratio,higher
+dynamic_mobility,mobility_mode,stationary,Full,Ours,throughput_rps,Throughput,0.4257965292135122,requests/s,higher
+dynamic_mobility,mobility_mode,stationary,Full,Ours,goodput_rps,Goodput,0.2432513091469683,requests/s,higher
+dynamic_mobility,mobility_mode,walking,LECU-RBA (adapted),External adapted baseline,avg_e2e_ms,Average E2E latency,5981.377459510796,ms,lower
+dynamic_mobility,mobility_mode,walking,LECU-RBA (adapted),External adapted baseline,p95_e2e_ms,P95 E2E latency,11845.215821584565,ms,lower
+dynamic_mobility,mobility_mode,walking,LECU-RBA (adapted),External adapted baseline,slo_satisfaction,SLO satisfaction,0.3049999999999999,ratio,higher
+dynamic_mobility,mobility_mode,walking,LECU-RBA (adapted),External adapted baseline,throughput_rps,Throughput,0.369697262542369,requests/s,higher
+dynamic_mobility,mobility_mode,walking,LECU-RBA (adapted),External adapted baseline,goodput_rps,Goodput,0.1182039865619027,requests/s,higher
+dynamic_mobility,mobility_mode,walking,DyBAP-Adapted,External adapted baseline,avg_e2e_ms,Average E2E latency,6254.00073001052,ms,lower
+dynamic_mobility,mobility_mode,walking,DyBAP-Adapted,External adapted baseline,p95_e2e_ms,P95 E2E latency,11396.82169160086,ms,lower
+dynamic_mobility,mobility_mode,walking,DyBAP-Adapted,External adapted baseline,slo_satisfaction,SLO satisfaction,0.3875,ratio,higher
+dynamic_mobility,mobility_mode,walking,DyBAP-Adapted,External adapted baseline,throughput_rps,Throughput,0.3777323183089941,requests/s,higher
+dynamic_mobility,mobility_mode,walking,DyBAP-Adapted,External adapted baseline,goodput_rps,Goodput,0.1571468532074238,requests/s,higher
+dynamic_mobility,mobility_mode,walking,Ours w/o DDQN,Ablation,avg_e2e_ms,Average E2E latency,3425.288135422367,ms,lower
+dynamic_mobility,mobility_mode,walking,Ours w/o DDQN,Ablation,p95_e2e_ms,P95 E2E latency,6844.475211824078,ms,lower
+dynamic_mobility,mobility_mode,walking,Ours w/o DDQN,Ablation,slo_satisfaction,SLO satisfaction,0.5125,ratio,higher
+dynamic_mobility,mobility_mode,walking,Ours w/o DDQN,Ablation,throughput_rps,Throughput,0.4221321725146578,requests/s,higher
+dynamic_mobility,mobility_mode,walking,Ours w/o DDQN,Ablation,goodput_rps,Goodput,0.214291858807431,requests/s,higher
+dynamic_mobility,mobility_mode,walking,Full,Ours,avg_e2e_ms,Average E2E latency,3163.744841695746,ms,lower
+dynamic_mobility,mobility_mode,walking,Full,Ours,p95_e2e_ms,P95 E2E latency,6520.777011892629,ms,lower
+dynamic_mobility,mobility_mode,walking,Full,Ours,slo_satisfaction,SLO satisfaction,0.5716666666666667,ratio,higher
+dynamic_mobility,mobility_mode,walking,Full,Ours,throughput_rps,Throughput,0.4257965292135122,requests/s,higher
+dynamic_mobility,mobility_mode,walking,Full,Ours,goodput_rps,Goodput,0.2432513091469683,requests/s,higher
+dynamic_mobility,mobility_mode,driving,LECU-RBA (adapted),External adapted baseline,avg_e2e_ms,Average E2E latency,5983.88853912603,ms,lower
+dynamic_mobility,mobility_mode,driving,LECU-RBA (adapted),External adapted baseline,p95_e2e_ms,P95 E2E latency,11850.958882050356,ms,lower
+dynamic_mobility,mobility_mode,driving,LECU-RBA (adapted),External adapted baseline,slo_satisfaction,SLO satisfaction,0.3049999999999999,ratio,higher
+dynamic_mobility,mobility_mode,driving,LECU-RBA (adapted),External adapted baseline,throughput_rps,Throughput,0.3696187527283346,requests/s,higher
+dynamic_mobility,mobility_mode,driving,LECU-RBA (adapted),External adapted baseline,goodput_rps,Goodput,0.1181938500672293,requests/s,higher
+dynamic_mobility,mobility_mode,driving,DyBAP-Adapted,External adapted baseline,avg_e2e_ms,Average E2E latency,6384.501865287665,ms,lower
+dynamic_mobility,mobility_mode,driving,DyBAP-Adapted,External adapted baseline,p95_e2e_ms,P95 E2E latency,11550.208764447612,ms,lower
+dynamic_mobility,mobility_mode,driving,DyBAP-Adapted,External adapted baseline,slo_satisfaction,SLO satisfaction,0.3875,ratio,higher
+dynamic_mobility,mobility_mode,driving,DyBAP-Adapted,External adapted baseline,throughput_rps,Throughput,0.3774869380415794,requests/s,higher
+dynamic_mobility,mobility_mode,driving,DyBAP-Adapted,External adapted baseline,goodput_rps,Goodput,0.1572104033223894,requests/s,higher
+dynamic_mobility,mobility_mode,driving,Ours w/o DDQN,Ablation,avg_e2e_ms,Average E2E latency,3428.4283327768017,ms,lower
+dynamic_mobility,mobility_mode,driving,Ours w/o DDQN,Ablation,p95_e2e_ms,P95 E2E latency,6865.250203709509,ms,lower
+dynamic_mobility,mobility_mode,driving,Ours w/o DDQN,Ablation,slo_satisfaction,SLO satisfaction,0.5116666666666666,ratio,higher
+dynamic_mobility,mobility_mode,driving,Ours w/o DDQN,Ablation,throughput_rps,Throughput,0.4220276052196512,requests/s,higher
+dynamic_mobility,mobility_mode,driving,Ours w/o DDQN,Ablation,goodput_rps,Goodput,0.2140171150561533,requests/s,higher
+dynamic_mobility,mobility_mode,driving,Full,Ours,avg_e2e_ms,Average E2E latency,3166.5909023468603,ms,lower
+dynamic_mobility,mobility_mode,driving,Full,Ours,p95_e2e_ms,P95 E2E latency,6540.623490864781,ms,lower
+dynamic_mobility,mobility_mode,driving,Full,Ours,slo_satisfaction,SLO satisfaction,0.5708333333333333,ratio,higher
+dynamic_mobility,mobility_mode,driving,Full,Ours,throughput_rps,Throughput,0.4257014430472906,requests/s,higher
+dynamic_mobility,mobility_mode,driving,Full,Ours,goodput_rps,Goodput,0.2429781252288197,requests/s,higher
+dynamic_mobility,mobility_mode,high_speed,LECU-RBA (adapted),External adapted baseline,avg_e2e_ms,Average E2E latency,5980.516636647996,ms,lower
+dynamic_mobility,mobility_mode,high_speed,LECU-RBA (adapted),External adapted baseline,p95_e2e_ms,P95 E2E latency,11877.800707277886,ms,lower
+dynamic_mobility,mobility_mode,high_speed,LECU-RBA (adapted),External adapted baseline,slo_satisfaction,SLO satisfaction,0.3049999999999999,ratio,higher
+dynamic_mobility,mobility_mode,high_speed,LECU-RBA (adapted),External adapted baseline,throughput_rps,Throughput,0.3694736671098929,requests/s,higher
+dynamic_mobility,mobility_mode,high_speed,LECU-RBA (adapted),External adapted baseline,goodput_rps,Goodput,0.1181667786955178,requests/s,higher
+dynamic_mobility,mobility_mode,high_speed,DyBAP-Adapted,External adapted baseline,avg_e2e_ms,Average E2E latency,6296.856421165481,ms,lower
+dynamic_mobility,mobility_mode,high_speed,DyBAP-Adapted,External adapted baseline,p95_e2e_ms,P95 E2E latency,11532.04722491458,ms,lower
+dynamic_mobility,mobility_mode,high_speed,DyBAP-Adapted,External adapted baseline,slo_satisfaction,SLO satisfaction,0.3858333333333333,ratio,higher
+dynamic_mobility,mobility_mode,high_speed,DyBAP-Adapted,External adapted baseline,throughput_rps,Throughput,0.3765827872865697,requests/s,higher
+dynamic_mobility,mobility_mode,high_speed,DyBAP-Adapted,External adapted baseline,goodput_rps,Goodput,0.1557287022615163,requests/s,higher
+dynamic_mobility,mobility_mode,high_speed,Ours w/o DDQN,Ablation,avg_e2e_ms,Average E2E latency,3435.2250000267413,ms,lower
+dynamic_mobility,mobility_mode,high_speed,Ours w/o DDQN,Ablation,p95_e2e_ms,P95 E2E latency,6876.073923917654,ms,lower
+dynamic_mobility,mobility_mode,high_speed,Ours w/o DDQN,Ablation,slo_satisfaction,SLO satisfaction,0.5116666666666666,ratio,higher
+dynamic_mobility,mobility_mode,high_speed,Ours w/o DDQN,Ablation,throughput_rps,Throughput,0.4220723695310286,requests/s,higher
+dynamic_mobility,mobility_mode,high_speed,Ours w/o DDQN,Ablation,goodput_rps,Goodput,0.2140551544603405,requests/s,higher
+dynamic_mobility,mobility_mode,high_speed,Full,Ours,avg_e2e_ms,Average E2E latency,3168.6265098276967,ms,lower
+dynamic_mobility,mobility_mode,high_speed,Full,Ours,p95_e2e_ms,P95 E2E latency,6542.3559680452245,ms,lower
+dynamic_mobility,mobility_mode,high_speed,Full,Ours,slo_satisfaction,SLO satisfaction,0.57,ratio,higher
+dynamic_mobility,mobility_mode,high_speed,Full,Ours,throughput_rps,Throughput,0.4257732337191565,requests/s,higher
+dynamic_mobility,mobility_mode,high_speed,Full,Ours,goodput_rps,Goodput,0.2426603678190604,requests/s,higher

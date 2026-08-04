@@ -1,0 +1,3 @@
+comparison,avg_e2e_reduction_pct,p95_e2e_reduction_pct,slo_gain_pp,throughput_gain_pct,goodput_gain_pct
+Full vs Ours w/o mobility,0.0,0.0,0.0,0.0,0.0
+Full vs Ours w/o node-conditioned DP,2.4779669933945097,3.482140638241218,0.8333333333333304,0.15853373778570654,1.6989960637882526

@@ -1,0 +1,80 @@
+
+==========================================
+Training Full seed=17
+Output=outputs/train_online_ddqn_cpu_300_analytic_seed17
+Start=2026年 07月 30日 星期四 11:45:13 CST
+==========================================
+Using request trace: data/processed/azure_2023_train_sample.csv rows=22,123
+Starting online DDQN training: episodes=300 device=cpu arrival_rates=[0.1, 0.2, 0.4, 0.6] max_requests=12 warmup_steps=100 updates_per_episode=2 no_update=False
+episode=    1/300 reward= -300.985 batch= 3.00 slo_sat= 0.000 goodput= 0.0000 loss=nan eps=0.999 replay=   40 elapsed=    1.0s eta=  286.7s
+episode=   10/300 reward= -476.686 batch= 2.80 slo_sat= 0.033 goodput= 0.0030 loss=5.9249 eps=0.986 replay=  446 elapsed=   22.0s eta=  637.4s
+episode=   20/300 reward= -488.325 batch= 2.43 slo_sat= 0.025 goodput= 0.0027 loss=9.8567 eps=0.969 replay=  982 elapsed=   42.9s eta=  600.5s
+episode=   30/300 reward= -411.148 batch= 2.58 slo_sat= 0.017 goodput= 0.0021 loss=7.7972 eps=0.953 replay= 1485 elapsed=   63.4s eta=  571.0s
+episode=   40/300 reward= -487.219 batch= 2.09 slo_sat= 0.050 goodput= 0.0047 loss=9.0352 eps=0.934 replay= 2069 elapsed=   84.0s eta=  545.9s
+episode=   50/300 reward= -555.748 batch= 2.33 slo_sat= 0.042 goodput= 0.0036 loss=8.5406 eps=0.917 replay= 2625 elapsed=   98.4s eta=  492.2s
+episode=   60/300 reward= -493.719 batch= 2.27 slo_sat= 0.050 goodput= 0.0044 loss=12.3646 eps=0.898 replay= 3214 elapsed=  116.4s eta=  465.7s
+episode=   70/300 reward= -602.618 batch= 2.26 slo_sat= 0.050 goodput= 0.0043 loss=9.8522 eps=0.879 replay= 3835 elapsed=  149.4s eta=  490.7s
+episode=   80/300 reward= -487.547 batch= 3.18 slo_sat= 0.008 goodput= 0.0008 loss=10.1669 eps=0.865 replay= 4273 elapsed=  186.1s eta=  511.7s
+episode=   90/300 reward= -473.454 batch= 2.61 slo_sat= 0.025 goodput= 0.0025 loss=6.4090 eps=0.848 replay= 4798 elapsed=  207.7s eta=  484.6s
+episode=  100/300 reward= -583.968 batch= 2.63 slo_sat= 0.025 goodput= 0.0018 loss=9.5007 eps=0.832 replay= 5305 elapsed=  232.3s eta=  464.7s
+episode=  110/300 reward= -514.160 batch= 2.43 slo_sat= 0.025 goodput= 0.0027 loss=8.5411 eps=0.816 replay= 5825 elapsed=  252.8s eta=  436.7s
+episode=  120/300 reward= -480.144 batch= 2.98 slo_sat= 0.025 goodput= 0.0020 loss=5.3115 eps=0.801 replay= 6270 elapsed=  278.6s eta=  417.9s
+episode=  130/300 reward= -559.536 batch= 2.77 slo_sat= 0.025 goodput= 0.0021 loss=7.2413 eps=0.785 replay= 6788 elapsed=  304.7s eta=  398.4s
+episode=  140/300 reward= -601.271 batch= 2.47 slo_sat= 0.017 goodput= 0.0012 loss=10.8700 eps=0.763 replay= 7490 elapsed=  331.9s eta=  379.4s
+episode=  150/300 reward= -471.970 batch= 2.79 slo_sat= 0.008 goodput= 0.0012 loss=7.8135 eps=0.746 replay= 8022 elapsed=  367.0s eta=  367.0s
+episode=  160/300 reward= -503.576 batch= 2.52 slo_sat= 0.017 goodput= 0.0027 loss=6.5471 eps=0.728 replay= 8602 elapsed=  390.7s eta=  341.9s
+episode=  170/300 reward= -531.075 batch= 2.35 slo_sat= 0.025 goodput= 0.0034 loss=7.0947 eps=0.709 replay= 9190 elapsed=  407.2s eta=  311.4s
+episode=  180/300 reward= -533.271 batch= 3.15 slo_sat= 0.008 goodput= 0.0010 loss=11.7214 eps=0.694 replay= 9673 elapsed=  429.2s eta=  286.1s
+episode=  190/300 reward= -734.706 batch= 2.73 slo_sat= 0.000 goodput= 0.0000 loss=8.1307 eps=0.674 replay=10297 elapsed=  454.5s eta=  263.1s
+episode=  200/300 reward= -587.582 batch= 3.06 slo_sat= 0.017 goodput= 0.0017 loss=7.4161 eps=0.658 replay=10796 elapsed=  495.6s eta=  247.8s
+episode=  210/300 reward= -670.301 batch= 2.53 slo_sat= 0.008 goodput= 0.0005 loss=6.8403 eps=0.638 replay=11447 elapsed=  515.2s eta=  220.8s
+episode=  220/300 reward= -541.933 batch= 2.80 slo_sat= 0.017 goodput= 0.0012 loss=10.3042 eps=0.620 replay=11987 elapsed=  544.7s eta=  198.1s
+episode=  230/300 reward= -636.818 batch= 2.86 slo_sat= 0.000 goodput= 0.0000 loss=11.7447 eps=0.602 replay=12564 elapsed=  566.5s eta=  172.4s
+episode=  240/300 reward= -585.696 batch= 2.98 slo_sat= 0.008 goodput= 0.0009 loss=5.9666 eps=0.585 replay=13091 elapsed=  593.4s eta=  148.3s
+episode=  250/300 reward= -671.424 batch= 2.22 slo_sat= 0.008 goodput= 0.0008 loss=7.7651 eps=0.561 replay=13852 elapsed=  609.6s eta=  121.9s
+episode=  260/300 reward= -530.175 batch= 2.85 slo_sat= 0.008 goodput= 0.0005 loss=8.1609 eps=0.541 replay=14481 elapsed=  641.6s eta=   98.7s
+episode=  270/300 reward= -701.481 batch= 2.53 slo_sat= 0.017 goodput= 0.0015 loss=8.5079 eps=0.521 replay=15140 elapsed=  667.1s eta=   74.1s
+episode=  280/300 reward= -568.926 batch= 2.49 slo_sat= 0.025 goodput= 0.0023 loss=6.4416 eps=0.497 replay=15882 elapsed=  691.4s eta=   49.4s
+episode=  290/300 reward= -527.346 batch= 3.03 slo_sat= 0.008 goodput= 0.0010 loss=9.5090 eps=0.477 replay=16506 elapsed=  724.4s eta=   25.0s
+episode=  300/300 reward= -540.600 batch= 2.72 slo_sat= 0.017 goodput= 0.0013 loss=8.2508 eps=0.456 replay=17173 elapsed=  747.8s eta=    0.0s
+Saved results to outputs/train_online_ddqn_cpu_300_analytic_seed17
+
+==========================================
+Training Full seed=29
+Output=outputs/train_online_ddqn_cpu_300_analytic_seed29
+Start=2026年 07月 30日 星期四 11:57:48 CST
+==========================================
+Using request trace: data/processed/azure_2023_train_sample.csv rows=22,123
+Starting online DDQN training: episodes=300 device=cpu arrival_rates=[0.1, 0.2, 0.4, 0.6] max_requests=12 warmup_steps=100 updates_per_episode=2 no_update=False
+episode=    1/300 reward= -323.824 batch= 4.00 slo_sat= 0.000 goodput= 0.0000 loss=nan eps=0.999 replay=   18 elapsed=    6.5s eta= 1931.2s
+episode=   10/300 reward= -444.690 batch= 2.92 slo_sat= 0.025 goodput= 0.0018 loss=6.2918 eps=0.986 replay=  448 elapsed=   24.6s eta=  714.4s
+episode=   20/300 reward= -531.257 batch= 2.69 slo_sat= 0.025 goodput= 0.0015 loss=7.6100 eps=0.970 replay=  936 elapsed=   45.4s eta=  635.7s
+episode=   30/300 reward= -454.872 batch= 2.87 slo_sat= 0.033 goodput= 0.0045 loss=8.2584 eps=0.956 replay= 1375 elapsed=   78.2s eta=  703.7s
+episode=   40/300 reward= -509.488 batch= 2.40 slo_sat= 0.008 goodput= 0.0008 loss=6.3607 eps=0.941 replay= 1874 elapsed=   95.1s eta=  618.4s
+episode=   50/300 reward= -508.281 batch= 2.63 slo_sat= 0.025 goodput= 0.0023 loss=10.3442 eps=0.924 replay= 2408 elapsed=  113.4s eta=  566.9s
+episode=   60/300 reward= -557.255 batch= 2.42 slo_sat= 0.017 goodput= 0.0023 loss=7.7059 eps=0.907 replay= 2945 elapsed=  142.3s eta=  569.3s
+episode=   70/300 reward= -442.028 batch= 2.79 slo_sat= 0.008 goodput= 0.0009 loss=7.1576 eps=0.893 replay= 3385 elapsed=  167.2s eta=  549.5s
+episode=   80/300 reward= -581.536 batch= 2.35 slo_sat= 0.042 goodput= 0.0046 loss=8.1518 eps=0.874 replay= 3968 elapsed=  185.8s eta=  511.0s
+episode=   90/300 reward= -496.642 batch= 2.50 slo_sat= 0.000 goodput= 0.0000 loss=12.7813 eps=0.858 replay= 4488 elapsed=  205.5s eta=  479.4s
+episode=  100/300 reward= -569.318 batch= 2.63 slo_sat= 0.050 goodput= 0.0035 loss=7.5816 eps=0.842 replay= 4994 elapsed=  234.4s eta=  468.8s
+episode=  110/300 reward= -599.144 batch= 2.28 slo_sat= 0.008 goodput= 0.0007 loss=11.0273 eps=0.824 replay= 5559 elapsed=  251.8s eta=  435.0s
+episode=  120/300 reward= -569.877 batch= 2.31 slo_sat= 0.042 goodput= 0.0039 loss=11.8531 eps=0.807 replay= 6099 elapsed=  273.8s eta=  410.8s
+episode=  130/300 reward= -593.633 batch= 2.68 slo_sat= 0.000 goodput= 0.0000 loss=8.6284 eps=0.790 replay= 6647 elapsed=  301.4s eta=  394.2s
+episode=  140/300 reward= -563.927 batch= 2.86 slo_sat= 0.008 goodput= 0.0005 loss=11.2153 eps=0.773 replay= 7179 elapsed=  335.0s eta=  382.9s
+episode=  150/300 reward= -572.840 batch= 2.60 slo_sat= 0.000 goodput= 0.0000 loss=10.6066 eps=0.755 replay= 7743 elapsed=  355.9s eta=  355.9s
+episode=  160/300 reward= -464.472 batch= 2.95 slo_sat= 0.042 goodput= 0.0035 loss=8.5872 eps=0.740 replay= 8205 elapsed=  387.3s eta=  338.9s
+episode=  170/300 reward= -655.566 batch= 2.95 slo_sat= 0.008 goodput= 0.0007 loss=10.2262 eps=0.724 replay= 8717 elapsed=  415.2s eta=  317.5s
+episode=  180/300 reward= -539.220 batch= 2.64 slo_sat= 0.017 goodput= 0.0018 loss=8.3355 eps=0.707 replay= 9253 elapsed=  435.4s eta=  290.2s
+episode=  190/300 reward= -581.041 batch= 2.67 slo_sat= 0.017 goodput= 0.0015 loss=10.0477 eps=0.690 replay= 9802 elapsed=  469.2s eta=  271.6s
+episode=  200/300 reward= -582.953 batch= 2.87 slo_sat= 0.000 goodput= 0.0000 loss=8.1622 eps=0.673 replay=10341 elapsed=  505.7s eta=  252.9s
+episode=  210/300 reward= -562.007 batch= 2.70 slo_sat= 0.000 goodput= 0.0000 loss=10.3381 eps=0.654 replay=10928 elapsed=  531.7s eta=  227.9s
+episode=  220/300 reward= -598.870 batch= 2.62 slo_sat= 0.008 goodput= 0.0006 loss=6.0882 eps=0.636 replay=11504 elapsed=  560.6s eta=  203.9s
+episode=  230/300 reward= -552.163 batch= 2.57 slo_sat= 0.042 goodput= 0.0034 loss=7.7789 eps=0.616 replay=12120 elapsed=  588.9s eta=  179.2s
+episode=  240/300 reward= -585.390 batch= 2.87 slo_sat= 0.000 goodput= 0.0000 loss=8.0424 eps=0.599 replay=12673 elapsed=  613.5s eta=  153.4s
+episode=  250/300 reward= -535.784 batch= 2.84 slo_sat= 0.017 goodput= 0.0011 loss=7.9531 eps=0.579 replay=13295 elapsed=  635.7s eta=  127.1s
+episode=  260/300 reward= -495.498 batch= 2.66 slo_sat= 0.025 goodput= 0.0038 loss=8.2602 eps=0.561 replay=13856 elapsed=  663.4s eta=  102.1s
+episode=  270/300 reward= -559.645 batch= 2.72 slo_sat= 0.008 goodput= 0.0005 loss=9.9891 eps=0.541 replay=14494 elapsed=  688.4s eta=   76.5s
+episode=  280/300 reward= -536.634 batch= 2.98 slo_sat= 0.008 goodput= 0.0007 loss=12.4936 eps=0.524 replay=15024 elapsed=  717.6s eta=   51.3s
+episode=  290/300 reward= -599.546 batch= 2.72 slo_sat= 0.025 goodput= 0.0021 loss=11.0224 eps=0.503 replay=15693 elapsed=  748.4s eta=   25.8s
+episode=  300/300 reward= -491.352 batch= 2.96 slo_sat= 0.008 goodput= 0.0007 loss=11.8679 eps=0.484 replay=16297 elapsed=  774.9s eta=    0.0s
+Saved results to outputs/train_online_ddqn_cpu_300_analytic_seed29

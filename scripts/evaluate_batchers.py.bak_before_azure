@@ -1,0 +1,375 @@
+from __future__ import annotations
+
+import argparse
+from pathlib import Path
+import sys
+import time
+
+import numpy as np
+import pandas as pd
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "src"))
+
+from msn_scheduler.baselines import (
+    choose_min_lower_bound,
+)
+from msn_scheduler.batching import (
+    FixedSizeBatcher,
+    NodeConditionedDPBatcher,
+    SequentialGreedyBatcher,
+    SingleRequestBatcher,
+)
+from msn_scheduler.config import load_config
+from msn_scheduler.env import SchedulingEnv
+from msn_scheduler.profiles import (
+    ModelProfile,
+    ProfileTable,
+)
+from msn_scheduler.synthetic import (
+    make_request_queue,
+    make_synthetic_infrastructure,
+)
+
+
+def run_episode(
+    env,
+    infra,
+    queue,
+    max_steps: int,
+):
+    obs = env.reset(
+        infra,
+        queue,
+    )
+
+    result = None
+
+    for _ in range(max_steps):
+        action = choose_min_lower_bound(obs)
+
+        next_obs, _, done, result = (
+            env.step(action)
+        )
+
+        if done:
+            if result is None:
+                raise RuntimeError(
+                    "Episode finished "
+                    "without a result"
+                )
+
+            return result
+
+        if next_obs is None:
+            raise RuntimeError(
+                "Missing next observation "
+                "before termination"
+            )
+
+        obs = next_obs
+
+    raise RuntimeError(
+        f"Episode exceeded "
+        f"{max_steps} mapping steps"
+    )
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument(
+        "--config",
+        default=str(
+            ROOT / "configs/default.yaml"
+        ),
+    )
+
+    parser.add_argument(
+        "--profile-csv",
+        default=None,
+    )
+
+    parser.add_argument(
+        "--episodes",
+        type=int,
+        default=30,
+    )
+
+    parser.add_argument(
+        "--fixed-batch-size",
+        type=int,
+        default=4,
+    )
+
+    parser.add_argument(
+        "--log-every",
+        type=int,
+        default=5,
+    )
+
+    parser.add_argument(
+        "--max-steps",
+        type=int,
+        default=64,
+    )
+
+    parser.add_argument(
+        "--output",
+        default=str(
+            ROOT
+            / "outputs/eval_batchers.csv"
+        ),
+    )
+
+    args = parser.parse_args()
+
+    cfg = load_config(args.config)
+
+    model = ModelProfile(
+        num_blocks=int(
+            cfg["model"]["num_blocks"]
+        ),
+        hidden_size=int(
+            cfg["model"]["hidden_size"]
+        ),
+        bytes_per_element=int(
+            cfg["model"][
+                "bytes_per_element"
+            ]
+        ),
+        block_parameter_gb=float(
+            cfg["model"][
+                "block_parameter_gb"
+            ]
+        ),
+        kv_bytes_per_token_per_block=float(
+            cfg["model"][
+                "kv_bytes_per_token_per_block"
+            ]
+        ),
+    )
+
+    profile = (
+        ProfileTable.from_csv(
+            model,
+            args.profile_csv,
+        )
+        if args.profile_csv
+        else ProfileTable(model)
+    )
+
+    if args.profile_csv:
+        print(
+            f"Using measured profile: "
+            f"{args.profile_csv}",
+            flush=True,
+        )
+    else:
+        print(
+            "Warning: using analytic "
+            "profile fallback",
+            flush=True,
+        )
+
+    batchers = {
+        "no_batch": SingleRequestBatcher(
+            cfg,
+            profile,
+        ),
+        f"fixed_{args.fixed_batch_size}":
+            FixedSizeBatcher(
+                cfg,
+                profile,
+                args.fixed_batch_size,
+            ),
+        "sequential_greedy":
+            SequentialGreedyBatcher(
+                cfg,
+                profile,
+            ),
+        "node_conditioned_dp":
+            NodeConditionedDPBatcher(
+                cfg,
+                profile,
+            ),
+    }
+
+    rows: list[dict] = []
+
+    out = Path(args.output)
+
+    out.parent.mkdir(
+        parents=True,
+        exist_ok=True,
+    )
+
+    total_runs = (
+        args.episodes
+        * len(batchers)
+    )
+
+    completed = 0
+    start = time.perf_counter()
+
+    print(
+        "Starting batching evaluation: "
+        f"episodes={args.episodes}, "
+        f"methods={list(batchers)}, "
+        f"total_runs={total_runs}",
+        flush=True,
+    )
+
+    for episode in range(
+        args.episodes
+    ):
+        seed = (
+            int(cfg["seed"])
+            + 20000
+            + episode
+        )
+
+        for name, batcher in (
+            batchers.items()
+        ):
+            rng = np.random.default_rng(
+                seed
+            )
+
+            infra = (
+                make_synthetic_infrastructure(
+                    cfg,
+                    rng,
+                )
+            )
+
+            queue = make_request_queue(
+                cfg,
+                rng,
+            )
+
+            env = SchedulingEnv(
+                cfg,
+                profile,
+                batcher,
+            )
+
+            try:
+                result = run_episode(
+                    env,
+                    infra,
+                    queue,
+                    args.max_steps,
+                )
+            except RuntimeError as exc:
+                raise RuntimeError(
+                    "Batcher failed: "
+                    f"batcher={name}, "
+                    f"episode={episode}, "
+                    f"seed={seed}, "
+                    f"error={exc}"
+                ) from exc
+
+            rows.append(
+                {
+                    "episode": episode,
+                    "batcher": name,
+                    "e2e_est_ms": (
+                        result.total_prefill_ms
+                        + result.expected_decode_ms
+                        + result.handover_ms
+                    ),
+                    "prefill_ms":
+                        result.total_prefill_ms,
+                    "decode_ms":
+                        result.expected_decode_ms,
+                    "transfer_mb":
+                        result.transfer_mb,
+                    "handover_ms":
+                        result.handover_ms,
+                    "slo_violations":
+                        result.slo_violations,
+                    "batch_size":
+                        result.batch_size,
+                    "reward":
+                        result.total_reward,
+                }
+            )
+
+            completed += 1
+
+        if (
+            episode == 0
+            or (
+                episode + 1
+            )
+            % max(
+                args.log_every,
+                1,
+            )
+            == 0
+            or episode + 1
+            == args.episodes
+        ):
+            pd.DataFrame(rows).to_csv(
+                out,
+                index=False,
+            )
+
+            elapsed = (
+                time.perf_counter()
+                - start
+            )
+
+            rate = (
+                completed / elapsed
+                if elapsed > 0
+                else 0.0
+            )
+
+            eta = (
+                (
+                    total_runs
+                    - completed
+                )
+                / rate
+                if rate > 0
+                else float("inf")
+            )
+
+            print(
+                f"episode="
+                f"{episode + 1:4d}/"
+                f"{args.episodes} "
+                f"runs="
+                f"{completed:4d}/"
+                f"{total_runs} "
+                f"elapsed="
+                f"{elapsed:7.1f}s "
+                f"eta="
+                f"{eta:7.1f}s",
+                flush=True,
+            )
+
+    df = pd.DataFrame(rows)
+
+    df.to_csv(
+        out,
+        index=False,
+    )
+
+    print(
+        df.groupby("batcher")
+        .mean(numeric_only=True)
+        .round(3),
+        flush=True,
+    )
+
+    print(
+        f"Saved {out}",
+        flush=True,
+    )
+
+
+if __name__ == "__main__":
+    main()

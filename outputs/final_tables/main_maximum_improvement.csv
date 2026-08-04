@@ -1,0 +1,6 @@
+metric,maximum_improvement,baseline,arrival_rate_rps
+avg_e2e_reduction_pct,48.83425262001552,DyBAP-Adapted,0.4
+p95_e2e_reduction_pct,44.274374331745555,LECU-RBA (adapted),0.4
+slo_gain_pp,27.33333333333335,LECU-RBA (adapted),0.2
+throughput_gain_pct,22.758115867244673,LECU-RBA (adapted),0.6
+goodput_gain_pct,140.12632163138824,LECU-RBA (adapted),0.6

@@ -1,0 +1,14 @@
+Using request trace: data/processed/azure_2023_train_sample.csv rows=22,123
+Using deterministic DDQN: outputs/train_online_ddqn_cpu_300_analytic_seed29/agent_ep50.pt device=cpu
+Starting evaluation: episodes=20, batchers=['node_conditioned_dp'], full_queue=True, total_runs=20
+episode=   1/20 runs=   1/20 elapsed=     1.8s eta=    34.5s
+episode=   5/20 runs=   5/20 elapsed=    11.2s eta=    33.5s
+episode=  10/20 runs=  10/20 elapsed=    19.5s eta=    19.5s
+episode=  15/20 runs=  15/20 elapsed=    29.1s eta=     9.7s
+episode=  20/20 runs=  20/20 elapsed=    37.6s eta=     0.0s
+                     episodes  completion_ratio  ...  goodput_rps    reward
+batcher                                          ...                       
+node_conditioned_dp        20               1.0  ...       0.1265 -226.8654
+
+[1 rows x 11 columns]
+Saved outputs/checkpoint_validation/seed29_ep50.csv

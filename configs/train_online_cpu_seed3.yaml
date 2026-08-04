@@ -1,0 +1,105 @@
+seed: 9
+model:
+  name: qwen-1.5b-sim
+  num_blocks: 28
+  hidden_size: 1536
+  bytes_per_element: 2
+  block_parameter_gb: 0.105
+  kv_bytes_per_token_per_block: 6144
+system:
+  num_edge_nodes: 6
+  num_cloud_nodes: 1
+  anchor_node: edge_0
+  topology_edge_prob: 0.55
+  cloud_reserved_memory_gb: 6.0
+  block_layout: heterogeneous
+  block_replica_coverage: 0.62
+requests:
+  queue_size: 24
+  window_size: 16
+  input_token_min: 64
+  input_token_max: 2048
+  output_token_min: 1
+  output_token_max: 768
+  deadline_ms_min: 1000
+  deadline_ms_max: 30000
+  handover_prob_max: 0.35
+  deadline_base_ms: 400.0
+  deadline_input_ms_per_token: 0.15
+  deadline_decode_ms_per_token: 45.0
+  deadline_slack_factor_min: 1.0
+  deadline_slack_factor_max: 1.8
+batching:
+  max_batch_size: 8
+  token_capacity: 8192
+  token_quantum: 32
+  length_buckets:
+  - 128
+  - 256
+  - 512
+  - 1024
+  - 1536
+  - 2048
+  alpha_urgency: 1.0
+  alpha_batch_gain: 0.025
+  alpha_padding: 0.0005
+  alpha_mobility: 0.003
+  deadline_slack_ms: 250.0
+  alpha_decode: 0.00015
+  alpha_deadline_risk: 1.0
+  alpha_output_spread: 0.002
+  deadline_risk_start: 0.8
+  baseline_alpha_urgency: 1.0
+  baseline_alpha_batch_gain: 0.025
+  baseline_alpha_padding: 0.0005
+  baseline_alpha_mobility: 0.003
+  dp_alpha_urgency: 1.0
+  dp_alpha_batch_gain: 4.0
+  dp_alpha_padding: 0.0005
+  dp_alpha_mobility: 0.003
+  dp_alpha_decode: 0.0001
+  dp_alpha_deadline_risk: 1.0
+  dp_alpha_output_spread: 0.002
+  hard_deadline_filter: false
+scheduler:
+  group_sizes:
+  - 1
+  - 2
+  - 4
+  - 8
+  top_n_nodes: 4
+  gamma: 0.98
+  learning_rate: 0.0003
+  batch_size: 16
+  replay_capacity: 20000
+  target_update_interval: 250
+  epsilon_start: 1.0
+  epsilon_end: 0.05
+  epsilon_decay_steps: 30000
+  reward_prefill: 0.01
+  reward_transfer: 0.002
+  reward_handover: 0.01
+  reward_decode: 0.005
+  reward_slo: 2.0
+training:
+  episodes: 1200
+  warmup_steps: 100
+  updates_per_episode: 2
+  checkpoint_every: 200
+profiling:
+  synthetic_node_types:
+    edge_slow:
+      base_prefill_ms: 5.5
+      base_decode_ms: 0.34
+      memory_gb: 16
+      compute_scale: 0.78
+    edge_fast:
+      base_prefill_ms: 3.2
+      base_decode_ms: 0.19
+      memory_gb: 24
+      compute_scale: 1.0
+    cloud:
+      base_prefill_ms: 1.8
+      base_decode_ms: 0.11
+      memory_gb: 80
+      compute_scale: 1.45

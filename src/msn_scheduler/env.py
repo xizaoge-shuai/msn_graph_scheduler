@@ -69,49 +69,280 @@ class SchedulingEnv:
             raise RuntimeError("No feasible initial batch/action. Increase deadlines or free capacity.")
         return self._observation()
 
-    def _batch_feature_vector(self, batch: BatchCandidate | None) -> np.ndarray:
+    def _batch_feature_vector(
+        self,
+        batch: BatchCandidate | None,
+    ) -> np.ndarray:
+        mask_mobility = bool(
+            self.cfg.get(
+                "ablation",
+                {},
+            ).get(
+                "mask_mobility_features",
+                False,
+            )
+        )
+
         if batch is None:
-            # Initial action candidates each carry their own batch; use queue summary as state context.
-            reqs = self.queue[: self.batcher.window_size]
+            reqs = self.queue[
+                : self.batcher.window_size
+            ]
+
+            if not reqs:
+                return np.zeros(
+                    7,
+                    dtype=np.float32,
+                )
+
+            mobility_probability = (
+                0.0
+                if mask_mobility
+                else float(
+                    np.mean(
+                        [
+                            request.handover_probability
+                            for request in reqs
+                        ]
+                    )
+                )
+            )
+
+            residual_dwell = (
+                0.0
+                if mask_mobility
+                else float(
+                    np.mean(
+                        [
+                            np.clip(
+                                request.residual_dwell_ms,
+                                1.0,
+                                2500.0,
+                            )
+                            for request in reqs
+                        ]
+                    )
+                    / 3000.0
+                )
+            )
+
             return np.array(
                 [
                     0.0,
-                    np.mean([r.input_tokens for r in reqs]) / 1024.0,
-                    sum(r.input_tokens for r in reqs) / 8192.0,
-                    np.mean([r.expected_output_tokens for r in reqs]) / 512.0,
-                    min(r.remaining_deadline_ms(self.now_ms) for r in reqs) / 5000.0,
-                    np.mean([r.handover_probability for r in reqs]),
-                    np.mean([r.residual_dwell_ms for r in reqs]) / 3000.0,
+                    np.mean(
+                        [
+                            request.input_tokens
+                            for request in reqs
+                        ]
+                    )
+                    / 1024.0,
+                    sum(
+                        request.input_tokens
+                        for request in reqs
+                    )
+                    / 8192.0,
+                    np.mean(
+                        [
+                            request.expected_output_tokens
+                            for request in reqs
+                        ]
+                    )
+                    / 512.0,
+                    min(
+                        request.remaining_deadline_ms(
+                            self.now_ms
+                        )
+                        for request in reqs
+                    )
+                    / 5000.0,
+                    mobility_probability,
+                    residual_dwell,
                 ],
                 dtype=np.float32,
             )
+
+        mobility_probability = (
+            0.0
+            if mask_mobility
+            else float(
+                np.mean(
+                    [
+                        request.handover_probability
+                        for request in batch.requests
+                    ]
+                )
+            )
+        )
+
+        residual_dwell = (
+            0.0
+            if mask_mobility
+            else float(
+                np.mean(
+                    [
+                        np.clip(
+                                request.residual_dwell_ms,
+                                1.0,
+                                2500.0,
+                            )
+                        for request in batch.requests
+                    ]
+                )
+                / 3000.0
+            )
+        )
+
         return np.array(
             [
-                batch.batch_size / max(self.batcher.max_batch_size, 1),
-                batch.max_input_tokens / 1024.0,
-                batch.token_sum / 8192.0,
-                batch.expected_output_mean / 512.0,
-                batch.min_remaining_deadline_ms / 5000.0,
-                np.mean([r.handover_probability for r in batch.requests]),
-                np.mean([r.residual_dwell_ms for r in batch.requests]) / 3000.0,
+                batch.batch_size
+                / max(
+                    self.batcher.max_batch_size,
+                    1,
+                ),
+                batch.max_input_tokens
+                / 1024.0,
+                batch.token_sum
+                / 8192.0,
+                batch.expected_output_mean
+                / 512.0,
+                batch.min_remaining_deadline_ms
+                / 5000.0,
+                mobility_probability,
+                residual_dwell,
             ],
             dtype=np.float32,
         )
 
-    def _observation(self) -> Observation:
+    def _observation(
+        self,
+    ) -> Observation:
         assert self.infra is not None
-        node_features, edge_index, edge_features, node_ids = infrastructure_to_tensors(self.infra)
+
+        (
+            node_features,
+            edge_index,
+            edge_features,
+            node_ids,
+        ) = infrastructure_to_tensors(
+            self.infra
+        )
+
         self.node_ids = node_ids
-        node_to_idx = {n: i for i, n in enumerate(node_ids)}
+
+        node_to_idx = {
+            node_id: index
+            for index, node_id
+            in enumerate(node_ids)
+        }
+
+        active_requests = (
+            self.batch.requests
+            if self.batch is not None
+            else self.queue[
+                : self.batcher.window_size
+            ]
+        )
+
+        node_scale = max(
+            len(node_ids) - 1,
+            1,
+        )
+
+        mask_mobility = bool(
+            self.cfg.get(
+                "ablation",
+                {},
+            ).get(
+                "mask_mobility_features",
+                False,
+            )
+        )
+
+        mobility_features = np.asarray(
+            [
+                [
+                    node_to_idx.get(
+                        request.anchor_node,
+                        0,
+                    )
+                    / node_scale,
+                    (
+                        0.0
+                        if mask_mobility
+                        else node_to_idx.get(
+                            request.next_anchor_node,
+                            0,
+                        )
+                        / node_scale
+                    ),
+                    (
+                        0.0
+                        if mask_mobility
+                        else float(
+                            request.handover_probability
+                        )
+                    ),
+                    (
+                        0.0
+                        if mask_mobility
+                        else float(
+                            np.clip(
+                                request.residual_dwell_ms,
+                                1.0,
+                                2500.0,
+                            )
+                        )
+                        / 3000.0
+                    ),
+                ]
+                for request in active_requests
+            ],
+            dtype=np.float32,
+        )
+
+        if mobility_features.size == 0:
+            mobility_features = np.zeros(
+                (1, 4),
+                dtype=np.float32,
+            )
+
         return Observation(
             node_features=node_features,
             edge_index=edge_index,
             edge_features=edge_features,
-            batch_features=self._batch_feature_vector(self.batch),
+            batch_features=(
+                self._batch_feature_vector(
+                    self.batch
+                )
+            ),
             current_block=self.current_block,
-            candidate_node_indices=np.array([node_to_idx[a.node_id] for a in self.actions], dtype=np.int64),
-            candidate_group_sizes=np.array([a.group_size for a in self.actions], dtype=np.int64),
-            candidate_payloads=list(self.actions),
+            candidate_node_indices=np.array(
+                [
+                    node_to_idx[
+                        action.node_id
+                    ]
+                    for action in self.actions
+                ],
+                dtype=np.int64,
+            ),
+            candidate_group_sizes=np.array(
+                [
+                    action.group_size
+                    for action in self.actions
+                ],
+                dtype=np.int64,
+            ),
+            candidate_payloads=list(
+                self.actions
+            ),
+            mobility_features=(
+                mobility_features
+            ),
+            agent_id=int(
+                node_to_idx.get(
+                    self.infra.anchor_node,
+                    0,
+                )
+            ),
         )
 
     def _step_costs(self, action: ActionCandidate) -> tuple[float, float, float]:
@@ -147,25 +378,87 @@ class SchedulingEnv:
         )
         return float(prefill), float(transfer), float(handover)
 
-    def _expected_decode_ms(self) -> float:
-        assert self.infra is not None and self.batch is not None
+
+    def _per_request_decode_ms(
+        self,
+    ) -> list[float]:
+        assert (
+            self.infra is not None
+            and self.batch is not None
+        )
+
         if not self.mapping:
-            return 0.0
-        total_per_token = 0.0
-        previous = self.batch.requests[0].anchor_node
-        context = int(self.batch.max_input_tokens + self.batch.expected_output_mean / 2)
-        for step in self.mapping:
-            node = self.infra.nodes[step.node_id]
-            total_per_token += self.profile.decode_per_token_ms(
-                node,
+            return [
+                0.0
+                for _ in self.batch.requests
+            ]
+
+        token_mb = (
+            self.profile.intermediate_mb(
                 self.batch.batch_size,
-                context,
-                step.group_size,
+                1,
+                decode=True,
             )
-            mb = self.profile.intermediate_mb(self.batch.batch_size, 1, decode=True)
-            total_per_token += transfer_time_ms(self.infra, previous, step.node_id, mb)
-            previous = step.node_id
-        return float(total_per_token * self.batch.expected_output_mean)
+        )
+
+        values: list[float] = []
+
+        for req in self.batch.requests:
+            total_per_token = 0.0
+            previous = req.anchor_node
+
+            context = int(
+                req.input_tokens
+                + req.expected_output_tokens
+                / 2
+            )
+
+            for step in self.mapping:
+                node = self.infra.nodes[
+                    step.node_id
+                ]
+
+                total_per_token += (
+                    self.profile
+                    .decode_per_token_ms(
+                        node,
+                        self.batch.batch_size,
+                        context,
+                        step.group_size,
+                    )
+                )
+
+                total_per_token += (
+                    transfer_time_ms(
+                        self.infra,
+                        previous,
+                        step.node_id,
+                        token_mb,
+                    )
+                )
+
+                previous = step.node_id
+
+            values.append(
+                float(
+                    total_per_token
+                    * req.expected_output_tokens
+                )
+            )
+
+        return values
+
+    def _expected_decode_ms(
+        self,
+    ) -> float:
+        values = (
+            self._per_request_decode_ms()
+        )
+
+        if not values:
+            return 0.0
+
+        return float(np.mean(values))
 
     def step(self, action_index: int) -> tuple[Observation | None, float, bool, EpisodeResult | None]:
         if action_index < 0 or action_index >= len(self.actions):
@@ -205,13 +498,41 @@ class SchedulingEnv:
         self.current_block += action.group_size
         done = self.current_block >= self.profile.model.num_blocks
         if done:
-            expected_decode = self._expected_decode_ms()
-            terminal = -self.w_decode * expected_decode
-            total_est = self.total_prefill_ms + expected_decode + self.total_handover_ms
-            violations = sum(
-                int(total_est > r.remaining_deadline_ms(self.now_ms)) for r in self.batch.requests
+            per_request_decode = (
+                self._per_request_decode_ms()
             )
-            terminal -= self.w_slo * violations
+
+            expected_decode = float(
+                np.mean(per_request_decode)
+            )
+
+            terminal = (
+                -self.w_decode
+                * expected_decode
+            )
+
+            violations = sum(
+                int(
+                    (
+                        self.total_prefill_ms
+                        + decode_ms
+                        + self.total_handover_ms
+                    )
+                    > req.remaining_deadline_ms(
+                        self.now_ms
+                    )
+                )
+                for req, decode_ms
+                in zip(
+                    self.batch.requests,
+                    per_request_decode,
+                )
+            )
+
+            terminal -= (
+                self.w_slo
+                * violations
+            )
             self.total_reward += terminal
             result = EpisodeResult(
                 total_reward=self.total_reward,

@@ -1,0 +1,19 @@
+Using request trace: data/processed/azure_2024_final_test.csv rows=400,000
+Starting evaluation: episodes=100, batchers=['sequential_greedy'], full_queue=True, total_runs=100
+episode=   1/100 runs=   1/100 elapsed=     0.8s eta=    83.0s
+episode=  10/100 runs=  10/100 elapsed=     8.1s eta=    72.8s
+episode=  20/100 runs=  20/100 elapsed=    16.0s eta=    64.1s
+episode=  30/100 runs=  30/100 elapsed=    23.9s eta=    55.7s
+episode=  40/100 runs=  40/100 elapsed=    31.7s eta=    47.6s
+episode=  50/100 runs=  50/100 elapsed=    39.9s eta=    39.9s
+episode=  60/100 runs=  60/100 elapsed=    47.9s eta=    31.9s
+episode=  70/100 runs=  70/100 elapsed=    55.8s eta=    23.9s
+episode=  80/100 runs=  80/100 elapsed=    64.3s eta=    16.1s
+episode=  90/100 runs=  90/100 elapsed=    72.4s eta=     8.0s
+episode= 100/100 runs= 100/100 elapsed=    81.2s eta=     0.0s
+                   episodes  completion_ratio  ...  goodput_rps    reward
+batcher                                        ...                       
+sequential_greedy       100               1.0  ...       0.1435 -159.5522
+
+[1 rows x 11 columns]
+Saved outputs/msn_final/baselines/sequential_greedy_rate020.csv

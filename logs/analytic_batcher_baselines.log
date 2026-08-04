@@ -1,0 +1,110 @@
+
+==========================================
+Analytical baselines, rate=0.10
+Started: 2026年 07月 29日 星期三 13:41:11 CST
+==========================================
+Using request trace: data/processed/azure_2024_test_sample.csv rows=500,000
+Starting evaluation: episodes=100, batchers=['no_batch', 'fixed_4', 'sequential_greedy', 'node_conditioned_dp'], full_queue=True, total_runs=400
+episode=   1/100 runs=   4/400 elapsed=     3.5s eta=   349.1s
+episode=  10/100 runs=  40/400 elapsed=    36.2s eta=   325.4s
+episode=  20/100 runs=  80/400 elapsed=    72.2s eta=   288.6s
+episode=  30/100 runs= 120/400 elapsed=   107.2s eta=   250.2s
+episode=  40/100 runs= 160/400 elapsed=   143.4s eta=   215.0s
+episode=  50/100 runs= 200/400 elapsed=   178.9s eta=   178.9s
+episode=  60/100 runs= 240/400 elapsed=   213.3s eta=   142.2s
+episode=  70/100 runs= 280/400 elapsed=   248.6s eta=   106.5s
+episode=  80/100 runs= 320/400 elapsed=   283.5s eta=    70.9s
+episode=  90/100 runs= 360/400 elapsed=   318.4s eta=    35.4s
+episode= 100/100 runs= 400/400 elapsed=   354.3s eta=     0.0s
+                     episodes  completion_ratio  ...  goodput_rps    reward
+batcher                                          ...                       
+fixed_4                   100               1.0  ...       0.0863 -163.5463
+no_batch                  100               1.0  ...       0.0859 -166.6374
+node_conditioned_dp       100               1.0  ...       0.0863 -163.6760
+sequential_greedy         100               1.0  ...       0.0862 -163.6213
+
+[4 rows x 11 columns]
+Saved outputs/analytic_batcher_baselines/baselines_r010_100.csv
+
+==========================================
+Analytical baselines, rate=0.20
+Started: 2026年 07月 29日 星期三 13:47:12 CST
+==========================================
+Using request trace: data/processed/azure_2024_test_sample.csv rows=500,000
+Starting evaluation: episodes=100, batchers=['no_batch', 'fixed_4', 'sequential_greedy', 'node_conditioned_dp'], full_queue=True, total_runs=400
+episode=   1/100 runs=   4/400 elapsed=     3.6s eta=   352.2s
+episode=  10/100 runs=  40/400 elapsed=    35.0s eta=   315.4s
+episode=  20/100 runs=  80/400 elapsed=    70.9s eta=   283.5s
+episode=  30/100 runs= 120/400 elapsed=   104.5s eta=   243.8s
+episode=  40/100 runs= 160/400 elapsed=   140.0s eta=   210.0s
+episode=  50/100 runs= 200/400 elapsed=   174.9s eta=   174.9s
+episode=  60/100 runs= 240/400 elapsed=   208.4s eta=   138.9s
+episode=  70/100 runs= 280/400 elapsed=   242.0s eta=   103.7s
+episode=  80/100 runs= 320/400 elapsed=   276.2s eta=    69.0s
+episode=  90/100 runs= 360/400 elapsed=   309.7s eta=    34.4s
+episode= 100/100 runs= 400/400 elapsed=   345.0s eta=     0.0s
+                     episodes  completion_ratio  ...  goodput_rps    reward
+batcher                                          ...                       
+fixed_4                   100               1.0  ...       0.1464 -158.8978
+no_batch                  100               1.0  ...       0.1414 -169.0774
+node_conditioned_dp       100               1.0  ...       0.1469 -158.8833
+sequential_greedy         100               1.0  ...       0.1459 -160.0067
+
+[4 rows x 11 columns]
+Saved outputs/analytic_batcher_baselines/baselines_r020_100.csv
+
+==========================================
+Analytical baselines, rate=0.40
+Started: 2026年 07月 29日 星期三 13:53:03 CST
+==========================================
+Using request trace: data/processed/azure_2024_test_sample.csv rows=500,000
+Starting evaluation: episodes=100, batchers=['no_batch', 'fixed_4', 'sequential_greedy', 'node_conditioned_dp'], full_queue=True, total_runs=400
+episode=   1/100 runs=   4/400 elapsed=     3.6s eta=   355.3s
+episode=  10/100 runs=  40/400 elapsed=    31.9s eta=   287.3s
+episode=  20/100 runs=  80/400 elapsed=    64.5s eta=   257.8s
+episode=  30/100 runs= 120/400 elapsed=    96.9s eta=   226.1s
+episode=  40/100 runs= 160/400 elapsed=   128.2s eta=   192.3s
+episode=  50/100 runs= 200/400 elapsed=   160.4s eta=   160.4s
+episode=  60/100 runs= 240/400 elapsed=   189.6s eta=   126.4s
+episode=  70/100 runs= 280/400 elapsed=   220.9s eta=    94.7s
+episode=  80/100 runs= 320/400 elapsed=   252.8s eta=    63.2s
+episode=  90/100 runs= 360/400 elapsed=   283.1s eta=    31.5s
+episode= 100/100 runs= 400/400 elapsed=   318.9s eta=     0.0s
+                     episodes  completion_ratio  ...  goodput_rps    reward
+batcher                                          ...                       
+fixed_4                   100               1.0  ...       0.2027 -144.2342
+no_batch                  100               1.0  ...       0.1782 -173.2374
+node_conditioned_dp       100               1.0  ...       0.2057 -144.3539
+sequential_greedy         100               1.0  ...       0.2041 -146.2819
+
+[4 rows x 11 columns]
+Saved outputs/analytic_batcher_baselines/baselines_r040_100.csv
+
+==========================================
+Analytical baselines, rate=0.60
+Started: 2026年 07月 29日 星期三 13:58:29 CST
+==========================================
+Using request trace: data/processed/azure_2024_test_sample.csv rows=500,000
+Starting evaluation: episodes=100, batchers=['no_batch', 'fixed_4', 'sequential_greedy', 'node_conditioned_dp'], full_queue=True, total_runs=400
+episode=   1/100 runs=   4/400 elapsed=     3.5s eta=   346.2s
+episode=  10/100 runs=  40/400 elapsed=    28.9s eta=   260.4s
+episode=  20/100 runs=  80/400 elapsed=    58.9s eta=   235.5s
+episode=  30/100 runs= 120/400 elapsed=    88.6s eta=   206.7s
+episode=  40/100 runs= 160/400 elapsed=   117.3s eta=   176.0s
+episode=  50/100 runs= 200/400 elapsed=   148.6s eta=   148.6s
+episode=  60/100 runs= 240/400 elapsed=   174.8s eta=   116.5s
+episode=  70/100 runs= 280/400 elapsed=   203.2s eta=    87.1s
+episode=  80/100 runs= 320/400 elapsed=   235.7s eta=    58.9s
+episode=  90/100 runs= 360/400 elapsed=   264.1s eta=    29.3s
+episode= 100/100 runs= 400/400 elapsed=   297.0s eta=     0.0s
+                     episodes  completion_ratio  ...  goodput_rps    reward
+batcher                                          ...                       
+fixed_4                   100               1.0  ...       0.2183 -133.0816
+no_batch                  100               1.0  ...       0.1713 -175.7974
+node_conditioned_dp       100               1.0  ...       0.2249 -132.7738
+sequential_greedy         100               1.0  ...       0.2228 -133.9555
+
+[4 rows x 11 columns]
+Saved outputs/analytic_batcher_baselines/baselines_r060_100.csv
+
+All analytical baselines completed: 2026年 07月 29日 星期三 14:03:32 CST

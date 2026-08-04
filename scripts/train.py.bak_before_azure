@@ -1,0 +1,320 @@
+from __future__ import annotations
+
+import argparse
+from pathlib import Path
+import random
+import sys
+
+import numpy as np
+import pandas as pd
+import torch
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "src"))
+
+from msn_scheduler.agent import DDQNAgent
+from msn_scheduler.batching import NodeConditionedDPBatcher
+from msn_scheduler.config import load_config
+from msn_scheduler.datatypes import Transition
+from msn_scheduler.env import SchedulingEnv
+from msn_scheduler.profiles import ModelProfile, ProfileTable
+from msn_scheduler.synthetic import (
+    make_request_queue,
+    make_synthetic_infrastructure,
+)
+
+
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(
+        description="Train the graph-aware DDQN scheduling agent."
+    )
+    parser.add_argument(
+        "--config",
+        default=str(ROOT / "configs/default.yaml"),
+    )
+    parser.add_argument(
+        "--profile-csv",
+        default=None,
+        help="Measured profile CSV; use analytic profile when omitted.",
+    )
+    parser.add_argument(
+        "--episodes",
+        type=int,
+        default=None,
+    )
+    parser.add_argument(
+        "--output",
+        default=str(ROOT / "outputs/train"),
+    )
+    parser.add_argument(
+        "--device",
+        default=None,
+        help="cpu, cuda, cuda:0, etc.",
+    )
+    parser.add_argument(
+        "--log-every",
+        type=int,
+        default=1,
+        help="Print progress every N completed episodes.",
+    )
+    parser.add_argument(
+        "--no-update",
+        action="store_true",
+        help=(
+            "Collect transitions without gradient updates. "
+            "Use this for a fast environment smoke test."
+        ),
+    )
+    parser.add_argument(
+        "--max-steps-per-episode",
+        type=int,
+        default=64,
+        help="Safety guard against a non-terminating episode.",
+    )
+    return parser.parse_args()
+
+
+def main() -> None:
+    args = parse_args()
+    cfg = load_config(args.config)
+
+    seed = int(cfg["seed"])
+    random.seed(seed)
+    np.random.seed(seed)
+    torch.manual_seed(seed)
+
+    if torch.cuda.is_available():
+        torch.cuda.manual_seed_all(seed)
+
+    rng = np.random.default_rng(seed)
+
+    model = ModelProfile(
+        num_blocks=int(cfg["model"]["num_blocks"]),
+        hidden_size=int(cfg["model"]["hidden_size"]),
+        bytes_per_element=int(cfg["model"]["bytes_per_element"]),
+        block_parameter_gb=float(cfg["model"]["block_parameter_gb"]),
+        kv_bytes_per_token_per_block=float(
+            cfg["model"]["kv_bytes_per_token_per_block"]
+        ),
+    )
+
+    if args.profile_csv:
+        profile = ProfileTable.from_csv(model, args.profile_csv)
+    else:
+        profile = ProfileTable(model)
+
+    batcher = NodeConditionedDPBatcher(cfg, profile)
+    env = SchedulingEnv(cfg, profile, batcher)
+
+    # Probe one environment instance to obtain feature dimensions.
+    probe_infra = make_synthetic_infrastructure(cfg, rng)
+    probe_queue = make_request_queue(cfg, rng)
+    probe_obs = env.reset(probe_infra, probe_queue)
+
+    agent = DDQNAgent(
+        cfg,
+        node_dim=probe_obs.node_features.shape[1],
+        edge_dim=probe_obs.edge_features.shape[1],
+        batch_dim=probe_obs.batch_features.shape[0],
+        device=args.device,
+    )
+
+    episodes = (
+        int(args.episodes)
+        if args.episodes is not None
+        else int(cfg["training"]["episodes"])
+    )
+
+    warmup_steps = int(
+        cfg["training"].get("warmup_steps", 0)
+    )
+    updates_per_episode = int(
+        cfg["training"].get("updates_per_episode", 1)
+    )
+    checkpoint_every = int(
+        cfg["training"].get("checkpoint_every", 200)
+    )
+
+    out_dir = Path(args.output)
+    out_dir.mkdir(parents=True, exist_ok=True)
+
+    rows: list[dict[str, float | int]] = []
+
+    print(
+        "Starting training: "
+        f"episodes={episodes} "
+        f"device={agent.device} "
+        f"warmup_steps={warmup_steps} "
+        f"updates_per_episode={updates_per_episode} "
+        f"no_update={args.no_update}",
+        flush=True,
+    )
+
+    completed_episodes = 0
+
+    for episode in range(1, episodes + 1):
+        infra = make_synthetic_infrastructure(cfg, rng)
+        queue = make_request_queue(cfg, rng)
+
+        try:
+            obs = env.reset(infra, queue)
+        except RuntimeError as exc:
+            print(
+                f"episode={episode:5d}/{episodes} reset skipped: {exc}",
+                flush=True,
+            )
+            continue
+
+        done = False
+        result = None
+        ep_loss: list[float] = []
+        episode_steps = 0
+
+        while not done:
+            episode_steps += 1
+
+            if episode_steps > args.max_steps_per_episode:
+                raise RuntimeError(
+                    f"Episode {episode} exceeded "
+                    f"{args.max_steps_per_episode} steps. "
+                    "Check continuation actions, block position, "
+                    "or group-size logic."
+                )
+
+            action_index = agent.act(obs)
+
+            next_obs, reward, done, result = env.step(
+                action_index
+            )
+
+            agent.add_transition(
+                Transition(
+                    observation=obs,
+                    action_index=action_index,
+                    reward=reward,
+                    next_observation=next_obs,
+                    done=done,
+                )
+            )
+
+            if next_obs is not None:
+                obs = next_obs
+
+        # Do not update once after every environment step.
+        # Each replay update evaluates many variable-size graph
+        # observations in Python, which is expensive for tiny graphs.
+        #
+        # Instead, update after the episode and obey the configured
+        # warm-up and number of updates.
+        if (
+            not args.no_update
+            and agent.steps >= warmup_steps
+        ):
+            for _ in range(updates_per_episode):
+                loss = agent.update()
+                if loss is not None:
+                    ep_loss.append(loss)
+
+        if result is None:
+            raise RuntimeError(
+                f"Episode {episode} ended without a result."
+            )
+
+        completed_episodes += 1
+
+        row = {
+            "episode": episode,
+            "completed_episode": completed_episodes,
+            "steps": episode_steps,
+            "reward": float(result.total_reward),
+            "prefill_ms": float(result.total_prefill_ms),
+            "decode_ms": float(result.expected_decode_ms),
+            "transfer_mb": float(result.transfer_mb),
+            "handover_ms": float(result.handover_ms),
+            "slo_violations": int(result.slo_violations),
+            "batch_size": int(result.batch_size),
+            "loss": (
+                float(np.mean(ep_loss))
+                if ep_loss
+                else np.nan
+            ),
+            "epsilon": float(agent.epsilon()),
+            "replay_size": len(agent.replay),
+            "agent_steps": int(agent.steps),
+            "agent_updates": int(agent.updates),
+        }
+        rows.append(row)
+
+        log_every = max(int(args.log_every), 1)
+
+        if (
+            completed_episodes == 1
+            or completed_episodes % log_every == 0
+        ):
+            window_size = min(log_every, len(rows))
+            recent = rows[-window_size:]
+
+            finite_losses = [
+                float(item["loss"])
+                for item in recent
+                if np.isfinite(float(item["loss"]))
+            ]
+            mean_loss = (
+                float(np.mean(finite_losses))
+                if finite_losses
+                else float("nan")
+            )
+
+            print(
+                f"episode={episode:5d}/{episodes} "
+                f"completed={completed_episodes:5d} "
+                f"steps={episode_steps:2d} "
+                f"reward="
+                f"{np.mean([x['reward'] for x in recent]):8.3f} "
+                f"prefill="
+                f"{np.mean([x['prefill_ms'] for x in recent]):7.2f}ms "
+                f"slo="
+                f"{np.mean([x['slo_violations'] for x in recent]):5.2f} "
+                f"loss={mean_loss:.4f} "
+                f"replay={len(agent.replay):5d} "
+                f"updates={agent.updates:5d} "
+                f"eps={agent.epsilon():.3f}",
+                flush=True,
+            )
+
+        if (
+            checkpoint_every > 0
+            and completed_episodes % checkpoint_every == 0
+        ):
+            agent.save(
+                str(
+                    out_dir
+                    / f"agent_ep{completed_episodes}.pt"
+                )
+            )
+            pd.DataFrame(rows).to_csv(
+                out_dir / "train_metrics.csv",
+                index=False,
+            )
+
+    if completed_episodes == 0:
+        raise RuntimeError(
+            "No episode completed successfully."
+        )
+
+    agent.save(str(out_dir / "agent_final.pt"))
+
+    pd.DataFrame(rows).to_csv(
+        out_dir / "train_metrics.csv",
+        index=False,
+    )
+
+    print(
+        f"Saved {completed_episodes} completed episodes "
+        f"to {out_dir}",
+        flush=True,
+    )
+
+
+if __name__ == "__main__":
+    main()

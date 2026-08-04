@@ -1,0 +1,10 @@
+method,eval_seed,episodes,complete,file
+full,7001,10,True,outputs/paired_ablation_r060_30/full_evalseed7001_n10.csv
+full,7002,10,True,outputs/paired_ablation_r060_30/full_evalseed7002_n10.csv
+full,7003,10,True,outputs/paired_ablation_r060_30/full_evalseed7003_n10.csv
+wo_dp,7001,10,True,outputs/paired_ablation_r060_30/wo_dp_evalseed7001_n10.csv
+wo_dp,7002,10,True,outputs/paired_ablation_r060_30/wo_dp_evalseed7002_n10.csv
+wo_dp,7003,10,True,outputs/paired_ablation_r060_30/wo_dp_evalseed7003_n10.csv
+wo_mobility,7001,10,True,outputs/paired_ablation_r060_30/wo_mobility_evalseed7001_n10.csv
+wo_mobility,7002,10,True,outputs/paired_ablation_r060_30/wo_mobility_evalseed7002_n10.csv
+wo_mobility,7003,10,True,outputs/paired_ablation_r060_30/wo_mobility_evalseed7003_n10.csv

@@ -1,0 +1,141 @@
+experiment,condition_name,condition,method,method_group,metric,metric_label,value,unit,better_direction
+common_analytical,arrival_rate_rps,0.1,NoBatch-LB,Conventional baseline,avg_e2e_ms,Average E2E latency,2447.270834891773,ms,lower
+common_analytical,arrival_rate_rps,0.1,NoBatch-LB,Conventional baseline,p95_e2e_ms,P95 E2E latency,5382.098873620561,ms,lower
+common_analytical,arrival_rate_rps,0.1,NoBatch-LB,Conventional baseline,slo_satisfaction,SLO satisfaction,0.7233333333333333,ratio,higher
+common_analytical,arrival_rate_rps,0.1,NoBatch-LB,Conventional baseline,throughput_rps,Throughput,0.1184485412059346,requests/s,higher
+common_analytical,arrival_rate_rps,0.1,NoBatch-LB,Conventional baseline,goodput_rps,Goodput,0.0859338439455841,requests/s,higher
+common_analytical,arrival_rate_rps,0.1,Fixed4-LB,Conventional baseline,avg_e2e_ms,Average E2E latency,2412.039158360999,ms,lower
+common_analytical,arrival_rate_rps,0.1,Fixed4-LB,Conventional baseline,p95_e2e_ms,P95 E2E latency,5360.3545840501165,ms,lower
+common_analytical,arrival_rate_rps,0.1,Fixed4-LB,Conventional baseline,slo_satisfaction,SLO satisfaction,0.7266666666666667,ratio,higher
+common_analytical,arrival_rate_rps,0.1,Fixed4-LB,Conventional baseline,throughput_rps,Throughput,0.118501771336551,requests/s,higher
+common_analytical,arrival_rate_rps,0.1,Fixed4-LB,Conventional baseline,goodput_rps,Goodput,0.0863049937661336,requests/s,higher
+common_analytical,arrival_rate_rps,0.1,SeqGreedy-LB,Conventional baseline,avg_e2e_ms,Average E2E latency,2407.3019721611117,ms,lower
+common_analytical,arrival_rate_rps,0.1,SeqGreedy-LB,Conventional baseline,p95_e2e_ms,P95 E2E latency,5331.438926060138,ms,lower
+common_analytical,arrival_rate_rps,0.1,SeqGreedy-LB,Conventional baseline,slo_satisfaction,SLO satisfaction,0.7258333333333333,ratio,higher
+common_analytical,arrival_rate_rps,0.1,SeqGreedy-LB,Conventional baseline,throughput_rps,Throughput,0.118501771336551,requests/s,higher
+common_analytical,arrival_rate_rps,0.1,SeqGreedy-LB,Conventional baseline,goodput_rps,Goodput,0.0862074369834425,requests/s,higher
+common_analytical,arrival_rate_rps,0.1,LECU-RBA (adapted),External adapted baseline,avg_e2e_ms,Average E2E latency,3782.83333160584,ms,lower
+common_analytical,arrival_rate_rps,0.1,LECU-RBA (adapted),External adapted baseline,p95_e2e_ms,P95 E2E latency,8451.110865605728,ms,lower
+common_analytical,arrival_rate_rps,0.1,LECU-RBA (adapted),External adapted baseline,slo_satisfaction,SLO satisfaction,0.4958333333333333,ratio,higher
+common_analytical,arrival_rate_rps,0.1,LECU-RBA (adapted),External adapted baseline,throughput_rps,Throughput,0.1167490782347887,requests/s,higher
+common_analytical,arrival_rate_rps,0.1,LECU-RBA (adapted),External adapted baseline,goodput_rps,Goodput,0.0572049780910849,requests/s,higher
+common_analytical,arrival_rate_rps,0.1,DyBAP-Adapted,External adapted baseline,avg_e2e_ms,Average E2E latency,3372.5568826883136,ms,lower
+common_analytical,arrival_rate_rps,0.1,DyBAP-Adapted,External adapted baseline,p95_e2e_ms,P95 E2E latency,8109.953111147373,ms,lower
+common_analytical,arrival_rate_rps,0.1,DyBAP-Adapted,External adapted baseline,slo_satisfaction,SLO satisfaction,0.6041666666666666,ratio,higher
+common_analytical,arrival_rate_rps,0.1,DyBAP-Adapted,External adapted baseline,throughput_rps,Throughput,0.1177615804595067,requests/s,higher
+common_analytical,arrival_rate_rps,0.1,DyBAP-Adapted,External adapted baseline,goodput_rps,Goodput,0.0716590403149897,requests/s,higher
+common_analytical,arrival_rate_rps,0.1,Ours w/o DDQN,Ablation,avg_e2e_ms,Average E2E latency,2412.74772548756,ms,lower
+common_analytical,arrival_rate_rps,0.1,Ours w/o DDQN,Ablation,p95_e2e_ms,P95 E2E latency,5368.0913850087245,ms,lower
+common_analytical,arrival_rate_rps,0.1,Ours w/o DDQN,Ablation,slo_satisfaction,SLO satisfaction,0.7266666666666667,ratio,higher
+common_analytical,arrival_rate_rps,0.1,Ours w/o DDQN,Ablation,throughput_rps,Throughput,0.118501771336551,requests/s,higher
+common_analytical,arrival_rate_rps,0.1,Ours w/o DDQN,Ablation,goodput_rps,Goodput,0.0863049937661336,requests/s,higher
+common_analytical,arrival_rate_rps,0.1,Full,Ours,avg_e2e_ms,Average E2E latency,2250.9502163381308,ms,lower
+common_analytical,arrival_rate_rps,0.1,Full,Ours,p95_e2e_ms,P95 E2E latency,5002.958162542382,ms,lower
+common_analytical,arrival_rate_rps,0.1,Full,Ours,slo_satisfaction,SLO satisfaction,0.76,ratio,higher
+common_analytical,arrival_rate_rps,0.1,Full,Ours,throughput_rps,Throughput,0.118674571369984,requests/s,higher
+common_analytical,arrival_rate_rps,0.1,Full,Ours,goodput_rps,Goodput,0.0906839417137291,requests/s,higher
+common_analytical,arrival_rate_rps,0.2,NoBatch-LB,Conventional baseline,avg_e2e_ms,Average E2E latency,3002.047388315367,ms,lower
+common_analytical,arrival_rate_rps,0.2,NoBatch-LB,Conventional baseline,p95_e2e_ms,P95 E2E latency,6328.011973176826,ms,lower
+common_analytical,arrival_rate_rps,0.2,NoBatch-LB,Conventional baseline,slo_satisfaction,SLO satisfaction,0.6216666666666666,ratio,higher
+common_analytical,arrival_rate_rps,0.2,NoBatch-LB,Conventional baseline,throughput_rps,Throughput,0.2292117504639231,requests/s,higher
+common_analytical,arrival_rate_rps,0.2,NoBatch-LB,Conventional baseline,goodput_rps,Goodput,0.1414110706036244,requests/s,higher
+common_analytical,arrival_rate_rps,0.2,Fixed4-LB,Conventional baseline,avg_e2e_ms,Average E2E latency,2772.668506302098,ms,lower
+common_analytical,arrival_rate_rps,0.2,Fixed4-LB,Conventional baseline,p95_e2e_ms,P95 E2E latency,5973.304916780813,ms,lower
+common_analytical,arrival_rate_rps,0.2,Fixed4-LB,Conventional baseline,slo_satisfaction,SLO satisfaction,0.6391666666666667,ratio,higher
+common_analytical,arrival_rate_rps,0.2,Fixed4-LB,Conventional baseline,throughput_rps,Throughput,0.2305094195055645,requests/s,higher
+common_analytical,arrival_rate_rps,0.2,Fixed4-LB,Conventional baseline,goodput_rps,Goodput,0.1464098036004824,requests/s,higher
+common_analytical,arrival_rate_rps,0.2,SeqGreedy-LB,Conventional baseline,avg_e2e_ms,Average E2E latency,2777.948874825402,ms,lower
+common_analytical,arrival_rate_rps,0.2,SeqGreedy-LB,Conventional baseline,p95_e2e_ms,P95 E2E latency,6000.946498960983,ms,lower
+common_analytical,arrival_rate_rps,0.2,SeqGreedy-LB,Conventional baseline,slo_satisfaction,SLO satisfaction,0.6375,ratio,higher
+common_analytical,arrival_rate_rps,0.2,SeqGreedy-LB,Conventional baseline,throughput_rps,Throughput,0.2304653135658843,requests/s,higher
+common_analytical,arrival_rate_rps,0.2,SeqGreedy-LB,Conventional baseline,goodput_rps,Goodput,0.1458663473480625,requests/s,higher
+common_analytical,arrival_rate_rps,0.2,LECU-RBA (adapted),External adapted baseline,avg_e2e_ms,Average E2E latency,4592.924468514215,ms,lower
+common_analytical,arrival_rate_rps,0.2,LECU-RBA (adapted),External adapted baseline,p95_e2e_ms,P95 E2E latency,9691.2086713033,ms,lower
+common_analytical,arrival_rate_rps,0.2,LECU-RBA (adapted),External adapted baseline,slo_satisfaction,SLO satisfaction,0.4133333333333333,ratio,higher
+common_analytical,arrival_rate_rps,0.2,LECU-RBA (adapted),External adapted baseline,throughput_rps,Throughput,0.2207908927388274,requests/s,higher
+common_analytical,arrival_rate_rps,0.2,LECU-RBA (adapted),External adapted baseline,goodput_rps,Goodput,0.0907475082273118,requests/s,higher
+common_analytical,arrival_rate_rps,0.2,DyBAP-Adapted,External adapted baseline,avg_e2e_ms,Average E2E latency,4465.528966284739,ms,lower
+common_analytical,arrival_rate_rps,0.2,DyBAP-Adapted,External adapted baseline,p95_e2e_ms,P95 E2E latency,9423.45074928793,ms,lower
+common_analytical,arrival_rate_rps,0.2,DyBAP-Adapted,External adapted baseline,slo_satisfaction,SLO satisfaction,0.5158333333333333,ratio,higher
+common_analytical,arrival_rate_rps,0.2,DyBAP-Adapted,External adapted baseline,throughput_rps,Throughput,0.2235732823041772,requests/s,higher
+common_analytical,arrival_rate_rps,0.2,DyBAP-Adapted,External adapted baseline,goodput_rps,Goodput,0.1178798891341793,requests/s,higher
+common_analytical,arrival_rate_rps,0.2,Ours w/o DDQN,Ablation,avg_e2e_ms,Average E2E latency,2771.644285205111,ms,lower
+common_analytical,arrival_rate_rps,0.2,Ours w/o DDQN,Ablation,p95_e2e_ms,P95 E2E latency,6007.143714420792,ms,lower
+common_analytical,arrival_rate_rps,0.2,Ours w/o DDQN,Ablation,slo_satisfaction,SLO satisfaction,0.64,ratio,higher
+common_analytical,arrival_rate_rps,0.2,Ours w/o DDQN,Ablation,throughput_rps,Throughput,0.230546993027269,requests/s,higher
+common_analytical,arrival_rate_rps,0.2,Ours w/o DDQN,Ablation,goodput_rps,Goodput,0.1468718028662988,requests/s,higher
+common_analytical,arrival_rate_rps,0.2,Full,Ours,avg_e2e_ms,Average E2E latency,2599.5850208671022,ms,lower
+common_analytical,arrival_rate_rps,0.2,Full,Ours,p95_e2e_ms,P95 E2E latency,5722.026491309918,ms,lower
+common_analytical,arrival_rate_rps,0.2,Full,Ours,slo_satisfaction,SLO satisfaction,0.6866666666666668,ratio,higher
+common_analytical,arrival_rate_rps,0.2,Full,Ours,throughput_rps,Throughput,0.2309896260911972,requests/s,higher
+common_analytical,arrival_rate_rps,0.2,Full,Ours,goodput_rps,Goodput,0.1580890141764926,requests/s,higher
+common_analytical,arrival_rate_rps,0.4,NoBatch-LB,Conventional baseline,avg_e2e_ms,Average E2E latency,4634.488460400007,ms,lower
+common_analytical,arrival_rate_rps,0.4,NoBatch-LB,Conventional baseline,p95_e2e_ms,P95 E2E latency,8324.215781824349,ms,lower
+common_analytical,arrival_rate_rps,0.4,NoBatch-LB,Conventional baseline,slo_satisfaction,SLO satisfaction,0.4483333333333333,ratio,higher
+common_analytical,arrival_rate_rps,0.4,NoBatch-LB,Conventional baseline,throughput_rps,Throughput,0.3912260645275557,requests/s,higher
+common_analytical,arrival_rate_rps,0.4,NoBatch-LB,Conventional baseline,goodput_rps,Goodput,0.1782499252278441,requests/s,higher
+common_analytical,arrival_rate_rps,0.4,Fixed4-LB,Conventional baseline,avg_e2e_ms,Average E2E latency,3662.174019172443,ms,lower
+common_analytical,arrival_rate_rps,0.4,Fixed4-LB,Conventional baseline,p95_e2e_ms,P95 E2E latency,6997.658257338187,ms,lower
+common_analytical,arrival_rate_rps,0.4,Fixed4-LB,Conventional baseline,slo_satisfaction,SLO satisfaction,0.4866666666666666,ratio,higher
+common_analytical,arrival_rate_rps,0.4,Fixed4-LB,Conventional baseline,throughput_rps,Throughput,0.4198322387822594,requests/s,higher
+common_analytical,arrival_rate_rps,0.4,Fixed4-LB,Conventional baseline,goodput_rps,Goodput,0.2027014347337287,requests/s,higher
+common_analytical,arrival_rate_rps,0.4,SeqGreedy-LB,Conventional baseline,avg_e2e_ms,Average E2E latency,3604.4937950993217,ms,lower
+common_analytical,arrival_rate_rps,0.4,SeqGreedy-LB,Conventional baseline,p95_e2e_ms,P95 E2E latency,7074.732550405869,ms,lower
+common_analytical,arrival_rate_rps,0.4,SeqGreedy-LB,Conventional baseline,slo_satisfaction,SLO satisfaction,0.4916666666666666,ratio,higher
+common_analytical,arrival_rate_rps,0.4,SeqGreedy-LB,Conventional baseline,throughput_rps,Throughput,0.4185052475690408,requests/s,higher
+common_analytical,arrival_rate_rps,0.4,SeqGreedy-LB,Conventional baseline,goodput_rps,Goodput,0.2040937613385767,requests/s,higher
+common_analytical,arrival_rate_rps,0.4,LECU-RBA (adapted),External adapted baseline,avg_e2e_ms,Average E2E latency,6066.502177767127,ms,lower
+common_analytical,arrival_rate_rps,0.4,LECU-RBA (adapted),External adapted baseline,p95_e2e_ms,P95 E2E latency,11995.997676512774,ms,lower
+common_analytical,arrival_rate_rps,0.4,LECU-RBA (adapted),External adapted baseline,slo_satisfaction,SLO satisfaction,0.2916666666666666,ratio,higher
+common_analytical,arrival_rate_rps,0.4,LECU-RBA (adapted),External adapted baseline,throughput_rps,Throughput,0.3693906814577129,requests/s,higher
+common_analytical,arrival_rate_rps,0.4,LECU-RBA (adapted),External adapted baseline,goodput_rps,Goodput,0.1120154143786887,requests/s,higher
+common_analytical,arrival_rate_rps,0.4,DyBAP-Adapted,External adapted baseline,avg_e2e_ms,Average E2E latency,6415.589412897859,ms,lower
+common_analytical,arrival_rate_rps,0.4,DyBAP-Adapted,External adapted baseline,p95_e2e_ms,P95 E2E latency,11558.396416139243,ms,lower
+common_analytical,arrival_rate_rps,0.4,DyBAP-Adapted,External adapted baseline,slo_satisfaction,SLO satisfaction,0.365,ratio,higher
+common_analytical,arrival_rate_rps,0.4,DyBAP-Adapted,External adapted baseline,throughput_rps,Throughput,0.3760332604783771,requests/s,higher
+common_analytical,arrival_rate_rps,0.4,DyBAP-Adapted,External adapted baseline,goodput_rps,Goodput,0.1470359730139484,requests/s,higher
+common_analytical,arrival_rate_rps,0.4,Ours w/o DDQN,Ablation,avg_e2e_ms,Average E2E latency,3539.5025750031964,ms,lower
+common_analytical,arrival_rate_rps,0.4,Ours w/o DDQN,Ablation,p95_e2e_ms,P95 E2E latency,7007.177430389129,ms,lower
+common_analytical,arrival_rate_rps,0.4,Ours w/o DDQN,Ablation,slo_satisfaction,SLO satisfaction,0.4933333333333333,ratio,higher
+common_analytical,arrival_rate_rps,0.4,Ours w/o DDQN,Ablation,throughput_rps,Throughput,0.4206085109599279,requests/s,higher
+common_analytical,arrival_rate_rps,0.4,Ours w/o DDQN,Ablation,goodput_rps,Goodput,0.2056972453412752,requests/s,higher
+common_analytical,arrival_rate_rps,0.4,Full,Ours,avg_e2e_ms,Average E2E latency,3282.584271940348,ms,lower
+common_analytical,arrival_rate_rps,0.4,Full,Ours,p95_e2e_ms,P95 E2E latency,6684.844760386009,ms,lower
+common_analytical,arrival_rate_rps,0.4,Full,Ours,slo_satisfaction,SLO satisfaction,0.5525,ratio,higher
+common_analytical,arrival_rate_rps,0.4,Full,Ours,throughput_rps,Throughput,0.4240964349827701,requests/s,higher
+common_analytical,arrival_rate_rps,0.4,Full,Ours,goodput_rps,Goodput,0.2335510800230916,requests/s,higher
+common_analytical,arrival_rate_rps,0.6,NoBatch-LB,Conventional baseline,avg_e2e_ms,Average E2E latency,6174.548205895466,ms,lower
+common_analytical,arrival_rate_rps,0.6,NoBatch-LB,Conventional baseline,p95_e2e_ms,P95 E2E latency,10548.91004139684,ms,lower
+common_analytical,arrival_rate_rps,0.6,NoBatch-LB,Conventional baseline,slo_satisfaction,SLO satisfaction,0.3416666666666666,ratio,higher
+common_analytical,arrival_rate_rps,0.6,NoBatch-LB,Conventional baseline,throughput_rps,Throughput,0.4713827434802023,requests/s,higher
+common_analytical,arrival_rate_rps,0.6,NoBatch-LB,Conventional baseline,goodput_rps,Goodput,0.1712942388239429,requests/s,higher
+common_analytical,arrival_rate_rps,0.6,Fixed4-LB,Conventional baseline,avg_e2e_ms,Average E2E latency,4576.46764869708,ms,lower
+common_analytical,arrival_rate_rps,0.6,Fixed4-LB,Conventional baseline,p95_e2e_ms,P95 E2E latency,8101.585192004496,ms,lower
+common_analytical,arrival_rate_rps,0.6,Fixed4-LB,Conventional baseline,slo_satisfaction,SLO satisfaction,0.3941666666666666,ratio,higher
+common_analytical,arrival_rate_rps,0.6,Fixed4-LB,Conventional baseline,throughput_rps,Throughput,0.5436815951450027,requests/s,higher
+common_analytical,arrival_rate_rps,0.6,Fixed4-LB,Conventional baseline,goodput_rps,Goodput,0.2183152133550903,requests/s,higher
+common_analytical,arrival_rate_rps,0.6,SeqGreedy-LB,Conventional baseline,avg_e2e_ms,Average E2E latency,4404.971909970622,ms,lower
+common_analytical,arrival_rate_rps,0.6,SeqGreedy-LB,Conventional baseline,p95_e2e_ms,P95 E2E latency,8130.406038040824,ms,lower
+common_analytical,arrival_rate_rps,0.6,SeqGreedy-LB,Conventional baseline,slo_satisfaction,SLO satisfaction,0.4016666666666666,ratio,higher
+common_analytical,arrival_rate_rps,0.6,SeqGreedy-LB,Conventional baseline,throughput_rps,Throughput,0.5470655961846239,requests/s,higher
+common_analytical,arrival_rate_rps,0.6,SeqGreedy-LB,Conventional baseline,goodput_rps,Goodput,0.2228378103217554,requests/s,higher
+common_analytical,arrival_rate_rps,0.6,LECU-RBA (adapted),External adapted baseline,avg_e2e_ms,Average E2E latency,7124.651074747013,ms,lower
+common_analytical,arrival_rate_rps,0.6,LECU-RBA (adapted),External adapted baseline,p95_e2e_ms,P95 E2E latency,13252.575894770598,ms,lower
+common_analytical,arrival_rate_rps,0.6,LECU-RBA (adapted),External adapted baseline,slo_satisfaction,SLO satisfaction,0.2191666666666666,ratio,higher
+common_analytical,arrival_rate_rps,0.6,LECU-RBA (adapted),External adapted baseline,throughput_rps,Throughput,0.4591968846382206,requests/s,higher
+common_analytical,arrival_rate_rps,0.6,LECU-RBA (adapted),External adapted baseline,goodput_rps,Goodput,0.1080592751421583,requests/s,higher
+common_analytical,arrival_rate_rps,0.6,DyBAP-Adapted,External adapted baseline,avg_e2e_ms,Average E2E latency,7707.373498670171,ms,lower
+common_analytical,arrival_rate_rps,0.6,DyBAP-Adapted,External adapted baseline,p95_e2e_ms,P95 E2E latency,13449.978541817452,ms,lower
+common_analytical,arrival_rate_rps,0.6,DyBAP-Adapted,External adapted baseline,slo_satisfaction,SLO satisfaction,0.2891666666666666,ratio,higher
+common_analytical,arrival_rate_rps,0.6,DyBAP-Adapted,External adapted baseline,throughput_rps,Throughput,0.4641261290651065,requests/s,higher
+common_analytical,arrival_rate_rps,0.6,DyBAP-Adapted,External adapted baseline,goodput_rps,Goodput,0.1495623789164779,requests/s,higher
+common_analytical,arrival_rate_rps,0.6,Ours w/o DDQN,Ablation,avg_e2e_ms,Average E2E latency,4269.239993761626,ms,lower
+common_analytical,arrival_rate_rps,0.6,Ours w/o DDQN,Ablation,p95_e2e_ms,P95 E2E latency,8022.442724084277,ms,lower
+common_analytical,arrival_rate_rps,0.6,Ours w/o DDQN,Ablation,slo_satisfaction,SLO satisfaction,0.405,ratio,higher
+common_analytical,arrival_rate_rps,0.6,Ours w/o DDQN,Ablation,throughput_rps,Throughput,0.5482231385439867,requests/s,higher
+common_analytical,arrival_rate_rps,0.6,Ours w/o DDQN,Ablation,goodput_rps,Goodput,0.2249097319526553,requests/s,higher
+common_analytical,arrival_rate_rps,0.6,Full,Ours,avg_e2e_ms,Average E2E latency,3963.2624965943255,ms,lower
+common_analytical,arrival_rate_rps,0.6,Full,Ours,p95_e2e_ms,P95 E2E latency,7531.022197028596,ms,lower
+common_analytical,arrival_rate_rps,0.6,Full,Ours,slo_satisfaction,SLO satisfaction,0.4541666666666666,ratio,higher
+common_analytical,arrival_rate_rps,0.6,Full,Ours,throughput_rps,Throughput,0.5637014437029647,requests/s,higher
+common_analytical,arrival_rate_rps,0.6,Full,Ours,goodput_rps,Goodput,0.2594787625804058,requests/s,higher

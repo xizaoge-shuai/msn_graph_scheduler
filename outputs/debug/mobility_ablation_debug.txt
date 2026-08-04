@@ -1,0 +1,800 @@
+============================================================
+Mobility ablation diagnostic
+Time: 2026年 07月 30日 星期四 20:07:46 CST
+============================================================
+
+===== 1. CHECKPOINT HASHES =====
+1f911c586d451473f6dc4be013741d3e7598b1a670297786c8d67e41667d58e7  outputs/train_online_ddqn_cpu_300_analytic/agent_ep150.pt
+938b467750624ad737f9e79ecd4277b963ae3fb70831c63e845f402f931f7e78  outputs/train_ablation_wo_mobility_seed7/agent_ep150.pt
+
+===== 2. CONFIG DIFFERENCE =====
+--- configs/train_online_cpu.yaml	2026-07-29 14:43:18.397902701 +0800
++++ configs/ablation_wo_mobility_seed7.yaml	2026-07-30 14:09:27.293717459 +0800
+@@ -56,7 +56,7 @@
+   dp_alpha_urgency: 1.0
+   dp_alpha_batch_gain: 4.0
+   dp_alpha_padding: 0.0005
+-  dp_alpha_mobility: 0.003
++  dp_alpha_mobility: 0.0
+   dp_alpha_decode: 0.0001
+   dp_alpha_deadline_risk: 1.0
+   dp_alpha_output_spread: 0.002
+@@ -144,3 +144,5 @@
+   mobility_weight: 0.2
+   group_risk_weight: 0.1
+   fragmentation_weight: 0.05
++ablation:
++  mask_mobility_features: true
+
+===== 3. MOBILITY CONFIG VALUES =====
+
+--- configs/train_online_cpu.yaml ---
+seed = 7
+ablation = {}
+dp_alpha_mobility = 0.003
+
+--- configs/ablation_wo_mobility_seed7.yaml ---
+seed = 7
+ablation = {'mask_mobility_features': True}
+dp_alpha_mobility = 0.0
+
+===== 4. SOURCE USE SITES =====
+Binary file src/msn_scheduler/__pycache__/env.cpython-310.pyc matches
+--
+src/msn_scheduler/env.py-76-        mask_mobility = bool(
+src/msn_scheduler/env.py-77-            self.cfg.get(
+src/msn_scheduler/env.py-78-                "ablation",
+src/msn_scheduler/env.py-79-                {},
+src/msn_scheduler/env.py-80-            ).get(
+src/msn_scheduler/env.py:81:                "mask_mobility_features",
+src/msn_scheduler/env.py-82-                False,
+src/msn_scheduler/env.py-83-            )
+src/msn_scheduler/env.py-84-        )
+src/msn_scheduler/env.py-85-
+src/msn_scheduler/env.py-86-        if batch is None:
+--
+configs/paired_mobility_ablation_highspeed/wo_mobility_seed8102.yaml-143-  resource_weight: 0.25
+configs/paired_mobility_ablation_highspeed/wo_mobility_seed8102.yaml-144-  mobility_weight: 0.2
+configs/paired_mobility_ablation_highspeed/wo_mobility_seed8102.yaml-145-  group_risk_weight: 0.1
+configs/paired_mobility_ablation_highspeed/wo_mobility_seed8102.yaml-146-  fragmentation_weight: 0.05
+configs/paired_mobility_ablation_highspeed/wo_mobility_seed8102.yaml-147-ablation:
+configs/paired_mobility_ablation_highspeed/wo_mobility_seed8102.yaml:148:  mask_mobility_features: true
+--
+configs/paired_mobility_ablation_highspeed/wo_mobility_seed8103.yaml-143-  resource_weight: 0.25
+configs/paired_mobility_ablation_highspeed/wo_mobility_seed8103.yaml-144-  mobility_weight: 0.2
+configs/paired_mobility_ablation_highspeed/wo_mobility_seed8103.yaml-145-  group_risk_weight: 0.1
+configs/paired_mobility_ablation_highspeed/wo_mobility_seed8103.yaml-146-  fragmentation_weight: 0.05
+configs/paired_mobility_ablation_highspeed/wo_mobility_seed8103.yaml-147-ablation:
+configs/paired_mobility_ablation_highspeed/wo_mobility_seed8103.yaml:148:  mask_mobility_features: true
+--
+configs/paired_mobility_ablation_highspeed/wo_mobility_seed8101.yaml-143-  resource_weight: 0.25
+configs/paired_mobility_ablation_highspeed/wo_mobility_seed8101.yaml-144-  mobility_weight: 0.2
+configs/paired_mobility_ablation_highspeed/wo_mobility_seed8101.yaml-145-  group_risk_weight: 0.1
+configs/paired_mobility_ablation_highspeed/wo_mobility_seed8101.yaml-146-  fragmentation_weight: 0.05
+configs/paired_mobility_ablation_highspeed/wo_mobility_seed8101.yaml-147-ablation:
+configs/paired_mobility_ablation_highspeed/wo_mobility_seed8101.yaml:148:  mask_mobility_features: true
+--
+configs/ablation_wo_mobility_seed7.yaml-143-  resource_weight: 0.25
+configs/ablation_wo_mobility_seed7.yaml-144-  mobility_weight: 0.2
+configs/ablation_wo_mobility_seed7.yaml-145-  group_risk_weight: 0.1
+configs/ablation_wo_mobility_seed7.yaml-146-  fragmentation_weight: 0.05
+configs/ablation_wo_mobility_seed7.yaml-147-ablation:
+configs/ablation_wo_mobility_seed7.yaml:148:  mask_mobility_features: true
+--
+configs/paired_ablation_eval/wo_mobility_evalseed7003.yaml-143-  resource_weight: 0.25
+configs/paired_ablation_eval/wo_mobility_evalseed7003.yaml-144-  mobility_weight: 0.2
+configs/paired_ablation_eval/wo_mobility_evalseed7003.yaml-145-  group_risk_weight: 0.1
+configs/paired_ablation_eval/wo_mobility_evalseed7003.yaml-146-  fragmentation_weight: 0.05
+configs/paired_ablation_eval/wo_mobility_evalseed7003.yaml-147-ablation:
+configs/paired_ablation_eval/wo_mobility_evalseed7003.yaml:148:  mask_mobility_features: true
+--
+configs/paired_ablation_eval/wo_mobility_evalseed7002.yaml-143-  resource_weight: 0.25
+configs/paired_ablation_eval/wo_mobility_evalseed7002.yaml-144-  mobility_weight: 0.2
+configs/paired_ablation_eval/wo_mobility_evalseed7002.yaml-145-  group_risk_weight: 0.1
+configs/paired_ablation_eval/wo_mobility_evalseed7002.yaml-146-  fragmentation_weight: 0.05
+configs/paired_ablation_eval/wo_mobility_evalseed7002.yaml-147-ablation:
+configs/paired_ablation_eval/wo_mobility_evalseed7002.yaml:148:  mask_mobility_features: true
+--
+configs/paired_ablation_eval/wo_mobility_evalseed7001.yaml-143-  resource_weight: 0.25
+configs/paired_ablation_eval/wo_mobility_evalseed7001.yaml-144-  mobility_weight: 0.2
+configs/paired_ablation_eval/wo_mobility_evalseed7001.yaml-145-  group_risk_weight: 0.1
+configs/paired_ablation_eval/wo_mobility_evalseed7001.yaml-146-  fragmentation_weight: 0.05
+configs/paired_ablation_eval/wo_mobility_evalseed7001.yaml-147-ablation:
+configs/paired_ablation_eval/wo_mobility_evalseed7001.yaml:148:  mask_mobility_features: true
+
+===== 5. DP MOBILITY USE SITES =====
+Binary file src/msn_scheduler/__pycache__/batching.cpython-310.pyc matches
+--
+src/msn_scheduler/batching.py-92-                    0.0005,
+src/msn_scheduler/batching.py-93-                )
+src/msn_scheduler/batching.py-94-            ),
+src/msn_scheduler/batching.py-95-            mobility=float(
+src/msn_scheduler/batching.py-96-                bcfg.get(
+src/msn_scheduler/batching.py:97:                    "dp_alpha_mobility",
+src/msn_scheduler/batching.py-98-                    0.003,
+src/msn_scheduler/batching.py-99-                )
+src/msn_scheduler/batching.py-100-            ),
+src/msn_scheduler/batching.py-101-            decode=float(
+src/msn_scheduler/batching.py-102-                bcfg.get(
+--
+configs/paired_mobility_ablation_highspeed/full_seed8102.yaml-54-  baseline_alpha_padding: 0.0005
+configs/paired_mobility_ablation_highspeed/full_seed8102.yaml-55-  baseline_alpha_mobility: 0.003
+configs/paired_mobility_ablation_highspeed/full_seed8102.yaml-56-  dp_alpha_urgency: 1.0
+configs/paired_mobility_ablation_highspeed/full_seed8102.yaml-57-  dp_alpha_batch_gain: 4.0
+configs/paired_mobility_ablation_highspeed/full_seed8102.yaml-58-  dp_alpha_padding: 0.0005
+configs/paired_mobility_ablation_highspeed/full_seed8102.yaml:59:  dp_alpha_mobility: 0.003
+configs/paired_mobility_ablation_highspeed/full_seed8102.yaml-60-  dp_alpha_decode: 0.0001
+configs/paired_mobility_ablation_highspeed/full_seed8102.yaml-61-  dp_alpha_deadline_risk: 1.0
+configs/paired_mobility_ablation_highspeed/full_seed8102.yaml-62-  dp_alpha_output_spread: 0.002
+configs/paired_mobility_ablation_highspeed/full_seed8102.yaml-63-  hard_deadline_filter: false
+configs/paired_mobility_ablation_highspeed/full_seed8102.yaml-64-scheduler:
+--
+configs/paired_mobility_ablation_highspeed/full_seed8101.yaml-54-  baseline_alpha_padding: 0.0005
+configs/paired_mobility_ablation_highspeed/full_seed8101.yaml-55-  baseline_alpha_mobility: 0.003
+configs/paired_mobility_ablation_highspeed/full_seed8101.yaml-56-  dp_alpha_urgency: 1.0
+configs/paired_mobility_ablation_highspeed/full_seed8101.yaml-57-  dp_alpha_batch_gain: 4.0
+configs/paired_mobility_ablation_highspeed/full_seed8101.yaml-58-  dp_alpha_padding: 0.0005
+configs/paired_mobility_ablation_highspeed/full_seed8101.yaml:59:  dp_alpha_mobility: 0.003
+configs/paired_mobility_ablation_highspeed/full_seed8101.yaml-60-  dp_alpha_decode: 0.0001
+configs/paired_mobility_ablation_highspeed/full_seed8101.yaml-61-  dp_alpha_deadline_risk: 1.0
+configs/paired_mobility_ablation_highspeed/full_seed8101.yaml-62-  dp_alpha_output_spread: 0.002
+configs/paired_mobility_ablation_highspeed/full_seed8101.yaml-63-  hard_deadline_filter: false
+configs/paired_mobility_ablation_highspeed/full_seed8101.yaml-64-scheduler:
+--
+configs/paired_mobility_ablation_highspeed/full_seed8103.yaml-54-  baseline_alpha_padding: 0.0005
+configs/paired_mobility_ablation_highspeed/full_seed8103.yaml-55-  baseline_alpha_mobility: 0.003
+configs/paired_mobility_ablation_highspeed/full_seed8103.yaml-56-  dp_alpha_urgency: 1.0
+configs/paired_mobility_ablation_highspeed/full_seed8103.yaml-57-  dp_alpha_batch_gain: 4.0
+configs/paired_mobility_ablation_highspeed/full_seed8103.yaml-58-  dp_alpha_padding: 0.0005
+configs/paired_mobility_ablation_highspeed/full_seed8103.yaml:59:  dp_alpha_mobility: 0.003
+configs/paired_mobility_ablation_highspeed/full_seed8103.yaml-60-  dp_alpha_decode: 0.0001
+configs/paired_mobility_ablation_highspeed/full_seed8103.yaml-61-  dp_alpha_deadline_risk: 1.0
+configs/paired_mobility_ablation_highspeed/full_seed8103.yaml-62-  dp_alpha_output_spread: 0.002
+configs/paired_mobility_ablation_highspeed/full_seed8103.yaml-63-  hard_deadline_filter: false
+configs/paired_mobility_ablation_highspeed/full_seed8103.yaml-64-scheduler:
+--
+configs/paired_mobility_ablation_highspeed/wo_mobility_seed8102.yaml-54-  baseline_alpha_padding: 0.0005
+configs/paired_mobility_ablation_highspeed/wo_mobility_seed8102.yaml-55-  baseline_alpha_mobility: 0.003
+configs/paired_mobility_ablation_highspeed/wo_mobility_seed8102.yaml-56-  dp_alpha_urgency: 1.0
+configs/paired_mobility_ablation_highspeed/wo_mobility_seed8102.yaml-57-  dp_alpha_batch_gain: 4.0
+configs/paired_mobility_ablation_highspeed/wo_mobility_seed8102.yaml-58-  dp_alpha_padding: 0.0005
+configs/paired_mobility_ablation_highspeed/wo_mobility_seed8102.yaml:59:  dp_alpha_mobility: 0.0
+configs/paired_mobility_ablation_highspeed/wo_mobility_seed8102.yaml-60-  dp_alpha_decode: 0.0001
+configs/paired_mobility_ablation_highspeed/wo_mobility_seed8102.yaml-61-  dp_alpha_deadline_risk: 1.0
+configs/paired_mobility_ablation_highspeed/wo_mobility_seed8102.yaml-62-  dp_alpha_output_spread: 0.002
+configs/paired_mobility_ablation_highspeed/wo_mobility_seed8102.yaml-63-  hard_deadline_filter: false
+configs/paired_mobility_ablation_highspeed/wo_mobility_seed8102.yaml-64-scheduler:
+--
+configs/paired_mobility_ablation_highspeed/wo_mobility_seed8103.yaml-54-  baseline_alpha_padding: 0.0005
+configs/paired_mobility_ablation_highspeed/wo_mobility_seed8103.yaml-55-  baseline_alpha_mobility: 0.003
+configs/paired_mobility_ablation_highspeed/wo_mobility_seed8103.yaml-56-  dp_alpha_urgency: 1.0
+configs/paired_mobility_ablation_highspeed/wo_mobility_seed8103.yaml-57-  dp_alpha_batch_gain: 4.0
+configs/paired_mobility_ablation_highspeed/wo_mobility_seed8103.yaml-58-  dp_alpha_padding: 0.0005
+configs/paired_mobility_ablation_highspeed/wo_mobility_seed8103.yaml:59:  dp_alpha_mobility: 0.0
+configs/paired_mobility_ablation_highspeed/wo_mobility_seed8103.yaml-60-  dp_alpha_decode: 0.0001
+configs/paired_mobility_ablation_highspeed/wo_mobility_seed8103.yaml-61-  dp_alpha_deadline_risk: 1.0
+configs/paired_mobility_ablation_highspeed/wo_mobility_seed8103.yaml-62-  dp_alpha_output_spread: 0.002
+configs/paired_mobility_ablation_highspeed/wo_mobility_seed8103.yaml-63-  hard_deadline_filter: false
+configs/paired_mobility_ablation_highspeed/wo_mobility_seed8103.yaml-64-scheduler:
+--
+configs/paired_mobility_ablation_highspeed/wo_mobility_seed8101.yaml-54-  baseline_alpha_padding: 0.0005
+configs/paired_mobility_ablation_highspeed/wo_mobility_seed8101.yaml-55-  baseline_alpha_mobility: 0.003
+configs/paired_mobility_ablation_highspeed/wo_mobility_seed8101.yaml-56-  dp_alpha_urgency: 1.0
+configs/paired_mobility_ablation_highspeed/wo_mobility_seed8101.yaml-57-  dp_alpha_batch_gain: 4.0
+configs/paired_mobility_ablation_highspeed/wo_mobility_seed8101.yaml-58-  dp_alpha_padding: 0.0005
+configs/paired_mobility_ablation_highspeed/wo_mobility_seed8101.yaml:59:  dp_alpha_mobility: 0.0
+configs/paired_mobility_ablation_highspeed/wo_mobility_seed8101.yaml-60-  dp_alpha_decode: 0.0001
+configs/paired_mobility_ablation_highspeed/wo_mobility_seed8101.yaml-61-  dp_alpha_deadline_risk: 1.0
+configs/paired_mobility_ablation_highspeed/wo_mobility_seed8101.yaml-62-  dp_alpha_output_spread: 0.002
+configs/paired_mobility_ablation_highspeed/wo_mobility_seed8101.yaml-63-  hard_deadline_filter: false
+configs/paired_mobility_ablation_highspeed/wo_mobility_seed8101.yaml-64-scheduler:
+--
+configs/train_online_cpu.yaml-54-  baseline_alpha_padding: 0.0005
+configs/train_online_cpu.yaml-55-  baseline_alpha_mobility: 0.003
+configs/train_online_cpu.yaml-56-  dp_alpha_urgency: 1.0
+configs/train_online_cpu.yaml-57-  dp_alpha_batch_gain: 4.0
+configs/train_online_cpu.yaml-58-  dp_alpha_padding: 0.0005
+configs/train_online_cpu.yaml:59:  dp_alpha_mobility: 0.003
+configs/train_online_cpu.yaml-60-  dp_alpha_decode: 0.0001
+configs/train_online_cpu.yaml-61-  dp_alpha_deadline_risk: 1.0
+configs/train_online_cpu.yaml-62-  dp_alpha_output_spread: 0.002
+configs/train_online_cpu.yaml-63-  hard_deadline_filter: false
+configs/train_online_cpu.yaml-64-scheduler:
+--
+configs/train_online_cpu_seed17.yaml-54-  baseline_alpha_padding: 0.0005
+configs/train_online_cpu_seed17.yaml-55-  baseline_alpha_mobility: 0.003
+configs/train_online_cpu_seed17.yaml-56-  dp_alpha_urgency: 1.0
+configs/train_online_cpu_seed17.yaml-57-  dp_alpha_batch_gain: 4.0
+configs/train_online_cpu_seed17.yaml-58-  dp_alpha_padding: 0.0005
+configs/train_online_cpu_seed17.yaml:59:  dp_alpha_mobility: 0.003
+configs/train_online_cpu_seed17.yaml-60-  dp_alpha_decode: 0.0001
+configs/train_online_cpu_seed17.yaml-61-  dp_alpha_deadline_risk: 1.0
+configs/train_online_cpu_seed17.yaml-62-  dp_alpha_output_spread: 0.002
+configs/train_online_cpu_seed17.yaml-63-  hard_deadline_filter: false
+configs/train_online_cpu_seed17.yaml-64-scheduler:
+--
+configs/train_online_cpu_seed3.yaml-54-  baseline_alpha_padding: 0.0005
+configs/train_online_cpu_seed3.yaml-55-  baseline_alpha_mobility: 0.003
+configs/train_online_cpu_seed3.yaml-56-  dp_alpha_urgency: 1.0
+configs/train_online_cpu_seed3.yaml-57-  dp_alpha_batch_gain: 4.0
+configs/train_online_cpu_seed3.yaml-58-  dp_alpha_padding: 0.0005
+configs/train_online_cpu_seed3.yaml:59:  dp_alpha_mobility: 0.003
+configs/train_online_cpu_seed3.yaml-60-  dp_alpha_decode: 0.0001
+configs/train_online_cpu_seed3.yaml-61-  dp_alpha_deadline_risk: 1.0
+configs/train_online_cpu_seed3.yaml-62-  dp_alpha_output_spread: 0.002
+configs/train_online_cpu_seed3.yaml-63-  hard_deadline_filter: false
+configs/train_online_cpu_seed3.yaml-64-scheduler:
+--
+configs/ablation_wo_mobility_seed7.yaml-54-  baseline_alpha_padding: 0.0005
+configs/ablation_wo_mobility_seed7.yaml-55-  baseline_alpha_mobility: 0.003
+configs/ablation_wo_mobility_seed7.yaml-56-  dp_alpha_urgency: 1.0
+configs/ablation_wo_mobility_seed7.yaml-57-  dp_alpha_batch_gain: 4.0
+configs/ablation_wo_mobility_seed7.yaml-58-  dp_alpha_padding: 0.0005
+configs/ablation_wo_mobility_seed7.yaml:59:  dp_alpha_mobility: 0.0
+configs/ablation_wo_mobility_seed7.yaml-60-  dp_alpha_decode: 0.0001
+configs/ablation_wo_mobility_seed7.yaml-61-  dp_alpha_deadline_risk: 1.0
+configs/ablation_wo_mobility_seed7.yaml-62-  dp_alpha_output_spread: 0.002
+configs/ablation_wo_mobility_seed7.yaml-63-  hard_deadline_filter: false
+configs/ablation_wo_mobility_seed7.yaml-64-scheduler:
+--
+configs/paired_ablation_eval/wo_dp_evalseed7001.yaml-54-  baseline_alpha_padding: 0.0005
+configs/paired_ablation_eval/wo_dp_evalseed7001.yaml-55-  baseline_alpha_mobility: 0.003
+configs/paired_ablation_eval/wo_dp_evalseed7001.yaml-56-  dp_alpha_urgency: 1.0
+configs/paired_ablation_eval/wo_dp_evalseed7001.yaml-57-  dp_alpha_batch_gain: 4.0
+configs/paired_ablation_eval/wo_dp_evalseed7001.yaml-58-  dp_alpha_padding: 0.0005
+configs/paired_ablation_eval/wo_dp_evalseed7001.yaml:59:  dp_alpha_mobility: 0.003
+configs/paired_ablation_eval/wo_dp_evalseed7001.yaml-60-  dp_alpha_decode: 0.0001
+configs/paired_ablation_eval/wo_dp_evalseed7001.yaml-61-  dp_alpha_deadline_risk: 1.0
+configs/paired_ablation_eval/wo_dp_evalseed7001.yaml-62-  dp_alpha_output_spread: 0.002
+configs/paired_ablation_eval/wo_dp_evalseed7001.yaml-63-  hard_deadline_filter: false
+configs/paired_ablation_eval/wo_dp_evalseed7001.yaml-64-scheduler:
+--
+configs/paired_ablation_eval/full_evalseed7001.yaml-54-  baseline_alpha_padding: 0.0005
+configs/paired_ablation_eval/full_evalseed7001.yaml-55-  baseline_alpha_mobility: 0.003
+configs/paired_ablation_eval/full_evalseed7001.yaml-56-  dp_alpha_urgency: 1.0
+configs/paired_ablation_eval/full_evalseed7001.yaml-57-  dp_alpha_batch_gain: 4.0
+configs/paired_ablation_eval/full_evalseed7001.yaml-58-  dp_alpha_padding: 0.0005
+configs/paired_ablation_eval/full_evalseed7001.yaml:59:  dp_alpha_mobility: 0.003
+configs/paired_ablation_eval/full_evalseed7001.yaml-60-  dp_alpha_decode: 0.0001
+configs/paired_ablation_eval/full_evalseed7001.yaml-61-  dp_alpha_deadline_risk: 1.0
+configs/paired_ablation_eval/full_evalseed7001.yaml-62-  dp_alpha_output_spread: 0.002
+configs/paired_ablation_eval/full_evalseed7001.yaml-63-  hard_deadline_filter: false
+configs/paired_ablation_eval/full_evalseed7001.yaml-64-scheduler:
+--
+configs/paired_ablation_eval/full_evalseed7003.yaml-54-  baseline_alpha_padding: 0.0005
+configs/paired_ablation_eval/full_evalseed7003.yaml-55-  baseline_alpha_mobility: 0.003
+configs/paired_ablation_eval/full_evalseed7003.yaml-56-  dp_alpha_urgency: 1.0
+configs/paired_ablation_eval/full_evalseed7003.yaml-57-  dp_alpha_batch_gain: 4.0
+configs/paired_ablation_eval/full_evalseed7003.yaml-58-  dp_alpha_padding: 0.0005
+configs/paired_ablation_eval/full_evalseed7003.yaml:59:  dp_alpha_mobility: 0.003
+configs/paired_ablation_eval/full_evalseed7003.yaml-60-  dp_alpha_decode: 0.0001
+configs/paired_ablation_eval/full_evalseed7003.yaml-61-  dp_alpha_deadline_risk: 1.0
+configs/paired_ablation_eval/full_evalseed7003.yaml-62-  dp_alpha_output_spread: 0.002
+configs/paired_ablation_eval/full_evalseed7003.yaml-63-  hard_deadline_filter: false
+configs/paired_ablation_eval/full_evalseed7003.yaml-64-scheduler:
+--
+configs/paired_ablation_eval/wo_mobility_evalseed7003.yaml-54-  baseline_alpha_padding: 0.0005
+configs/paired_ablation_eval/wo_mobility_evalseed7003.yaml-55-  baseline_alpha_mobility: 0.003
+configs/paired_ablation_eval/wo_mobility_evalseed7003.yaml-56-  dp_alpha_urgency: 1.0
+configs/paired_ablation_eval/wo_mobility_evalseed7003.yaml-57-  dp_alpha_batch_gain: 4.0
+configs/paired_ablation_eval/wo_mobility_evalseed7003.yaml-58-  dp_alpha_padding: 0.0005
+configs/paired_ablation_eval/wo_mobility_evalseed7003.yaml:59:  dp_alpha_mobility: 0.0
+configs/paired_ablation_eval/wo_mobility_evalseed7003.yaml-60-  dp_alpha_decode: 0.0001
+configs/paired_ablation_eval/wo_mobility_evalseed7003.yaml-61-  dp_alpha_deadline_risk: 1.0
+configs/paired_ablation_eval/wo_mobility_evalseed7003.yaml-62-  dp_alpha_output_spread: 0.002
+configs/paired_ablation_eval/wo_mobility_evalseed7003.yaml-63-  hard_deadline_filter: false
+configs/paired_ablation_eval/wo_mobility_evalseed7003.yaml-64-scheduler:
+--
+configs/paired_ablation_eval/wo_mobility_evalseed7002.yaml-54-  baseline_alpha_padding: 0.0005
+configs/paired_ablation_eval/wo_mobility_evalseed7002.yaml-55-  baseline_alpha_mobility: 0.003
+configs/paired_ablation_eval/wo_mobility_evalseed7002.yaml-56-  dp_alpha_urgency: 1.0
+configs/paired_ablation_eval/wo_mobility_evalseed7002.yaml-57-  dp_alpha_batch_gain: 4.0
+configs/paired_ablation_eval/wo_mobility_evalseed7002.yaml-58-  dp_alpha_padding: 0.0005
+configs/paired_ablation_eval/wo_mobility_evalseed7002.yaml:59:  dp_alpha_mobility: 0.0
+configs/paired_ablation_eval/wo_mobility_evalseed7002.yaml-60-  dp_alpha_decode: 0.0001
+configs/paired_ablation_eval/wo_mobility_evalseed7002.yaml-61-  dp_alpha_deadline_risk: 1.0
+configs/paired_ablation_eval/wo_mobility_evalseed7002.yaml-62-  dp_alpha_output_spread: 0.002
+configs/paired_ablation_eval/wo_mobility_evalseed7002.yaml-63-  hard_deadline_filter: false
+configs/paired_ablation_eval/wo_mobility_evalseed7002.yaml-64-scheduler:
+--
+configs/paired_ablation_eval/wo_mobility_evalseed7001.yaml-54-  baseline_alpha_padding: 0.0005
+configs/paired_ablation_eval/wo_mobility_evalseed7001.yaml-55-  baseline_alpha_mobility: 0.003
+configs/paired_ablation_eval/wo_mobility_evalseed7001.yaml-56-  dp_alpha_urgency: 1.0
+configs/paired_ablation_eval/wo_mobility_evalseed7001.yaml-57-  dp_alpha_batch_gain: 4.0
+configs/paired_ablation_eval/wo_mobility_evalseed7001.yaml-58-  dp_alpha_padding: 0.0005
+configs/paired_ablation_eval/wo_mobility_evalseed7001.yaml:59:  dp_alpha_mobility: 0.0
+configs/paired_ablation_eval/wo_mobility_evalseed7001.yaml-60-  dp_alpha_decode: 0.0001
+configs/paired_ablation_eval/wo_mobility_evalseed7001.yaml-61-  dp_alpha_deadline_risk: 1.0
+configs/paired_ablation_eval/wo_mobility_evalseed7001.yaml-62-  dp_alpha_output_spread: 0.002
+configs/paired_ablation_eval/wo_mobility_evalseed7001.yaml-63-  hard_deadline_filter: false
+configs/paired_ablation_eval/wo_mobility_evalseed7001.yaml-64-scheduler:
+--
+configs/paired_ablation_eval/wo_dp_evalseed7003.yaml-54-  baseline_alpha_padding: 0.0005
+configs/paired_ablation_eval/wo_dp_evalseed7003.yaml-55-  baseline_alpha_mobility: 0.003
+configs/paired_ablation_eval/wo_dp_evalseed7003.yaml-56-  dp_alpha_urgency: 1.0
+configs/paired_ablation_eval/wo_dp_evalseed7003.yaml-57-  dp_alpha_batch_gain: 4.0
+configs/paired_ablation_eval/wo_dp_evalseed7003.yaml-58-  dp_alpha_padding: 0.0005
+configs/paired_ablation_eval/wo_dp_evalseed7003.yaml:59:  dp_alpha_mobility: 0.003
+configs/paired_ablation_eval/wo_dp_evalseed7003.yaml-60-  dp_alpha_decode: 0.0001
+configs/paired_ablation_eval/wo_dp_evalseed7003.yaml-61-  dp_alpha_deadline_risk: 1.0
+configs/paired_ablation_eval/wo_dp_evalseed7003.yaml-62-  dp_alpha_output_spread: 0.002
+configs/paired_ablation_eval/wo_dp_evalseed7003.yaml-63-  hard_deadline_filter: false
+configs/paired_ablation_eval/wo_dp_evalseed7003.yaml-64-scheduler:
+--
+configs/paired_ablation_eval/full_evalseed7002.yaml-54-  baseline_alpha_padding: 0.0005
+configs/paired_ablation_eval/full_evalseed7002.yaml-55-  baseline_alpha_mobility: 0.003
+configs/paired_ablation_eval/full_evalseed7002.yaml-56-  dp_alpha_urgency: 1.0
+configs/paired_ablation_eval/full_evalseed7002.yaml-57-  dp_alpha_batch_gain: 4.0
+configs/paired_ablation_eval/full_evalseed7002.yaml-58-  dp_alpha_padding: 0.0005
+configs/paired_ablation_eval/full_evalseed7002.yaml:59:  dp_alpha_mobility: 0.003
+configs/paired_ablation_eval/full_evalseed7002.yaml-60-  dp_alpha_decode: 0.0001
+configs/paired_ablation_eval/full_evalseed7002.yaml-61-  dp_alpha_deadline_risk: 1.0
+configs/paired_ablation_eval/full_evalseed7002.yaml-62-  dp_alpha_output_spread: 0.002
+configs/paired_ablation_eval/full_evalseed7002.yaml-63-  hard_deadline_filter: false
+configs/paired_ablation_eval/full_evalseed7002.yaml-64-scheduler:
+--
+configs/paired_ablation_eval/wo_dp_evalseed7002.yaml-54-  baseline_alpha_padding: 0.0005
+configs/paired_ablation_eval/wo_dp_evalseed7002.yaml-55-  baseline_alpha_mobility: 0.003
+configs/paired_ablation_eval/wo_dp_evalseed7002.yaml-56-  dp_alpha_urgency: 1.0
+configs/paired_ablation_eval/wo_dp_evalseed7002.yaml-57-  dp_alpha_batch_gain: 4.0
+configs/paired_ablation_eval/wo_dp_evalseed7002.yaml-58-  dp_alpha_padding: 0.0005
+configs/paired_ablation_eval/wo_dp_evalseed7002.yaml:59:  dp_alpha_mobility: 0.003
+configs/paired_ablation_eval/wo_dp_evalseed7002.yaml-60-  dp_alpha_decode: 0.0001
+configs/paired_ablation_eval/wo_dp_evalseed7002.yaml-61-  dp_alpha_deadline_risk: 1.0
+configs/paired_ablation_eval/wo_dp_evalseed7002.yaml-62-  dp_alpha_output_spread: 0.002
+configs/paired_ablation_eval/wo_dp_evalseed7002.yaml-63-  hard_deadline_filter: false
+configs/paired_ablation_eval/wo_dp_evalseed7002.yaml-64-scheduler:
+--
+configs/train_online_cpu_seed2.yaml-54-  baseline_alpha_padding: 0.0005
+configs/train_online_cpu_seed2.yaml-55-  baseline_alpha_mobility: 0.003
+configs/train_online_cpu_seed2.yaml-56-  dp_alpha_urgency: 1.0
+configs/train_online_cpu_seed2.yaml-57-  dp_alpha_batch_gain: 4.0
+configs/train_online_cpu_seed2.yaml-58-  dp_alpha_padding: 0.0005
+configs/train_online_cpu_seed2.yaml:59:  dp_alpha_mobility: 0.003
+configs/train_online_cpu_seed2.yaml-60-  dp_alpha_decode: 0.0001
+configs/train_online_cpu_seed2.yaml-61-  dp_alpha_deadline_risk: 1.0
+configs/train_online_cpu_seed2.yaml-62-  dp_alpha_output_spread: 0.002
+configs/train_online_cpu_seed2.yaml-63-  hard_deadline_filter: false
+configs/train_online_cpu_seed2.yaml-64-scheduler:
+--
+configs/train_online_cpu_seed29.yaml-54-  baseline_alpha_padding: 0.0005
+configs/train_online_cpu_seed29.yaml-55-  baseline_alpha_mobility: 0.003
+configs/train_online_cpu_seed29.yaml-56-  dp_alpha_urgency: 1.0
+configs/train_online_cpu_seed29.yaml-57-  dp_alpha_batch_gain: 4.0
+configs/train_online_cpu_seed29.yaml-58-  dp_alpha_padding: 0.0005
+configs/train_online_cpu_seed29.yaml:59:  dp_alpha_mobility: 0.003
+configs/train_online_cpu_seed29.yaml-60-  dp_alpha_decode: 0.0001
+configs/train_online_cpu_seed29.yaml-61-  dp_alpha_deadline_risk: 1.0
+configs/train_online_cpu_seed29.yaml-62-  dp_alpha_output_spread: 0.002
+configs/train_online_cpu_seed29.yaml-63-  hard_deadline_filter: false
+configs/train_online_cpu_seed29.yaml-64-scheduler:
+--
+configs/default.yaml-54-  baseline_alpha_padding: 0.0005
+configs/default.yaml-55-  baseline_alpha_mobility: 0.003
+configs/default.yaml-56-  dp_alpha_urgency: 1.0
+configs/default.yaml-57-  dp_alpha_batch_gain: 4.0
+configs/default.yaml-58-  dp_alpha_padding: 0.0005
+configs/default.yaml:59:  dp_alpha_mobility: 0.003
+configs/default.yaml-60-  dp_alpha_decode: 0.0001
+configs/default.yaml-61-  dp_alpha_deadline_risk: 1.0
+configs/default.yaml-62-  dp_alpha_output_spread: 0.002
+configs/default.yaml-63-  hard_deadline_filter: false
+configs/default.yaml-64-scheduler:
+
+===== 6. ENV CONFIG ASSIGNMENT =====
+25-
+26-class SchedulingEnv:
+27-    """One episode maps one prefill batch across all Transformer blocks."""
+28-
+29-    def __init__(self, cfg: dict, profile: ProfileTable, batcher: NodeConditionedDPBatcher):
+30:        self.cfg = cfg
+31-        self.profile = profile
+32-        self.batcher = batcher
+33-        scfg = cfg["scheduler"]
+34-        self.w_prefill = float(scfg["reward_prefill"])
+35-        self.w_transfer = float(scfg["reward_transfer"])
+--
+61-        self.total_reward = 0.0
+62-        self.total_prefill_ms = 0.0
+63-        self.total_transfer_mb = 0.0
+64-        self.total_handover_ms = 0.0
+65-        self.actions = initial_action_candidates(
+66:            self.cfg, self.queue, self.now_ms, infra, self.profile, self.batcher
+67-        )
+68-        if not self.actions:
+69-            raise RuntimeError("No feasible initial batch/action. Increase deadlines or free capacity.")
+70-        return self._observation()
+71-
+72-    def _batch_feature_vector(
+73-        self,
+74-        batch: BatchCandidate | None,
+75-    ) -> np.ndarray:
+76-        mask_mobility = bool(
+77:            self.cfg.get(
+78-                "ablation",
+79-                {},
+80-            ).get(
+81-                "mask_mobility_features",
+82-                False,
+--
+482-                batch_size=self.batch.batch_size,
+483-                mapping=list(self.mapping),
+484-            )
+485-            return None, float(step_reward + terminal), True, result
+486-        self.actions = continuation_action_candidates(
+487:            self.cfg,
+488-            self.infra,
+489-            self.profile,
+490-            self.current_block,
+491-            self.batch,
+492-            self.current_node,
+
+===== 7. ENV CONSTRUCTION =====
+scripts/evaluate_dynamic_mobility.py-18-    str(ROOT / "src"),
+scripts/evaluate_dynamic_mobility.py-19-)
+scripts/evaluate_dynamic_mobility.py-20-
+scripts/evaluate_dynamic_mobility.py-21-from msn_scheduler.agent import DDQNAgent
+scripts/evaluate_dynamic_mobility.py-22-from msn_scheduler.baselines import (
+scripts/evaluate_dynamic_mobility.py-23-    choose_min_lower_bound,
+scripts/evaluate_dynamic_mobility.py-24-)
+scripts/evaluate_dynamic_mobility.py-25-from msn_scheduler.batching import (
+scripts/evaluate_dynamic_mobility.py:26:    NodeConditionedDPBatcher,
+scripts/evaluate_dynamic_mobility.py-27-)
+scripts/evaluate_dynamic_mobility.py-28-from msn_scheduler.config import load_config
+scripts/evaluate_dynamic_mobility.py-29-from msn_scheduler.dybap import (
+scripts/evaluate_dynamic_mobility.py-30-    DyBAPFusionBatcher,
+scripts/evaluate_dynamic_mobility.py-31-)
+scripts/evaluate_dynamic_mobility.py:32:from msn_scheduler.env import SchedulingEnv
+scripts/evaluate_dynamic_mobility.py-33-from msn_scheduler.external_baselines import (
+scripts/evaluate_dynamic_mobility.py-34-    choose_external_action,
+scripts/evaluate_dynamic_mobility.py-35-)
+scripts/evaluate_dynamic_mobility.py-36-from msn_scheduler.profiles import (
+scripts/evaluate_dynamic_mobility.py-37-    ModelProfile,
+scripts/evaluate_dynamic_mobility.py-38-    ProfileTable,
+scripts/evaluate_dynamic_mobility.py-39-    shortest_path_latency_ms,
+scripts/evaluate_dynamic_mobility.py-40-    transfer_time_ms,
+--
+scripts/evaluate_dynamic_mobility.py-859-        )
+scripts/evaluate_dynamic_mobility.py-860-
+scripts/evaluate_dynamic_mobility.py-861-    return choose_min_lower_bound(
+scripts/evaluate_dynamic_mobility.py-862-        observation
+scripts/evaluate_dynamic_mobility.py-863-    )
+scripts/evaluate_dynamic_mobility.py-864-
+scripts/evaluate_dynamic_mobility.py-865-
+scripts/evaluate_dynamic_mobility.py-866-def run_one_mapping(
+scripts/evaluate_dynamic_mobility.py:867:    env: SchedulingEnv,
+scripts/evaluate_dynamic_mobility.py-868-    infra,
+scripts/evaluate_dynamic_mobility.py-869-    queue,
+scripts/evaluate_dynamic_mobility.py-870-    now_ms: float,
+scripts/evaluate_dynamic_mobility.py-871-    max_steps: int,
+scripts/evaluate_dynamic_mobility.py-872-    method: str,
+scripts/evaluate_dynamic_mobility.py-873-    cfg: dict,
+scripts/evaluate_dynamic_mobility.py-874-    agent: DDQNAgent | None,
+scripts/evaluate_dynamic_mobility.py-875-):
+--
+scripts/evaluate_dynamic_mobility.py-914-        observation = next_observation
+scripts/evaluate_dynamic_mobility.py-915-
+scripts/evaluate_dynamic_mobility.py-916-    raise RuntimeError(
+scripts/evaluate_dynamic_mobility.py-917-        f"Mapping exceeded {max_steps} steps"
+scripts/evaluate_dynamic_mobility.py-918-    )
+scripts/evaluate_dynamic_mobility.py-919-
+scripts/evaluate_dynamic_mobility.py-920-
+scripts/evaluate_dynamic_mobility.py-921-def get_decode_times(
+scripts/evaluate_dynamic_mobility.py:922:    env: SchedulingEnv,
+scripts/evaluate_dynamic_mobility.py-923-    expected_decode_ms: float,
+scripts/evaluate_dynamic_mobility.py-924-    batch_size: int,
+scripts/evaluate_dynamic_mobility.py-925-) -> list[float]:
+scripts/evaluate_dynamic_mobility.py-926-    function = getattr(
+scripts/evaluate_dynamic_mobility.py-927-        env,
+scripts/evaluate_dynamic_mobility.py-928-        "_per_request_decode_ms",
+scripts/evaluate_dynamic_mobility.py-929-        None,
+scripts/evaluate_dynamic_mobility.py-930-    )
+--
+scripts/evaluate_dynamic_mobility.py-988-
+scripts/evaluate_dynamic_mobility.py-989-    if method == "dybap_adapted":
+scripts/evaluate_dynamic_mobility.py-990-        batcher = DyBAPFusionBatcher(
+scripts/evaluate_dynamic_mobility.py-991-            cfg,
+scripts/evaluate_dynamic_mobility.py-992-            profile,
+scripts/evaluate_dynamic_mobility.py-993-        )
+scripts/evaluate_dynamic_mobility.py-994-    else:
+scripts/evaluate_dynamic_mobility.py-995-        batcher = (
+scripts/evaluate_dynamic_mobility.py:996:            NodeConditionedDPBatcher(
+scripts/evaluate_dynamic_mobility.py-997-                cfg,
+scripts/evaluate_dynamic_mobility.py-998-                profile,
+scripts/evaluate_dynamic_mobility.py-999-            )
+scripts/evaluate_dynamic_mobility.py-1000-        )
+scripts/evaluate_dynamic_mobility.py-1001-
+scripts/evaluate_dynamic_mobility.py-1002-    pending = []
+scripts/evaluate_dynamic_mobility.py-1003-    cursor = 0
+scripts/evaluate_dynamic_mobility.py-1004-    now_ms = float(
+--
+scripts/evaluate_dynamic_mobility.py-1062-                edge_ids=edge_ids,
+scripts/evaluate_dynamic_mobility.py-1063-                mode=mobility_mode,
+scripts/evaluate_dynamic_mobility.py-1064-                prediction_error=(
+scripts/evaluate_dynamic_mobility.py-1065-                    prediction_error
+scripts/evaluate_dynamic_mobility.py-1066-                ),
+scripts/evaluate_dynamic_mobility.py-1067-            )
+scripts/evaluate_dynamic_mobility.py-1068-        )
+scripts/evaluate_dynamic_mobility.py-1069-
+scripts/evaluate_dynamic_mobility.py:1070:        env = SchedulingEnv(
+scripts/evaluate_dynamic_mobility.py-1071-            cfg,
+scripts/evaluate_dynamic_mobility.py-1072-            profile,
+scripts/evaluate_dynamic_mobility.py-1073-            batcher,
+scripts/evaluate_dynamic_mobility.py-1074-        )
+scripts/evaluate_dynamic_mobility.py-1075-
+scripts/evaluate_dynamic_mobility.py-1076-        batch_start_ms = now_ms
+scripts/evaluate_dynamic_mobility.py-1077-
+scripts/evaluate_dynamic_mobility.py-1078-        try:
+--
+scripts/evaluate_dynamic_mobility.py-1473-        assign_poisson_arrivals(
+scripts/evaluate_dynamic_mobility.py-1474-            probe_queue,
+scripts/evaluate_dynamic_mobility.py-1475-            probe_rng,
+scripts/evaluate_dynamic_mobility.py-1476-            0.1,
+scripts/evaluate_dynamic_mobility.py-1477-        )
+scripts/evaluate_dynamic_mobility.py-1478-    )
+scripts/evaluate_dynamic_mobility.py-1479-
+scripts/evaluate_dynamic_mobility.py-1480-    probe_batcher = (
+scripts/evaluate_dynamic_mobility.py:1481:        NodeConditionedDPBatcher(
+scripts/evaluate_dynamic_mobility.py-1482-            cfg,
+scripts/evaluate_dynamic_mobility.py-1483-            profile,
+scripts/evaluate_dynamic_mobility.py-1484-        )
+scripts/evaluate_dynamic_mobility.py-1485-    )
+scripts/evaluate_dynamic_mobility.py-1486-
+scripts/evaluate_dynamic_mobility.py:1487:    probe_env = SchedulingEnv(
+scripts/evaluate_dynamic_mobility.py-1488-        cfg,
+scripts/evaluate_dynamic_mobility.py-1489-        profile,
+scripts/evaluate_dynamic_mobility.py-1490-        probe_batcher,
+scripts/evaluate_dynamic_mobility.py-1491-    )
+scripts/evaluate_dynamic_mobility.py-1492-
+scripts/evaluate_dynamic_mobility.py-1493-    probe_observation = (
+scripts/evaluate_dynamic_mobility.py-1494-        probe_env.reset(
+scripts/evaluate_dynamic_mobility.py-1495-            probe_infra,
+--
+scripts/evaluate_batchers.py-14-sys.path.insert(0, str(ROOT / "src"))
+scripts/evaluate_batchers.py-15-
+scripts/evaluate_batchers.py-16-from msn_scheduler.agent import DDQNAgent
+scripts/evaluate_batchers.py-17-from msn_scheduler.baselines import (
+scripts/evaluate_batchers.py-18-    choose_min_lower_bound,
+scripts/evaluate_batchers.py-19-)
+scripts/evaluate_batchers.py-20-from msn_scheduler.batching import (
+scripts/evaluate_batchers.py-21-    FixedSizeBatcher,
+scripts/evaluate_batchers.py:22:    NodeConditionedDPBatcher,
+scripts/evaluate_batchers.py-23-    SequentialGreedyBatcher,
+scripts/evaluate_batchers.py-24-    SingleRequestBatcher,
+scripts/evaluate_batchers.py-25-)
+scripts/evaluate_batchers.py-26-from msn_scheduler.dybap import DyBAPFusionBatcher
+scripts/evaluate_batchers.py-27-from msn_scheduler.config import load_config
+scripts/evaluate_batchers.py:28:from msn_scheduler.env import SchedulingEnv
+scripts/evaluate_batchers.py-29-from msn_scheduler.profiles import (
+scripts/evaluate_batchers.py-30-    ModelProfile,
+scripts/evaluate_batchers.py-31-    ProfileTable,
+scripts/evaluate_batchers.py-32-)
+scripts/evaluate_batchers.py-33-from msn_scheduler.synthetic import (
+scripts/evaluate_batchers.py-34-    make_request_queue,
+scripts/evaluate_batchers.py-35-    make_synthetic_infrastructure,
+scripts/evaluate_batchers.py-36-)
+scripts/evaluate_batchers.py-37-
+scripts/evaluate_batchers.py-38-
+scripts/evaluate_batchers.py-39-def run_one_mapping(
+scripts/evaluate_batchers.py:40:    env: SchedulingEnv,
+scripts/evaluate_batchers.py-41-    infra,
+scripts/evaluate_batchers.py-42-    queue,
+scripts/evaluate_batchers.py-43-    now_ms: float,
+scripts/evaluate_batchers.py-44-    max_steps: int,
+scripts/evaluate_batchers.py-45-    agent: DDQNAgent | None = None,
+scripts/evaluate_batchers.py-46-):
+scripts/evaluate_batchers.py-47-    obs = env.reset(
+scripts/evaluate_batchers.py-48-        infra,
+--
+scripts/evaluate_batchers.py-89-        obs = next_obs
+scripts/evaluate_batchers.py-90-
+scripts/evaluate_batchers.py-91-    raise RuntimeError(
+scripts/evaluate_batchers.py-92-        f"Mapping exceeded {max_steps} steps"
+scripts/evaluate_batchers.py-93-    )
+scripts/evaluate_batchers.py-94-
+scripts/evaluate_batchers.py-95-
+scripts/evaluate_batchers.py-96-def get_per_request_decode(
+scripts/evaluate_batchers.py:97:    env: SchedulingEnv,
+scripts/evaluate_batchers.py-98-    expected_decode_ms: float,
+scripts/evaluate_batchers.py-99-    batch_size: int,
+scripts/evaluate_batchers.py-100-) -> list[float]:
+scripts/evaluate_batchers.py-101-    function = getattr(
+scripts/evaluate_batchers.py-102-        env,
+scripts/evaluate_batchers.py-103-        "_per_request_decode_ms",
+scripts/evaluate_batchers.py-104-        None,
+scripts/evaluate_batchers.py-105-    )
+--
+scripts/evaluate_batchers.py-228-            continue
+scripts/evaluate_batchers.py-229-
+scripts/evaluate_batchers.py-230-        # Record how many requests were available
+scripts/evaluate_batchers.py-231-        # when the batching decision was made.
+scripts/evaluate_batchers.py-232-        pending_sizes.append(
+scripts/evaluate_batchers.py-233-            len(pending)
+scripts/evaluate_batchers.py-234-        )
+scripts/evaluate_batchers.py-235-
+scripts/evaluate_batchers.py:236:        env = SchedulingEnv(
+scripts/evaluate_batchers.py-237-            cfg,
+scripts/evaluate_batchers.py-238-            profile,
+scripts/evaluate_batchers.py-239-            batcher,
+scripts/evaluate_batchers.py-240-        )
+scripts/evaluate_batchers.py-241-
+scripts/evaluate_batchers.py-242-        batch_start_ms = now_ms
+scripts/evaluate_batchers.py-243-
+scripts/evaluate_batchers.py-244-        try:
+--
+scripts/evaluate_batchers.py-699-            queue=probe_queue,
+scripts/evaluate_batchers.py-700-            rng=probe_rng,
+scripts/evaluate_batchers.py-701-            arrival_rate_rps=(
+scripts/evaluate_batchers.py-702-                args.arrival_rate_rps
+scripts/evaluate_batchers.py-703-            ),
+scripts/evaluate_batchers.py-704-        )
+scripts/evaluate_batchers.py-705-
+scripts/evaluate_batchers.py-706-        probe_batcher = (
+scripts/evaluate_batchers.py:707:            NodeConditionedDPBatcher(
+scripts/evaluate_batchers.py-708-                cfg,
+scripts/evaluate_batchers.py-709-                profile,
+scripts/evaluate_batchers.py-710-            )
+scripts/evaluate_batchers.py-711-        )
+scripts/evaluate_batchers.py-712-
+scripts/evaluate_batchers.py:713:        probe_env = SchedulingEnv(
+scripts/evaluate_batchers.py-714-            cfg,
+scripts/evaluate_batchers.py-715-            profile,
+scripts/evaluate_batchers.py-716-            probe_batcher,
+scripts/evaluate_batchers.py-717-        )
+scripts/evaluate_batchers.py-718-
+scripts/evaluate_batchers.py-719-        probe_obs = probe_env.reset(
+scripts/evaluate_batchers.py-720-            probe_infra,
+scripts/evaluate_batchers.py-721-            [probe_queue[0]],
+--
+scripts/evaluate_batchers.py-834-        ),
+scripts/evaluate_batchers.py-835-        "dybap_fusion": lambda: (
+scripts/evaluate_batchers.py-836-            DyBAPFusionBatcher(
+scripts/evaluate_batchers.py-837-                cfg,
+scripts/evaluate_batchers.py-838-                profile,
+scripts/evaluate_batchers.py-839-            )
+scripts/evaluate_batchers.py-840-        ),
+scripts/evaluate_batchers.py-841-        "node_conditioned_dp": lambda: (
+scripts/evaluate_batchers.py:842:            NodeConditionedDPBatcher(
+scripts/evaluate_batchers.py-843-                cfg,
+scripts/evaluate_batchers.py-844-                profile,
+scripts/evaluate_batchers.py-845-            )
+scripts/evaluate_batchers.py-846-        ),
+scripts/evaluate_batchers.py-847-    }
+scripts/evaluate_batchers.py-848-
+scripts/evaluate_batchers.py-849-    selected_names = (
+scripts/evaluate_batchers.py-850-        args.batchers
+--
+scripts/train.py-11-import pandas as pd
+scripts/train.py-12-import torch
+scripts/train.py-13-
+scripts/train.py-14-ROOT = Path(__file__).resolve().parents[1]
+scripts/train.py-15-sys.path.insert(0, str(ROOT / "src"))
+scripts/train.py-16-
+scripts/train.py-17-from msn_scheduler.agent import DDQNAgent
+scripts/train.py-18-from msn_scheduler.batching import (
+scripts/train.py:19:    NodeConditionedDPBatcher,
+scripts/train.py-20-)
+scripts/train.py-21-from msn_scheduler.config import load_config
+scripts/train.py-22-from msn_scheduler.datatypes import Transition
+scripts/train.py:23:from msn_scheduler.env import SchedulingEnv
+scripts/train.py-24-from msn_scheduler.profiles import (
+scripts/train.py-25-    ModelProfile,
+scripts/train.py-26-    ProfileTable,
+scripts/train.py-27-)
+scripts/train.py-28-from msn_scheduler.synthetic import (
+scripts/train.py-29-    make_request_queue,
+scripts/train.py-30-    make_synthetic_infrastructure,
+scripts/train.py-31-)
+--
+scripts/train.py-58-                arrival_ms=current_ms,
+scripts/train.py-59-            )
+scripts/train.py-60-        )
+scripts/train.py-61-
+scripts/train.py-62-    return result
+scripts/train.py-63-
+scripts/train.py-64-
+scripts/train.py-65-def request_decode_times(
+scripts/train.py:66:    env: SchedulingEnv,
+scripts/train.py-67-    expected_ms: float,
+scripts/train.py-68-    batch_size: int,
+scripts/train.py-69-) -> list[float]:
+scripts/train.py-70-    function = getattr(
+scripts/train.py-71-        env,
+scripts/train.py-72-        "_per_request_decode_ms",
+scripts/train.py-73-        None,
+scripts/train.py-74-    )
+--
+scripts/train.py-226-        ProfileTable.from_csv(
+scripts/train.py-227-            model,
+scripts/train.py-228-            args.profile_csv,
+scripts/train.py-229-        )
+scripts/train.py-230-        if args.profile_csv
+scripts/train.py-231-        else ProfileTable(model)
+scripts/train.py-232-    )
+scripts/train.py-233-
+scripts/train.py:234:    batcher = NodeConditionedDPBatcher(
+scripts/train.py-235-        cfg,
+scripts/train.py-236-        profile,
+scripts/train.py-237-    )
+scripts/train.py-238-
+scripts/train.py-239-    # Probe graph and batch feature dimensions.
+scripts/train.py-240-    probe_infra = (
+scripts/train.py-241-        make_synthetic_infrastructure(
+scripts/train.py-242-            cfg,
+--
+scripts/train.py-251-    )[:1]
+scripts/train.py-252-
+scripts/train.py-253-    probe_queue = assign_poisson_arrivals(
+scripts/train.py-254-        probe_queue,
+scripts/train.py-255-        rng,
+scripts/train.py-256-        args.arrival_rates[0],
+scripts/train.py-257-    )
+scripts/train.py-258-
+scripts/train.py:259:    probe_env = SchedulingEnv(
+scripts/train.py-260-        cfg,
+scripts/train.py-261-        profile,
+scripts/train.py-262-        batcher,
+scripts/train.py-263-    )
+scripts/train.py-264-
+scripts/train.py-265-    probe_obs = probe_env.reset(
+scripts/train.py-266-        probe_infra,
+scripts/train.py-267-        probe_queue,
+--
+scripts/train.py-422-                    now_ms,
+scripts/train.py-423-                    float(
+scripts/train.py-424-                        future[cursor]
+scripts/train.py-425-                        .arrival_ms
+scripts/train.py-426-                    ),
+scripts/train.py-427-                )
+scripts/train.py-428-                continue
+scripts/train.py-429-
+scripts/train.py:430:            env = SchedulingEnv(
+scripts/train.py-431-                cfg,
+scripts/train.py-432-                profile,
+scripts/train.py-433-                batcher,
+scripts/train.py-434-            )
+scripts/train.py-435-
+scripts/train.py-436-            try:
+scripts/train.py-437-                obs = env.reset(
+scripts/train.py-438-                    infra,
+
+===== 8. CHECKPOINT PARAMETER DIFFERENCE =====
+<stdin>:55: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+full tensor_count= 27
+wo_mobility tensor_count= 27
+common tensors = 27
+different tensors = 27
+parameter L2 difference = 2.0627981703050895
+
+===== 9. RAW EPISODE COMPARISON =====
+
+--- eval seed 8101 ---
+avg_e2e_ms                all_equal=True max_diff=0.000000000000
+p95_e2e_ms                all_equal=True max_diff=0.000000000000
+slo_satisfaction          all_equal=True max_diff=0.000000000000
+throughput_rps            all_equal=True max_diff=0.000000000000
+goodput_rps               all_equal=True max_diff=0.000000000000
+handover_events           all_equal=True max_diff=0.000000000000
+handover_overhead_ms      all_equal=True max_diff=0.000000000000
+
+--- eval seed 8102 ---
+avg_e2e_ms                all_equal=True max_diff=0.000000000000
+p95_e2e_ms                all_equal=True max_diff=0.000000000000
+slo_satisfaction          all_equal=True max_diff=0.000000000000
+throughput_rps            all_equal=True max_diff=0.000000000000
+goodput_rps               all_equal=True max_diff=0.000000000000
+handover_events           all_equal=True max_diff=0.000000000000
+handover_overhead_ms      all_equal=True max_diff=0.000000000000
+
+--- eval seed 8103 ---
+avg_e2e_ms                all_equal=True max_diff=0.000000000000
+p95_e2e_ms                all_equal=True max_diff=0.000000000000
+slo_satisfaction          all_equal=True max_diff=0.000000000000
+throughput_rps            all_equal=True max_diff=0.000000000000
+goodput_rps               all_equal=True max_diff=0.000000000000
+handover_events           all_equal=True max_diff=0.000000000000
+handover_overhead_ms      all_equal=True max_diff=0.000000000000
+
+============================================================
+Diagnostic completed
+============================================================

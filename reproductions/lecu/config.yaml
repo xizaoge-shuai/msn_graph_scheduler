@@ -1,0 +1,46 @@
+seed: 7
+environment:
+  num_edge_nodes: 4
+  num_layers: 609
+  num_images: 23
+  versions_per_episode: 10
+  cloud_bandwidth_mbps: 100.0
+  edge_bandwidth_min_mbps: 75.0
+  edge_bandwidth_max_mbps: 135.0
+  cpu_min: 80.0
+  cpu_max: 120.0
+  memory_min_gb: 64.0
+  memory_max_gb: 128.0
+  storage_gb: 512.0
+  layer_size_min_mb: 1.0
+  layer_size_max_mb: 400.0
+  changed_layers_min: 1
+  changed_layers_max: 6
+  initialization_delta: 0.03
+  task_arrival_rate_rps: 2.0
+  task_cpu_min: 1.0
+  task_cpu_max: 8.0
+  task_memory_min_gb: 0.5
+  task_memory_max_gb: 8.0
+  lambda_update: 0.6
+  update_cost_scale: 10000.0
+  initial_task_load_min: 0.25
+  initial_task_load_max: 0.6
+  initial_task_max_per_node: 20
+  cloud_task_duration_min_ms: 2500.0
+  cloud_task_duration_max_ms: 60000.0
+  cloud_task_communication_min_ms: 40.0
+  cloud_task_communication_max_ms: 180.0
+sac:
+  hidden_dim: 256
+  learning_rate: 0.0003
+  gamma: 0.99
+  tau: 0.005
+  alpha: 0.2
+  replay_capacity: 100000
+  batch_size: 128
+  warmup_steps: 500
+  updates_per_step: 1
+training:
+  episodes: 1500
+  checkpoint_every: 100

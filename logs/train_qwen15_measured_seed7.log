@@ -1,0 +1,19 @@
+Using request trace: data/processed/azure_2023_train_sample.csv rows=22,123
+Traceback (most recent call last):
+  File "/home/zhjia/projects/msn_graph_scheduler/scripts/train.py", line 870, in <module>
+    main()
+  File "/home/zhjia/projects/msn_graph_scheduler/scripts/train.py", line 226, in main
+    ProfileTable.from_csv(
+  File "/home/zhjia/projects/msn_graph_scheduler/src/msn_scheduler/profiles.py", line 34, in from_csv
+    df = pd.read_csv(path)
+  File "/home/zhjia/miniconda3/envs/msn/lib/python3.10/site-packages/pandas/io/parsers/readers.py", line 1026, in read_csv
+    return _read(filepath_or_buffer, kwds)
+  File "/home/zhjia/miniconda3/envs/msn/lib/python3.10/site-packages/pandas/io/parsers/readers.py", line 620, in _read
+    parser = TextFileReader(filepath_or_buffer, **kwds)
+  File "/home/zhjia/miniconda3/envs/msn/lib/python3.10/site-packages/pandas/io/parsers/readers.py", line 1620, in __init__
+    self._engine = self._make_engine(f, self.engine)
+  File "/home/zhjia/miniconda3/envs/msn/lib/python3.10/site-packages/pandas/io/parsers/readers.py", line 1880, in _make_engine
+    self.handles = get_handle(
+  File "/home/zhjia/miniconda3/envs/msn/lib/python3.10/site-packages/pandas/io/common.py", line 873, in get_handle
+    handle = open(
+FileNotFoundError: [Errno 2] No such file or directory: 'profiles/qwen2.5_1.5b_local.csv'

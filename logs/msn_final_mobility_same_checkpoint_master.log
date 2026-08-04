@@ -1,0 +1,9 @@
+Start variant=strict rate=0.40 time=2026年 07月 31日 星期五 17:36:49 CST
+Start variant=full rate=0.40 time=2026年 07月 31日 星期五 17:36:49 CST
+Start variant=full rate=0.60 time=2026年 07月 31日 星期五 17:36:49 CST
+Start variant=strict rate=0.60 time=2026年 07月 31日 星期五 17:36:49 CST
+Finished variant=full rate=0.60 time=2026年 07月 31日 星期五 17:37:54 CST
+Finished variant=strict rate=0.60 time=2026年 07月 31日 星期五 17:37:55 CST
+Finished variant=full rate=0.40 time=2026年 07月 31日 星期五 17:38:02 CST
+Finished variant=strict rate=0.40 time=2026年 07月 31日 星期五 17:38:05 CST
+Same-checkpoint mobility audit completed.
