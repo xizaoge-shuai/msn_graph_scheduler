@@ -6,5 +6,12 @@ data/processed/azure_2024_code.csv
 data/processed/azure_2024_conversation.csv
 data/processed/azure_all_requests.csv
 
-git reset --soft origin/reproduce/lecu-dybap
-git reset
+
+
+# Generated runtime artifacts
+logs/
+**/__pycache__/
+*.py[cod]
+.pytest_cache/
+# Local checkpoints
+outputs/**/*.pt

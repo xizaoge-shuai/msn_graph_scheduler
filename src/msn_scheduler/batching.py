@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 
 import numpy as np
 
@@ -146,6 +146,53 @@ class NodeConditionedDPBatcher:
             raise ValueError(
                 "tmc_mobility.batch_risk_horizon "
                 "must be either 'prefill' or 'service'"
+            )
+
+        self.guarded_mobility_batching = bool(
+            tmc_cfg.get(
+                "guarded_batching",
+                False,
+            )
+        )
+
+        self.guard_base_weight = float(
+            tmc_cfg.get(
+                "guard_base_weight",
+                self.dp_weights.mobility,
+            )
+        )
+
+        self.guard_proposal_weight = float(
+            tmc_cfg.get(
+                "guard_proposal_weight",
+                0.6,
+            )
+        )
+
+        self.guard_max_utility_regret = float(
+            tmc_cfg.get(
+                "guard_max_utility_regret",
+                0.0,
+            )
+        )
+
+        self.guard_min_risk_reduction = float(
+            tmc_cfg.get(
+                "guard_min_risk_reduction",
+                0.0,
+            )
+        )
+
+        if self.guard_max_utility_regret < 0.0:
+            raise ValueError(
+                "guard_max_utility_regret "
+                "must be non-negative"
+            )
+
+        if self.guard_min_risk_reduction < 0.0:
+            raise ValueError(
+                "guard_min_risk_reduction "
+                "must be non-negative"
             )
 
     def _handover_cost_ms(self, req: Request, infra: Infrastructure, node_id: str) -> float:
@@ -408,19 +455,36 @@ class NodeConditionedDPBatcher:
             link_signature,
         )
 
-    def best_batch(
+    def _best_batch_once(
         self,
         queue: list[Request],
         now_ms: float,
         infra: Infrastructure,
         node_id: str,
         group_size: int,
+        mobility_weight: float,
+        fixed_batch_size: int | None = None,
     ) -> BatchCandidate | None:
         if not queue:
             return None
         if not hasattr(self, "_cache"):
             self._cache = {}
-        key = self._cache_key(queue, now_ms, infra, node_id, group_size)
+        key = (
+            self._cache_key(
+                queue,
+                now_ms,
+                infra,
+                node_id,
+                group_size,
+            )
+            + (
+                round(
+                    float(mobility_weight),
+                    6,
+                ),
+                fixed_batch_size,
+            )
+        )
         if key in self._cache:
             return self._cache[key]
 
@@ -438,7 +502,18 @@ class NodeConditionedDPBatcher:
             max_target = min(self.max_batch_size, len(eligible))
             expected_out_pool = int(round(np.mean([r.expected_output_tokens for r in eligible])))
             for target_b in range(1, max_target + 1):
-                batch_prefill = self.profile.prefill_ms(node, target_b, max_len, group_size)
+                if (
+                    fixed_batch_size is not None
+                    and target_b != fixed_batch_size
+                ):
+                    continue
+
+                batch_prefill = self.profile.prefill_ms(
+                    node,
+                    target_b,
+                    max_len,
+                    group_size,
+                )
                 batch_gain = (
                     target_b * self.profile.prefill_ms(node, 1, max_len, group_size) - batch_prefill
                 )
@@ -557,7 +632,7 @@ class NodeConditionedDPBatcher:
                             max_len
                             - req.input_tokens
                         )
-                        - self.dp_weights.mobility
+                        - mobility_weight
                         * p_ho
                         * handover
                         - self.dp_weights.decode
@@ -708,6 +783,164 @@ class NodeConditionedDPBatcher:
         self._cache[key] = best
         return best
 
+
+    def _candidate_prefill_mobility_risk(
+        self,
+        candidate: BatchCandidate,
+        infra: Infrastructure,
+        node_id: str,
+    ) -> float:
+        if not candidate.requests:
+            return 0.0
+
+        risks = []
+
+        for request in candidate.requests:
+            exposure_probability = min(
+                1.0,
+                request.handover_probability
+                * candidate.estimated_prefill_ms
+                / max(
+                    request.residual_dwell_ms,
+                    1.0,
+                ),
+            )
+
+            risks.append(
+                exposure_probability
+                * self._handover_cost_ms(
+                    request,
+                    infra,
+                    node_id,
+                )
+            )
+
+        return float(
+            np.mean(risks)
+        )
+
+    def best_batch(
+        self,
+        queue: list[Request],
+        now_ms: float,
+        infra: Infrastructure,
+        node_id: str,
+        group_size: int,
+    ) -> BatchCandidate | None:
+        if not self.guarded_mobility_batching:
+            return self._best_batch_once(
+                queue=queue,
+                now_ms=now_ms,
+                infra=infra,
+                node_id=node_id,
+                group_size=group_size,
+                mobility_weight=(
+                    self.dp_weights.mobility
+                ),
+            )
+
+        baseline = self._best_batch_once(
+            queue=queue,
+            now_ms=now_ms,
+            infra=infra,
+            node_id=node_id,
+            group_size=group_size,
+            mobility_weight=(
+                self.guard_base_weight
+            ),
+        )
+
+        if baseline is None:
+            return None
+
+        proposal = self._best_batch_once(
+            queue=queue,
+            now_ms=now_ms,
+            infra=infra,
+            node_id=node_id,
+            group_size=group_size,
+            mobility_weight=(
+                self.guard_proposal_weight
+            ),
+            fixed_batch_size=(
+                baseline.batch_size
+            ),
+        )
+
+        if proposal is None:
+            return baseline
+
+        baseline_ids = tuple(
+            request.request_id
+            for request in baseline.requests
+        )
+
+        proposal_ids = tuple(
+            request.request_id
+            for request in proposal.requests
+        )
+
+        if proposal_ids == baseline_ids:
+            return baseline
+
+        baseline_risk = (
+            self._candidate_prefill_mobility_risk(
+                baseline,
+                infra,
+                node_id,
+            )
+        )
+
+        proposal_risk = (
+            self._candidate_prefill_mobility_risk(
+                proposal,
+                infra,
+                node_id,
+            )
+        )
+
+        risk_reduction = (
+            baseline_risk
+            - proposal_risk
+        )
+
+        if (
+            risk_reduction
+            <= self.guard_min_risk_reduction
+        ):
+            return baseline
+
+        # The proposal utility was evaluated using the
+        # stronger mobility coefficient. Convert it back
+        # to the reference coefficient before applying
+        # the utility-regret guard.
+        proposal_reference_utility = (
+            proposal.utility
+            + (
+                self.guard_proposal_weight
+                - self.guard_base_weight
+            )
+            * proposal_risk
+        )
+
+        utility_regret = (
+            baseline.utility
+            - proposal_reference_utility
+        )
+
+        if (
+            utility_regret
+            > self.guard_max_utility_regret
+            + 1e-12
+        ):
+            return baseline
+
+        return replace(
+            proposal,
+            utility=float(
+                proposal_reference_utility
+            ),
+        )
 
 class HeuristicBatcherBase(NodeConditionedDPBatcher):
     """Shared feasibility/cost logic for batching baselines."""

@@ -1,0 +1,3 @@
+comparison,avg_e2e_ms_mean_delta,avg_e2e_ms_improvement_rate,p95_e2e_ms_mean_delta,p95_e2e_ms_improvement_rate,slo_satisfaction_mean_delta,slo_satisfaction_improvement_rate,goodput_rps_mean_delta,goodput_rps_improvement_rate,handover_overhead_ms_mean_delta,handover_overhead_ms_improvement_rate,migration_mb_mean_delta,migration_mb_improvement_rate
+prefetch_vs_keep,324.4148771826578,0.3,436.32827476256455,0.5,-0.004166666666666668,0.05,-0.004560020535098689,0.45,1796.2725079444797,0.25,1463.363671875,0.0
+prefetch_vs_reactive,-3159.1815433314373,0.95,-7293.925007284417,1.0,0.09999999999999999,0.75,0.03848041095982076,0.85,-13784.789990016556,1.0,27.02109375,0.35
