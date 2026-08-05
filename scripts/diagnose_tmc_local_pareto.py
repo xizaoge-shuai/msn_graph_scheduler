@@ -52,7 +52,22 @@ def candidate_ids(candidate) -> tuple[str, ...]:
 def traced_run_one_mapping(*args, **kwargs):
     env = kwargs["env"]
     infra = kwargs["infra"]
-    queue = list(kwargs["queue"])
+    full_queue = list(
+        kwargs["queue"]
+    )
+
+    window_size = int(
+        env.batcher.window_size
+    )
+
+    # Freeze the original candidate universe.
+    # Excluding a baseline request must not allow a
+    # request outside the original rolling window
+    # to enter the alternative search.
+    search_queue = full_queue[
+        :window_size
+    ]
+
     now_ms = float(kwargs["now_ms"])
 
     result = ORIGINAL_RUN_ONE_MAPPING(
@@ -77,7 +92,7 @@ def traced_run_one_mapping(*args, **kwargs):
     )
 
     baseline = batcher._best_batch_once(
-        queue=queue,
+        queue=search_queue,
         now_ms=now_ms,
         infra=infra,
         node_id=node_id,
@@ -126,7 +141,7 @@ def traced_run_one_mapping(*args, **kwargs):
     for excluded in exclusions:
         filtered_queue = [
             request
-            for request in queue
+            for request in search_queue
             if request.request_id
             not in excluded
         ]
@@ -188,6 +203,23 @@ def traced_run_one_mapping(*args, **kwargs):
         absolute_regret = (
             baseline.utility
             - candidate.utility
+        )
+
+        if absolute_regret < -1e-8:
+            raise RuntimeError(
+                "Alternative utility exceeds baseline "
+                "utility under the same frozen window: "
+                f"episode_seed={STATE['episode_seed']}, "
+                f"mapping_id={STATE['mapping_id']}, "
+                f"baseline_utility={baseline.utility}, "
+                f"candidate_utility={candidate.utility}, "
+                f"regret={absolute_regret}"
+            )
+
+        # Remove only floating-point noise.
+        absolute_regret = max(
+            0.0,
+            float(absolute_regret),
         )
 
         utility_scale = max(
