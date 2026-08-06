@@ -1,17 +1,17 @@
 
-# Large Azure datasets: keep locally, do not commit
-data/raw/azure_2024/conversation.csv
-data/raw/azure_2024/code.csv
 data/processed/azure_2024_code.csv
 data/processed/azure_2024_conversation.csv
 data/processed/azure_all_requests.csv
-
-
-
+data/raw/azure_2024/code.csv
+data/raw/azure_2024/conversation.csv
 # Generated runtime artifacts
+# Large Azure datasets: keep locally, do not commit
+# Large per-action diagnostic records
+# Local checkpoints
 logs/
+outputs/**/*.pt
+outputs/tmc_action_pareto*/**/*_actions.csv
 **/__pycache__/
 *.py[cod]
 .pytest_cache/
-# Local checkpoints
-outputs/**/*.pt
+# Runtime logs and caches
