@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import copy
 import hashlib
 from dataclasses import dataclass, replace
 from pathlib import Path
@@ -26,6 +27,10 @@ from msn_scheduler.batching import (
     NodeConditionedDPBatcher,
 )
 from msn_scheduler.config import load_config
+from msn_scheduler.continuity import (
+    find_optimal_continuation_mapping,
+    simulate_stateful_decode,
+)
 from msn_scheduler.dybap import (
     DyBAPFusionBatcher,
 )
@@ -1154,6 +1159,9 @@ def run_dynamic_episode(
     handover_successful_requests = 0
     total_migration_mb = 0.0
     total_migration_ms = 0.0
+    total_continuity_delta_ms = 0.0
+    total_replan_events = 0
+    total_replanned_blocks = 0
 
     batch_sizes = []
     request_e2e_ms = []
@@ -1309,49 +1317,190 @@ def run_dynamic_episode(
                 request.request_id
             ]
 
-            (
-                migration_ms,
-                migration_mb,
-                handover_events,
-                final_state,
-            ) = simulate_handover_overhead(
-                request=request,
-                state=state,
-                service_start_ms=(
-                    batch_start_ms
-                ),
-                base_finish_ms=(
+            replan_events = 0
+            replanned_blocks = 0
+
+            if migration_policy in {
+                "stateful_keep",
+                "oracle_replan",
+            }:
+                def replan_mapping(
+                    new_anchor: str,
+                    current_ms: float,
+                    remaining_tokens: int,
+                    generated_tokens: int,
+                ):
+                    return (
+                        find_optimal_continuation_mapping(
+                            request=request,
+                            old_mapping=(
+                                result.mapping
+                            ),
+                            new_anchor=str(
+                                new_anchor
+                            ),
+                            remaining_tokens=max(
+                                int(
+                                    remaining_tokens
+                                ),
+                                1,
+                            ),
+                            generated_tokens=max(
+                                int(
+                                    generated_tokens
+                                ),
+                                0,
+                            ),
+                            batch_size=(
+                                result.batch_size
+                            ),
+                            infra=infra,
+                            profile=profile,
+                            cfg=cfg,
+                        )
+                    )
+
+                def next_mobility_state(
+                    current_state,
+                    event_ms: float,
+                    new_anchor: str,
+                ):
+                    return create_mobility_state(
+                        request_id=(
+                            request.request_id
+                        ),
+                        current_anchor=str(
+                            new_anchor
+                        ),
+                        now_ms=float(
+                            event_ms
+                        ),
+                        transition_index=(
+                            current_state
+                            .transition_index
+                            + 1
+                        ),
+                        episode_seed=(
+                            episode_seed
+                        ),
+                        edge_ids=edge_ids,
+                        mode=mobility_mode,
+                        prediction_error=(
+                            prediction_error
+                        ),
+                    )
+
+                continuity = simulate_stateful_decode(
+                    request=request,
+                    initial_state=state,
+                    service_start_ms=(
+                        batch_start_ms
+                    ),
+                    prefill_ms=(
+                        result.total_prefill_ms
+                    ),
+                    mapping=result.mapping,
+                    batch_size=(
+                        result.batch_size
+                    ),
+                    infra=infra,
+                    profile=profile,
+                    policy=migration_policy,
+                    handover_setup_ms=(
+                        handover_setup_ms
+                    ),
+                    replan_callback=(
+                        replan_mapping
+                        if migration_policy
+                        == "oracle_replan"
+                        else None
+                    ),
+                    next_state_callback=(
+                        next_mobility_state
+                    ),
+                )
+
+                completion_ms = float(
+                    continuity.completion_ms
+                )
+
+                migration_ms = float(
+                    continuity.migration_ms
+                )
+
+                migration_mb = float(
+                    continuity.migration_mb
+                )
+
+                handover_events = int(
+                    continuity.handover_events
+                )
+
+                replan_events = int(
+                    continuity.replan_events
+                )
+
+                replanned_blocks = int(
+                    continuity.replanned_blocks
+                )
+
+                final_state = (
+                    continuity.final_state
+                )
+
+                completion_delta_ms = (
+                    completion_ms
+                    - base_finish_ms
+                )
+
+            else:
+                (
+                    migration_ms,
+                    migration_mb,
+                    handover_events,
+                    final_state,
+                ) = simulate_handover_overhead(
+                    request=request,
+                    state=state,
+                    service_start_ms=(
+                        batch_start_ms
+                    ),
+                    base_finish_ms=(
+                        base_finish_ms
+                    ),
+                    execution_node=(
+                        execution_node
+                    ),
+                    infra=infra,
+                    profile=profile,
+                    episode_seed=(
+                        episode_seed
+                    ),
+                    edge_ids=edge_ids,
+                    mode=mobility_mode,
+                    prediction_error=(
+                        prediction_error
+                    ),
+                    migration_policy=(
+                        migration_policy
+                    ),
+                    handover_setup_ms=(
+                        handover_setup_ms
+                    ),
+                )
+
+                completion_ms = (
                     base_finish_ms
-                ),
-                execution_node=(
-                    execution_node
-                ),
-                infra=infra,
-                profile=profile,
-                episode_seed=(
-                    episode_seed
-                ),
-                edge_ids=edge_ids,
-                mode=mobility_mode,
-                prediction_error=(
-                    prediction_error
-                ),
-                migration_policy=(
-                    migration_policy
-                ),
-                handover_setup_ms=(
-                    handover_setup_ms
-                ),
-            )
+                    + migration_ms
+                )
+
+                completion_delta_ms = float(
+                    migration_ms
+                )
 
             mobility_states[
                 request.request_id
             ] = final_state
-
-            completion_ms = (
-                base_finish_ms
-                + migration_ms
-            )
 
             e2e_ms = max(
                 0.0,
@@ -1391,8 +1540,20 @@ def run_dynamic_episode(
                 migration_ms
             )
 
+            total_continuity_delta_ms += (
+                completion_delta_ms
+            )
+
+            total_replan_events += (
+                replan_events
+            )
+
+            total_replanned_blocks += (
+                replanned_blocks
+            )
+
             per_request_overhead_ms.append(
-                migration_ms
+                completion_delta_ms
             )
 
         service_decode_ms = max(
@@ -1535,21 +1696,24 @@ def run_dynamic_episode(
             total_migration_mb
         ),
         "handover_overhead_ms": (
-            total_migration_ms
+            total_continuity_delta_ms
         ),
         "migration_ms": (
             total_migration_ms
-            if migration_policy != "keep"
+            if migration_policy not in {
+                "keep",
+                "stateful_keep",
+            }
             else 0.0
         ),
         "avg_handover_overhead_ms_per_event": (
-            total_migration_ms
+            total_continuity_delta_ms
             / total_handover_events
             if total_handover_events > 0
             else 0.0
         ),
         "avg_handover_overhead_ms_per_affected_request": (
-            total_migration_ms
+            total_continuity_delta_ms
             / handover_affected_requests
             if handover_affected_requests > 0
             else 0.0
@@ -1559,7 +1723,10 @@ def run_dynamic_episode(
             / total_handover_events
             if (
                 total_handover_events > 0
-                and migration_policy != "keep"
+                and migration_policy not in {
+                    "keep",
+                    "stateful_keep",
+                }
             )
             else 0.0
         ),
@@ -1568,7 +1735,10 @@ def run_dynamic_episode(
             / handover_affected_requests
             if (
                 handover_affected_requests > 0
-                and migration_policy != "keep"
+                and migration_policy not in {
+                    "keep",
+                    "stateful_keep",
+                }
             )
             else 0.0
         ),
@@ -1577,6 +1747,12 @@ def run_dynamic_episode(
             / total_handover_events
             if total_handover_events > 0
             else 0.0
+        ),
+        "replan_events": (
+            total_replan_events
+        ),
+        "replanned_blocks": (
+            total_replanned_blocks
         ),
         "mapping_steps": mapping_steps,
         "reward": total_reward,
@@ -1753,6 +1929,8 @@ def main() -> None:
             "reactive",
             "prefetch",
             "oracle_guarded",
+            "stateful_keep",
+            "oracle_replan",
         ],
     )
 
