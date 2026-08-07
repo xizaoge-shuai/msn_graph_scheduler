@@ -741,7 +741,13 @@ def simulate_stateful_decode(
     handover_setup_ms: float,
     replan_callback: (
         Callable[
-            [str, float, int, int],
+            [
+                str,
+                float,
+                int,
+                int,
+                Sequence[MappingStep],
+            ],
             Sequence[MappingStep] | None,
         ]
         | None
@@ -890,6 +896,7 @@ def simulate_stateful_decode(
                         ),
                         0,
                     ),
+                    current_mapping,
                 )
             )
 

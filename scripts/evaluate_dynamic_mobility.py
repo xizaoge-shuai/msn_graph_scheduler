@@ -1329,12 +1329,13 @@ def run_dynamic_episode(
                     current_ms: float,
                     remaining_tokens: int,
                     generated_tokens: int,
+                    current_mapping,
                 ):
                     return (
                         find_optimal_continuation_mapping(
                             request=request,
                             old_mapping=(
-                                result.mapping
+                                current_mapping
                             ),
                             new_anchor=str(
                                 new_anchor
