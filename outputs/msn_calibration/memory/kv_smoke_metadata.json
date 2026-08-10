@@ -1,0 +1,20 @@
+{
+  "model": "/data/users/zhjia/models/Qwen2.5-1.5B-Instruct",
+  "dtype": "bfloat16",
+  "num_layers": 28,
+  "hidden_size": 1536,
+  "num_attention_heads": 12,
+  "num_key_value_heads": 2,
+  "head_dim": 128,
+  "dtype_bytes": 2,
+  "total_parameter_bytes": 3087428608,
+  "total_parameter_gib": 2.875391960144043,
+  "transformer_layer_bytes": 2620678144,
+  "transformer_layer_gib": 2.4406967163085938,
+  "non_layer_bytes": 466750464,
+  "non_layer_gib": 0.4346952438354492,
+  "mean_block_bytes": 93595648.0,
+  "mean_block_gib": 0.08716773986816406,
+  "expected_kv_bytes_per_layer_token": 1024,
+  "expected_kv_bytes_per_full_model_token": 28672
+}

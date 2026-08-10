@@ -1,0 +1,2 @@
+batch_size,token_length,work_tokens,kv_tensor_bytes,kv_tensor_gib,expected_kv_bytes,expected_kv_gib,cache_alloc_delta_bytes,cache_alloc_delta_gib,logits_bytes,logits_gib,peak_with_logits_gib,baseline_alloc_gib
+1,128,128,3670016,0.00341796875,3670016,0.00341796875,3670016,0.00341796875,38895616,0.036224365234375,2.925077438354492,2.884183883666992

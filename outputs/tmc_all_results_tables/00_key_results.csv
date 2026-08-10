@@ -1,0 +1,17 @@
+result,value,unit
+Stationary total gain,0.0,%
+Walking total gain,0.949981559958113,%
+Driving total gain,4.841246363579,%
+High-speed reactive gain,9.035684793714791,%
+High-speed predictive extra,1.5754015455748285,%
+High-speed total Avg gain,10.468738021396174,%
+High-speed P95 gain,11.003285811168327,%
+High-speed SLO gain,3.166666666666668,pp
+High-speed Goodput gain,8.199497700757409,%
+Planner mean speedup,6.368940096208818,x
+Planner p95 speedup,6.823453469656416,x
+Memoized planner p95,68.14300585000001,ms
+Min total gain over loads,10.118516695223622,%
+Max total gain over loads,11.95990000181748,%
+Severe joint-error prefetch extra gain,1.7360621888123706,%
+Severe joint-error traffic overhead,17.19505519776867,%

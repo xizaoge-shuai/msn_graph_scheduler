@@ -1,0 +1,9 @@
+metric,max_abs_diff,equal
+avg_e2e_ms,0.0,True
+p95_e2e_ms,0.0,True
+slo_satisfaction,0.0,True
+goodput_rps,0.0,True
+migration_mb,0.0,True
+migration_ms,0.0,True
+replan_events,0.0,True
+replanned_blocks,0.0,True

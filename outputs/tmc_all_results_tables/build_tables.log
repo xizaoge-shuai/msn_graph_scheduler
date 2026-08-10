@@ -1,0 +1,174 @@
+LOAD outputs/tmc_nodedp_runtimeaware_100ep/nodedp_tmc_summary.csv: rows=4
+LOAD outputs/tmc_main_runtimeaware_100ep/main_runtimeaware_summary.csv: rows=4
+LOAD outputs/tmc_baselines_stateful_100ep/baseline_full_table.csv: rows=24
+LOAD outputs/tmc_load_sensitivity_100ep/load_sensitivity_summary.csv: rows=4
+LOAD outputs/tmc_prefetch_joint_error_100ep/joint_error_summary.csv: rows=9
+LOAD outputs/tmc_prefetch_joint_error_100ep/joint_error_traffic_summary.csv: rows=9
+LOAD outputs/tmc_prefetch_practical_20_20_100ep/practical_20_20_summary.csv: rows=3
+LOAD outputs/tmc_planner_overhead_100ep/planner_timing.csv: rows=1483
+LOAD outputs/tmc_planner_cached_smoke/planner_timing.csv: rows=294
+LOAD outputs/tmc_planner_cached_smoke/high_speed.csv: rows=20
+LOAD outputs/tmc_prefetch_practical_20_20_100ep/high_speed_prefetch.csv: rows=100
+
+====================================================================================================
+TMC ALL VALID RESULTS TABLES
+====================================================================================================
+
+TABLE 0 - KEY RESULTS
+---------------------
+                                result     value unit
+                 Stationary total gain  0.000000    %
+                    Walking total gain  0.949982    %
+                    Driving total gain  4.841246    %
+              High-speed reactive gain  9.035685    %
+           High-speed predictive extra  1.575402    %
+             High-speed total Avg gain 10.468738    %
+                   High-speed P95 gain 11.003286    %
+                   High-speed SLO gain  3.166667   pp
+               High-speed Goodput gain  8.199498    %
+                  Planner mean speedup  6.368940    x
+                   Planner p95 speedup  6.823453    x
+                  Memoized planner p95 68.143006   ms
+             Min total gain over loads 10.118517    %
+             Max total gain over loads 11.959900    %
+Severe joint-error prefetch extra gain  1.736062    %
+   Severe joint-error traffic overhead 17.195055    %
+
+TABLE 1 - NODE-DP + TMC MAIN MOBILITY RESULTS
+---------------------------------------------
+      mode  keep_avg_ms  reactive_avg_ms  predictive_avg_ms  reactive_gain_pct  reactive_ci_low_ms  reactive_ci_high_ms  prefetch_extra_pct  extra_ci_low_ms  extra_ci_high_ms  total_gain_pct  total_ci_low_ms  total_ci_high_ms  reactive_p95_gain_pct  predictive_p95_gain_pct  keep_slo  reactive_slo  predictive_slo  total_slo_gain_pp  goodput_gain_pct  keep_handover  reactive_handover  predictive_handover  reactive_migration_mb  predictive_actual_mb  traffic_overhead_pct  prefetch_waste_pct
+stationary 11921.862343     11921.862343       11921.862343           0.000000            0.000000             0.000000            0.000000         0.000000          0.000000        0.000000         0.000000          0.000000               0.000000                 0.000000  0.463333      0.463333        0.463333           0.000000          0.000000           0.00               0.00                 0.00               0.000000              0.000000              0.000000            0.000000
+   walking 11923.273032     11823.081163       11810.004137           0.840305           -3.764646           204.148384            0.110606         2.719066         23.434986        0.949982         2.388747        224.149043               1.667583                 1.939854  0.463333      0.463333        0.463333           0.000000          0.049887           0.31               0.29                 0.29              17.250352             19.222309             11.431402           35.812800
+   driving 11981.329039     11460.478916       11401.283383           4.347182           44.784827           996.915420            0.516519       -10.215272        128.606338        4.841246       105.079076       1055.012237               5.119776                 5.490452  0.460000      0.470000        0.473333           1.333333          3.074463           2.69               2.57                 2.58              48.610664             54.313581             11.731822           28.746894
+high_speed 11935.011239     10856.601243       10685.566179           9.035685          487.992105          1668.827887            1.575402        48.802854        293.267274       10.468738       625.463376       1873.426743              10.074679                11.003286  0.464167      0.491667        0.495833           3.166667          8.199498           9.90               9.27                 9.05             125.928984            124.832834             -0.870451           19.829871
+
+TABLE 2 - FULL/DDQN BACKBONE GENERALIZATION
+-------------------------------------------
+      mode  keep_avg_ms  reactive_avg_ms  prefetch_avg_ms  reactive_gain_pct  reactive_ci_low_ms  reactive_ci_high_ms  prefetch_extra_pct  extra_ci_low_ms  extra_ci_high_ms  total_gain_pct  total_ci_low_ms  total_ci_high_ms  reactive_p95_gain_pct  prefetch_p95_gain_pct  keep_slo  reactive_slo  prefetch_slo  prefetch_extra_slo_pp  prefetch_goodput_gain_pct  reactive_migration_mb  prefetch_actual_mb  prefetch_traffic_overhead_pct  prefetch_waste_pct  reactive_planner_mean_ms  reactive_planner_p95_ms
+stationary 15740.858235     15740.858235     15740.858235           0.000000            0.000000             0.000000            0.000000         0.000000          0.000000        0.000000         0.000000          0.000000               0.000000               0.000000  0.412500      0.412500      0.412500               0.000000                   0.000000               0.000000            0.000000                       0.000000            0.000000                  0.000000                 0.000000
+   walking 15747.320382     14886.321904     14810.587497           5.467587          172.644402          1549.352554            0.508752        10.909205        140.559609        5.948522       192.302146       1681.163625               7.396627               8.045905  0.412500      0.413333      0.414167               0.083333                   0.137531              48.899941           55.902221                      14.319607           14.251852                 47.864245                65.348869
+   driving 15754.965489     13404.620757     13215.764703          14.918120         1140.891908          3559.797556            1.408888        19.972618        357.739491       16.116829      1217.969226       3860.432347              18.363836              18.593868  0.410833      0.427500      0.427500               0.000000                   0.245294             105.266016          115.933119                      10.133474           15.902825                 55.850255                68.675500
+high_speed 15706.255505     11744.482578     11452.420345          25.224172         2257.335206          5666.210648            2.486804       147.917594        436.206871       27.083700      2505.336070       6002.334248              28.137679              29.487553  0.411667      0.449167      0.465000               1.583333                   3.505066             166.982344          184.240239                      10.335162           20.482080                 59.196082                69.405327
+
+TABLE 3 - SCHEDULER BASELINES
+-----------------------------
+      mode            method   avg_e2e_ms   p95_e2e_ms      slo  goodput  handover  migration_mb
+stationary           Node-DP 11921.862343 22281.853073 0.463333 0.133300      0.00      0.000000
+stationary          LeCu-RBA 18852.120491 35478.540849 0.269167 0.071744      0.00      0.000000
+stationary     DyBAP-adapted 17892.892726 29504.489172 0.369167 0.099084      0.00      0.000000
+stationary       Full + Keep 15740.858235 30108.749859 0.412500 0.117436      0.00      0.000000
+stationary   Full + Reactive 15740.858235 30108.749859 0.412500 0.117436      0.00      0.000000
+stationary Full + Predictive 15740.858235 30108.749859 0.412500 0.117436      0.00      0.000000
+   walking           Node-DP 11923.273032 22292.080147 0.463333 0.133297      0.31      0.000000
+   walking          LeCu-RBA 18855.887790 35488.760446 0.269167 0.071763      1.21      0.000000
+   walking     DyBAP-adapted 21215.884086 35742.598861 0.293333 0.073819      1.27      0.000000
+   walking       Full + Keep 15747.320382 30134.685303 0.412500 0.117395      0.73      0.000000
+   walking   Full + Reactive 14886.321904 27905.735013 0.413333 0.117710      0.71     48.899941
+   walking Full + Predictive 14810.587497 27710.077132 0.414167 0.117872      0.74     51.989180
+   driving           Node-DP 11981.329039 22426.137069 0.460000 0.132241      2.69      0.000000
+   driving          LeCu-RBA 18879.970973 35522.078579 0.267500 0.071220      5.31      0.000000
+   driving     DyBAP-adapted 21215.439521 35320.418663 0.289167 0.071745      4.58      0.000000
+   driving       Full + Keep 15754.965489 30147.898851 0.410833 0.116850      3.67      0.000000
+   driving   Full + Reactive 13404.620757 24611.588188 0.427500 0.120907      3.14    105.266016
+   driving Full + Predictive 13215.764703 24542.238407 0.427500 0.121203      3.06    106.521328
+high_speed           Node-DP 11935.011239 22264.748130 0.464167 0.133772      9.90      0.000000
+high_speed          LeCu-RBA 18797.081839 35494.250854 0.265000 0.070727     16.26      0.000000
+high_speed     DyBAP-adapted 21479.980970 35822.669809 0.274167 0.065742     14.52      0.000000
+high_speed       Full + Keep 15706.255505 29972.523028 0.411667 0.118186     12.55      0.000000
+high_speed   Full + Reactive 11744.482578 21538.950568 0.449167 0.129106     10.18    166.982344
+high_speed Full + Predictive 11452.420345 21134.359287 0.465000 0.133631     10.05    170.750098
+
+TABLE 4 - COMPONENT ABLATION
+----------------------------
+      mode             component   avg_e2e_ms  gain_vs_keep_pct  incremental_gain_pct  p95_gain_vs_keep_pct      slo  slo_gain_vs_keep_pp
+stationary                  Keep 11921.862343          0.000000              0.000000              0.000000 0.463333             0.000000
+stationary              Reactive 11921.862343          0.000000              0.000000              0.000000 0.463333             0.000000
+stationary Reactive + Predictive 11921.862343          0.000000              0.000000              0.000000 0.463333             0.000000
+   walking                  Keep 11923.273032          0.000000              0.000000              0.000000 0.463333             0.000000
+   walking              Reactive 11823.081163          0.840305              0.840305              1.667583 0.463333             0.000000
+   walking Reactive + Predictive 11810.004137          0.949982              0.110606              1.939854 0.463333             0.000000
+   driving                  Keep 11981.329039          0.000000              0.000000              0.000000 0.460000             0.000000
+   driving              Reactive 11460.478916          4.347182              4.347182              5.119776 0.470000             1.000000
+   driving Reactive + Predictive 11401.283383          4.841246              0.516519              5.490452 0.473333             1.333333
+high_speed                  Keep 11935.011239          0.000000              0.000000              0.000000 0.464167             0.000000
+high_speed              Reactive 10856.601243          9.035685              9.035685             10.074679 0.491667             2.750000
+high_speed Reactive + Predictive 10685.566179         10.468738              1.575402             11.003286 0.495833             3.166667
+
+TABLE 5 - HIGH-SPEED LOAD SENSITIVITY
+-------------------------------------
+ arrival_rate_rps  keep_avg_ms  reactive_avg_ms  predictive_avg_ms  reactive_gain_pct  reactive_ci_low_ms  reactive_ci_high_ms  prefetch_extra_pct  extra_ci_low_ms  extra_ci_high_ms  total_gain_pct  total_ci_low_ms  total_ci_high_ms  keep_p95_ms  predictive_p95_ms  p95_gain_pct  slo_gain_pp  goodput_gain_pct
+              0.1  8110.937209      7449.175084        7245.599050           8.158886          343.099960           980.424291            2.732867       112.540545        294.611523       10.668781       470.329171       1260.347148 16121.611305       14505.736551     10.023035     3.666667          5.260675
+              0.2  9964.164993      9022.747418        8772.460824           9.448033          393.475892          1489.359258            2.773951       121.933634        378.639555       11.959900       579.674892       1803.733446 18758.587378       16306.746980     13.070496     3.666667          6.871669
+              0.4 11935.011239     10856.601243       10685.566179           9.035685          487.992105          1668.827887            1.575402        48.802854        293.267274       10.468738       625.463376       1873.426743 22264.748130       19814.894258     11.003286     3.166667          8.199498
+              0.6 13040.085858     11993.584292       11720.622594           8.025266          460.150104          1632.853028            2.275898       108.456672        437.466725       10.118517       610.050343       2028.876186 24015.509134       21720.098158      9.558036     2.333333          6.954534
+
+TABLE 6 - JOINT ANCHOR / ETA ROBUSTNESS
+---------------------------------------
+ anchor_error_pct  eta_bound_pct  prediction_accuracy_pct  eta_mae_pct  gain_vs_keep_pct  extra_vs_reactive_pct  extra_gain_ms  ci_low_ms  ci_high_ms  extra_p95_pct  extra_slo_pp  prefetched_mb  useful_prefetch_mb  wasted_prefetch_mb  waste_ratio_pct  wrong_anchor_waste_mb  plan_rate  accept_rate
+                0              0               100.000000     0.000000         28.462437               3.572599     416.284804 214.121998  618.447610       3.221249      1.750000    7274.003920         7274.003920            0.000000         0.000000               0.000000   0.756294     0.314199
+                0             20               100.000000    10.081345         28.225952               3.253835     379.141970 191.730523  566.553418       3.115349      1.750000    6542.202218         6542.202218            0.000000         0.000000               0.000000   0.732663     0.307538
+                0             40               100.000000    20.099440         27.587092               2.392699     278.801002 137.275699  420.326306       2.264121      1.500000    5986.023821         5986.023821            0.000000         0.000000               0.000000   0.709256     0.301811
+               20              0                80.180180     0.000000         27.620131               2.437233     283.990179 130.327555  437.652804       2.059384      1.333333    7758.791834         6044.229953         1714.561881        22.098310            1714.561881   0.758759     0.260260
+               20             20                80.159521    10.031414         27.499084               2.274070     264.978170 119.140523  410.815817       1.953964      1.333333    6785.711220         5403.173042         1382.538179        20.374256            1382.538179   0.732802     0.254237
+               20             40                80.080080    20.018441         27.225992               1.905962     222.085677  91.362868  352.808487       1.651549      1.250000    6267.838124         4949.632752         1318.205372        21.031261            1318.205372   0.709710     0.248248
+               40              0                60.239760     0.000000         27.119973               1.763055     205.433991  82.830004  328.037978       1.333929      1.083333    7269.577588         4364.254672         2905.322916        39.965498            2905.322916   0.757243     0.195804
+               40             20                60.160160    10.022186         27.136172               1.784891     207.978335  84.047969  331.908700       1.421182      1.166667    6354.314044         4014.771526         2339.542518        36.818176            2339.542518   0.734735     0.190190
+               40             40                60.120240    20.041401         27.099947               1.736062     202.288697  81.443494  323.133900       1.375526      1.166667    6157.120988         4021.582313         2135.538675        34.684046            2135.538675   0.711423     0.189379
+
+TABLE 7 - COMMUNICATION ACCOUNTING
+----------------------------------
+ anchor_err_pct  eta_err_pct   avg_e2e_ms  extra_gain_vs_reactive_pct  latency_saved_ms  reactive_migration_mb_ep  reported_migration_mb_ep  wasted_prefetch_mb_ep  actual_total_traffic_mb_ep  traffic_change_vs_reactive_pct  prefetched_total_mb  useful_prefetch_mb  wasted_prefetch_mb  prefetch_waste_pct  saved_ms_per_extra_mb
+              0            0 11235.872479                    3.572599        416.284804                166.767012                171.175371               0.000000                  171.175371                        2.643424          7274.003920         7274.003920            0.000000            0.000000              94.430778
+              0           20 11273.015313                    3.253835        379.141970                166.767012                171.262324               0.000000                  171.262324                        2.695565          6542.202218         6542.202218            0.000000            0.000000              84.341627
+              0           40 11373.356281                    2.392699        278.801002                166.767012                171.817266               0.000000                  171.817266                        3.028329          5986.023821         5986.023821            0.000000            0.000000              55.205344
+             20            0 11368.167104                    2.437233        283.990179                166.767012                171.498223              17.145619                  188.643841                       13.118200          7758.791834         6044.229953         1714.561881           22.098310              12.981322
+             20           20 11387.179113                    2.274070        264.978170                166.767012                172.136484              13.825382                  185.961866                       11.509983          6785.711220         5403.173042         1382.538179           20.374256              13.804646
+             20           40 11430.071606                    1.905962        222.085677                166.767012                173.218770              13.182054                  186.400823                       11.773199          6267.838124         4949.632752         1318.205372           21.031261              11.311389
+             40            0 11446.723292                    1.763055        205.433991                166.767012                170.716875              29.053229                  199.770104                       19.789941          7269.577588         4364.254672         2905.322916           39.965498               6.224689
+             40           20 11444.178948                    1.784891        207.978335                166.767012                171.278438              23.395425                  194.673863                       16.734036          6354.314044         4014.771526         2339.542518           36.818176               7.452591
+             40           40 11449.868586                    1.736062        202.288697                166.767012                174.087305              21.355387                  195.442691                       17.195055          6157.120988         4021.582313         2135.538675           34.684046               7.054364
+
+TABLE 8 - PRACTICAL 20% ANCHOR + ±20% ETA
+-----------------------------------------
+      mode  keep_avg_ms  reactive_avg_ms  practical_avg_ms  reactive_gain_pct  practical_extra_pct  total_gain_pct  practical_extra_ms  extra_ci_low_ms  extra_ci_high_ms  total_gain_ms  total_ci_low_ms  total_ci_high_ms  reactive_p95_gain_pct  practical_p95_gain_pct  extra_p95_pct  reactive_slo  practical_slo  extra_slo_pp  goodput_gain_vs_reactive_pct  anchor_accuracy_pct  eta_mae_pct  reactive_traffic_mb_ep  practical_traffic_mb_ep  traffic_overhead_pct  prefetch_waste_pct  plan_rate  accept_rate
+   walking 15747.320382     14881.491257      14808.265559           5.498263             0.492059        5.963267           73.225699         9.136650        137.314747     939.054823       193.891489       1684.218157               7.435947                8.058457       0.672518      0.413333       0.414167      0.083333                      0.134698            83.783784    10.588793               48.910254                55.959148             14.411894           14.383050   0.743243     0.527027
+   driving 15754.965489     13370.251795      13196.758252          15.136267             1.297609       16.237466          173.493543         6.353456        340.633630    2558.207237      1236.642910       3879.771565              18.576182               18.720108       0.176762      0.428333       0.428333      0.000000                      0.195889            80.000000     9.926313              105.328770               116.103802             10.229905           16.032063   0.819672     0.449180
+high_speed 15706.255505     11652.157283      11387.179113          25.811997             2.274070       27.499084          264.978170       119.140523        410.815817    4319.076391      2560.899218       6077.253565              28.542498               29.938752       1.953964      0.454167       0.467500      1.333333                      3.178009            80.159521    10.031414              166.767012               185.961866             11.509983           20.374256   0.732802     0.254237
+
+TABLE 9 - EXACT PLANNER RUNTIME
+-------------------------------
+     implementation  calls    mean_ms  median_ms     p90_ms     p95_ms     p99_ms     max_ms  mean_speedup_vs_uncached  p95_speedup_vs_uncached
+Exact DP - uncached   1483 386.965119 406.080643 455.142507 464.970630 481.895054 553.147373                   1.00000                 1.000000
+Exact DP - memoized    294  60.758166  63.050224  67.390933  68.143006  70.700955 127.437729                   6.36894                 6.823453
+
+TABLE 10 - MEMOIZATION EXACTNESS CHECK
+--------------------------------------
+          metric  max_abs_diff  equal
+      avg_e2e_ms           0.0   True
+      p95_e2e_ms           0.0   True
+slo_satisfaction           0.0   True
+     goodput_rps           0.0   True
+    migration_mb           0.0   True
+    migration_ms           0.0   True
+   replan_events           0.0   True
+replanned_blocks           0.0   True
+
+====================================================================================================
+GENERATED FILES
+====================================================================================================
+outputs/tmc_all_results_tables/00_key_results.csv
+outputs/tmc_all_results_tables/01_nodedp_main_mobility.csv
+outputs/tmc_all_results_tables/02_full_backbone_generalization.csv
+outputs/tmc_all_results_tables/03_scheduler_baselines.csv
+outputs/tmc_all_results_tables/04_component_ablation.csv
+outputs/tmc_all_results_tables/05_load_sensitivity.csv
+outputs/tmc_all_results_tables/06_prediction_joint_robustness.csv
+outputs/tmc_all_results_tables/07_communication_accounting.csv
+outputs/tmc_all_results_tables/08_practical_prediction_across_mobility.csv
+outputs/tmc_all_results_tables/09_planner_runtime.csv
+outputs/tmc_all_results_tables/10_planner_exactness_check.csv
+outputs/tmc_all_results_tables/ALL_RESULTS_TABLES.txt
+outputs/tmc_all_results_tables/build_tables.log
+
+MASTER TEXT TABLE:
+outputs/tmc_all_results_tables/ALL_RESULTS_TABLES.txt

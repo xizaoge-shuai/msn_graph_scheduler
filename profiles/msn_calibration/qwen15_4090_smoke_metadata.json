@@ -1,0 +1,15 @@
+{
+  "model": "/data/users/zhjia/models/Qwen2.5-1.5B-Instruct",
+  "node_type": "edge_fast",
+  "gpu": "NVIDIA GeForce RTX 4090",
+  "torch": "2.13.0+cu130",
+  "cuda": "13.0",
+  "dtype": "torch.bfloat16",
+  "num_hidden_layers": 28,
+  "hidden_size": 1536,
+  "vocab_size": 151936,
+  "warmup": 2,
+  "repeats": 5,
+  "attention_implementation": "sdpa",
+  "profile_points": 4
+}
