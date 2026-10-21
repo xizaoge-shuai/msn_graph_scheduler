@@ -1,0 +1,19 @@
+START PETALS MODE=stationary TIME=Fri Aug 14 04:16:53 PM UTC 2026
+Dynamic run_one_mapping signature: (env: 'SchedulingEnv', infra, queue, now_ms: 'float', max_steps: 'int', method: 'str', cfg: 'dict', agent: 'DDQNAgent | None', mobility_prior_beta: 'float')
+Starting dynamic mobility test: method=node_dp, mode=stationary, policy=keep, prediction_error=0.1, prior_beta=0.0, rate=0.4, episodes=100
+episode=   1/100 elapsed=     0.0s slo=0.9167 handover=0.00
+episode=  10/100 elapsed=     0.3s slo=0.5083 handover=0.00
+episode=  20/100 elapsed=     0.6s slo=0.4083 handover=0.00
+episode=  30/100 elapsed=     0.9s slo=0.4583 handover=0.00
+episode=  40/100 elapsed=     1.2s slo=0.3417 handover=0.00
+episode=  50/100 elapsed=     1.5s slo=0.3667 handover=0.00
+episode=  60/100 elapsed=     1.8s slo=0.2750 handover=0.00
+episode=  70/100 elapsed=     2.1s slo=0.4417 handover=0.00
+episode=  80/100 elapsed=     2.4s slo=0.4667 handover=0.00
+episode=  90/100 elapsed=     2.7s slo=0.3500 handover=0.00
+episode= 100/100 elapsed=     3.0s slo=0.4250 handover=0.00
+      avg_e2e_ms  p95_e2e_ms  slo_satisfaction  throughput_rps  goodput_rps  handover_events  handover_slo_satisfaction  migration_mb  migration_ms  mean_batch_size
+mean   6208.4511  11143.0608            0.4042          0.3707       0.1588              0.0                        NaN           0.0           0.0              1.0
+std    6666.6933  10443.9423            0.2325          0.1107       0.1128              0.0                        NaN           0.0           0.0              0.0
+Saved outputs/dynamic_mobility_external_fig5/petals_stationary_r040_100.csv
+METHOD=PETALS MODE=stationary EXIT_STATUS=0 TIME=Fri Aug 14 04:16:58 PM UTC 2026

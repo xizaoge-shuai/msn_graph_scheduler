@@ -1,0 +1,19 @@
+Using request trace: data/processed/azure_2024_test_sample.csv rows=500,000
+Starting evaluation: episodes=100, batchers=['no_batch'], full_queue=True, total_runs=100
+episode=   1/100 runs=   1/100 elapsed=     0.0s eta=     3.7s
+episode=  10/100 runs=  10/100 elapsed=     0.4s eta=     3.6s
+episode=  20/100 runs=  20/100 elapsed=     0.8s eta=     3.3s
+episode=  30/100 runs=  30/100 elapsed=     1.2s eta=     2.8s
+episode=  40/100 runs=  40/100 elapsed=     1.6s eta=     2.4s
+episode=  50/100 runs=  50/100 elapsed=     2.1s eta=     2.1s
+episode=  60/100 runs=  60/100 elapsed=     2.5s eta=     1.6s
+episode=  70/100 runs=  70/100 elapsed=     2.9s eta=     1.2s
+episode=  80/100 runs=  80/100 elapsed=     3.2s eta=     0.8s
+episode=  90/100 runs=  90/100 elapsed=     3.7s eta=     0.4s
+episode= 100/100 runs= 100/100 elapsed=     4.0s eta=     0.0s
+          episodes  completion_ratio  ...  goodput_rps    reward
+batcher                               ...                       
+no_batch       100               1.0  ...       0.0708 -192.8648
+
+[1 rows x 11 columns]
+Saved outputs/fig1_oldenv_external7/edgeshard_r0_1.csv

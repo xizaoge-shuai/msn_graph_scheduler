@@ -1,0 +1,22 @@
+Using request trace: data/processed/azure_2024_test_sample.csv rows=500,000
+Starting evaluation: episodes=100, batchers=['no_batch', 'fixed_4', 'sequential_greedy', 'dybap_fusion'], full_queue=True, total_runs=400
+episode=   1/100 runs=   4/400 elapsed=     0.4s eta=    41.9s
+episode=  10/100 runs=  40/400 elapsed=     3.9s eta=    34.7s
+episode=  20/100 runs=  80/400 elapsed=     7.7s eta=    30.8s
+episode=  30/100 runs= 120/400 elapsed=    11.6s eta=    27.0s
+episode=  40/100 runs= 160/400 elapsed=    15.3s eta=    23.0s
+episode=  50/100 runs= 200/400 elapsed=    19.1s eta=    19.1s
+episode=  60/100 runs= 240/400 elapsed=    22.7s eta=    15.2s
+episode=  70/100 runs= 280/400 elapsed=    26.5s eta=    11.4s
+episode=  80/100 runs= 320/400 elapsed=    30.3s eta=     7.6s
+episode=  90/100 runs= 360/400 elapsed=    34.0s eta=     3.8s
+episode= 100/100 runs= 400/400 elapsed=    37.9s eta=     0.0s
+                   episodes  completion_ratio  ...  goodput_rps    reward
+batcher                                        ...                       
+dybap_fusion            100               1.0  ...       0.1936 -158.6525
+fixed_4                 100               1.0  ...       0.2027 -144.2342
+no_batch                100               1.0  ...       0.1782 -173.2374
+sequential_greedy       100               1.0  ...       0.2041 -146.2819
+
+[4 rows x 11 columns]
+Saved outputs/fig1_oldenv_baselines7_no_lecu/baselines_r0_4.csv

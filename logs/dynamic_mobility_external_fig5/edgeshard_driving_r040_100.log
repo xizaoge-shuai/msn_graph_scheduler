@@ -1,0 +1,19 @@
+START EDGESHARD MODE=driving TIME=Fri Aug 14 04:17:05 PM UTC 2026
+Dynamic run_one_mapping signature: (env: 'SchedulingEnv', infra, queue, now_ms: 'float', max_steps: 'int', method: 'str', cfg: 'dict', agent: 'DDQNAgent | None', mobility_prior_beta: 'float')
+Starting dynamic mobility test: method=node_dp, mode=driving, policy=keep, prediction_error=0.1, prior_beta=0.0, rate=0.4, episodes=100
+episode=   1/100 elapsed=     0.0s slo=0.9167 handover=0.00
+episode=  10/100 elapsed=     0.4s slo=0.4833 handover=0.40
+episode=  20/100 elapsed=     0.9s slo=0.3833 handover=0.50
+episode=  30/100 elapsed=     1.3s slo=0.4250 handover=0.60
+episode=  40/100 elapsed=     1.7s slo=0.2667 handover=1.30
+episode=  50/100 elapsed=     2.2s slo=0.2750 handover=0.40
+episode=  60/100 elapsed=     2.6s slo=0.2500 handover=0.80
+episode=  70/100 elapsed=     3.1s slo=0.3333 handover=0.40
+episode=  80/100 elapsed=     3.5s slo=0.4333 handover=0.10
+episode=  90/100 elapsed=     4.0s slo=0.3000 handover=0.70
+episode= 100/100 elapsed=     4.4s slo=0.3917 handover=0.80
+      avg_e2e_ms  p95_e2e_ms  slo_satisfaction  throughput_rps  goodput_rps  handover_events  handover_slo_satisfaction  migration_mb  migration_ms  mean_batch_size
+mean   6882.3626  12239.7477            0.3542          0.3591       0.1363           0.6000                     0.1478           0.0           0.0              1.0
+std    7098.8508  11147.7473            0.2325          0.1069       0.1066           1.0918                     0.3160           0.0           0.0              0.0
+Saved outputs/dynamic_mobility_external_fig5/edgeshard_driving_r040_100.csv
+METHOD=EDGESHARD MODE=driving EXIT_STATUS=0 TIME=Fri Aug 14 04:17:11 PM UTC 2026
