@@ -354,6 +354,7 @@ def main() -> None:
             queue = make_request_queue(
                 cfg,
                 local_rng,
+                request_pool=request_pool,
             )
 
             run_start = time.perf_counter()

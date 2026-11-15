@@ -449,6 +449,27 @@ def run_full_queue(
             if pending_sizes
             else 0
         ),
+        "p95_pending_size": (
+            float(np.quantile(pending_sizes, 0.95))
+            if pending_sizes
+            else 0.0
+        ),
+        "frac_pending_ge_16": (
+            float(np.mean([
+                size >= 16
+                for size in pending_sizes
+            ]))
+            if pending_sizes
+            else 0.0
+        ),
+        "frac_pending_ge_24": (
+            float(np.mean([
+                size >= 24
+                for size in pending_sizes
+            ]))
+            if pending_sizes
+            else 0.0
+        ),
         "batch_opportunity_rate": (
             float(
                 np.mean(
